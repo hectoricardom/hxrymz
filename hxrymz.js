@@ -1859,7 +1859,8 @@ class Params {
 
 
 
-    getProfile(_cda){      
+    getProfile(_cda){  
+        var _th = this;        
         var _tk = _th.GetTokenById(_cda);   
         _tk && request({
             headers: {
