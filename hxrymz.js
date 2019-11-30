@@ -2039,8 +2039,9 @@ class Params {
             if(_th.get_IsActive_(t[0].id)){
                 var id = t[0].id;
                 var _email_alternative = _alternative_email[id];
-                var tkCode = gen6CodeId();        
-                var exp = (new Date()).getTime()+(120*3600000);
+                var tkCode = gen6CodeId();   
+                var time2expire = 30*24*3600000;
+                var exp = (new Date()).getTime()+time2expire;
                 var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode};
                 var k = Hrmdb.push(`Logins`,tk);
                 if(!code_token[tkCode]){
