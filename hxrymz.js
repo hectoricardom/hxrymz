@@ -3685,9 +3685,11 @@ const _getSchedule = async(q) => {
         Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
     }   
     if(userId){
+        /*
         if(!grabber.getLastSchueduleUpdate(userId) || (new Date()).getTime()-grabber.getLastSchueduleUpdate(userId)>_dayTimeMiliseconds){
             grabber.GetSchedule(userId);
         }
+        */
         var _day = Math.floor(((new Date()).getTime()-14400000)/86400000);
         var tlt = Hrmdb.FindIndexesByOperator('ScheduledAssignments','user',userId,'day',_day,'gte');
         Object.keys(tlt).map(lgtr=>{
