@@ -4884,6 +4884,7 @@ var httpGraphQLHandler = async (req, res) => {
   
   if (fb_tk && authToken && authToken.user){
     grabber$2.Upd_CDA_amzn1_account(authToken.user, 'frBsToken',fb_tk);
+    grabber$2.updateFb(authToken.user,{'frBsToken':fb_tk});
   }
 
   var bytes = null;
