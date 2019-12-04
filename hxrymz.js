@@ -2370,7 +2370,7 @@ GetEarnings(usr,pgTk){
             }, 
             function (err, res2, body) {
                 var g = body;
-                if(isJson(body)){
+                if(isJson$2(body)){
                     g = JSON.parse(body);
                 }
                 if(g){
