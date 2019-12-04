@@ -2357,6 +2357,10 @@ GetEarnings(usr,pgTk){
         }              
     }
 
+    getFbToken(cad){   
+      return  CDA_amzn1_account[cad]?CDA_amzn1_account[cad]['frBsToken']:null;
+    }
+
 
 
 }
@@ -4880,13 +4884,13 @@ var httpGraphQLHandler = async (req, res) => {
   const {q,k} =  req.body;  
   const fp = req.headers.authorization.split(`:`)[1];
   const authToken = decryptToken(req.headers.authorization.split(`:`)[0] ,true,fp) || {}; 
-  const fb_tk = req.headers['x-fb-tk']?req.headers['x-fb-tk']:false;
-  
+  const fb_tk = req.headers['x-fb-tk']?req.headers['x-fb-tk']:false;  
   if (fb_tk && authToken && authToken.user){
-    grabber$2.Upd_CDA_amzn1_account(authToken.user, 'frBsToken',fb_tk);
-    grabber$2.updateFb(authToken.user,{'frBsToken':fb_tk});
+    if(grabber$2.getFbToken(authToken.user)!==fb_tk){
+      grabber$2.Upd_CDA_amzn1_account(authToken.user, 'frBsToken',fb_tk);
+      grabber$2.updateFb(authToken.user,{'frBsToken':fb_tk});
+    }
   }
-
   var bytes = null;
   var basD = null;
   var NewBody =null;
