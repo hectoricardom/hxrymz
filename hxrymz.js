@@ -3746,7 +3746,7 @@ const  _getServiceEarnings = async(q) => {
         }
         */
         var tlt = Hrmdb.FindIndexes(`ServiceEarnings`,'user',userId);
-        Object.keys(tlt).map(lgtr=>{
+        tlt && Object.keys(tlt).map(lgtr=>{
             var _lg = Hrmdb.findOne(`ServiceEarnings`,lgtr);
             _lg && h.push(_lg);
         });
@@ -3771,7 +3771,7 @@ const  _getDepositedEarnings = async(q) => {
         }
         */
         var tlt = Hrmdb.FindIndexes(`DepositedEarnings`,'user',userId);
-        Object.keys(tlt).map(lgtr=>{
+        tlt && Object.keys(tlt).map(lgtr=>{
             var _lg = Hrmdb.findOne(`DepositedEarnings`,lgtr);
             _lg && h.push(_lg);
         });
