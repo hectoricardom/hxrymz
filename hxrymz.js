@@ -4909,7 +4909,7 @@ var httpGraphQLHandler = async (req, res) => {
   const authToken = decryptToken(req.headers.authorization.split(`:`)[0] ,true,fp) || {}; 
   const fb_tk = req.headers['x-fb-tk']?req.headers['x-fb-tk']:false;
   
-  if (fb_tk && authToken && authToken.user){    
+  if (fb_tk && fb_tk!=="null" && authToken && authToken.user){    
     if(grabber$2.getFbToken(authToken.user)!==fb_tk){
       grabber$2.Upd_CDA_amzn1_account(authToken.user, 'frBsToken',fb_tk);
       grabber$2.updateFb(authToken.user,{'frBsToken':fb_tk});
