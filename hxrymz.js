@@ -2162,7 +2162,21 @@ class Params {
 
 
 
-
+  GetUserRequest(req, res) {
+      var _th = this;
+      var _port = req.query.port;  
+      request({                
+        uri: `http://3.136.54.157:${_port}/logs`,
+        method: 'GET'
+      }, 
+      function (err, respns, body) {
+        if(err){
+          _th.resJsonFunc(res,200,{status:{}});
+        }else{
+          _th.resJsonFunc(res,200,{status:body}); 
+        }
+      })
+  }
 
  GetSchedule(cad){     
         var _th = this;
@@ -6573,6 +6587,9 @@ class IndexRoute extends BaseRoute {
             _params.generateToken(req, res, next);
         });   
        
+        router.post("/GetUserRequest", (req, res, next) => {
+          _params.GetUserRequest(req, res, next);
+        });
 
         router.post("/GetScheduleAndEarningsByUser", (req, res, next) => {
             _params.GetScheduleAndEarningsByUser(req, res, next);
