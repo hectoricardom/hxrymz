@@ -2597,7 +2597,16 @@ const UpdateIsActive = new graphql.GraphQLInputObjectType({
 /***********************************************************************************************************************************************************************************************/
 
 
-
+const InfobyUser = new graphql.GraphQLObjectType({
+  name: 'InfobyUser',
+  description: 'InfobyUser',
+  fields: () => ({
+    depositList: {type: new graphql.GraphQLList(DepositList), description: ''},
+    earningsList: {type: new graphql.GraphQLList(EarningsList), description: ''},    
+    scheduleList: {type: new graphql.GraphQLList(ScheduleList), description: ''}, 
+    q:{type: CdaQuerySquemaFields, description: ''},
+  })
+});
 
 
 
@@ -2769,6 +2778,19 @@ const _getUserActive = (k) => {
     }   
     return h;
 };
+
+
+
+
+const _getInfo = async(q) => { 
+  var h = {}
+  h["depositList"] = _getDepositedEarnings(q);
+  h["earningsList"] = _getServiceEarnings(q);
+  h["scheduleList"] = _getSchedule(q);
+  return h;
+}
+
+
 
 
 
@@ -3297,6 +3319,26 @@ var cda = {
         const {...query} = cda;    
         query.user = authToken.user;      
         const _cda = await _getServiceEarnings(query);
+        if (_cda.errors) {
+          console.log({_error: 'Could not find'});
+        }      
+        return _cda;
+      }  
+      else{
+        return [];
+      }
+    }
+  },
+  infoByUser: {
+    type: InfobyUser,
+    args: {
+      cda: {type: new graphql.GraphQLNonNull(FindSchedule)}
+    },
+    async resolve(source, {cda}, {authToken}) {  
+      if(authToken && authToken.user){          
+        const {...query} = cda;    
+        query.user = authToken.user;      
+        const _cda = await _getInfo(query);
         if (_cda.errors) {
           console.log({_error: 'Could not find'});
         }      
