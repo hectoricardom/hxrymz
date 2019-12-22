@@ -2802,21 +2802,25 @@ const _IsAdmin = (q) => {
   return userId;
 }
 
-const _getRequestGrabberInfo = async(q) => { 
-  var userId = _IsAdmin(q);
-  let _port = q.expire;
-  if(userId && _port){
-    request({                
-      uri: `http://3.136.54.157:${_port}/logs`,
-      method: 'GET'
-    }, 
-    function (err, respns, body) {
-        return body?Base64$1.encode(JSON.stringify(body)):'';
-    })
-  }
-  else{
-    return '';
-  }
+const _getRequestGrabberInfo = (q) => { 
+  return new Promise((resolve,reject)=>{
+    var userId = _IsAdmin(q);
+    let _port = q.expire;
+    if(userId && _port){
+      request({                
+        uri: `http://3.136.54.157:${_port}/logs`,
+        method: 'GET'
+      }, 
+      function (err, respns, body) {
+        let bs64 = body?Base64$1.encode(JSON.stringify(body)):'';
+        console.log(bs64);
+        resolve(bs64);
+      })
+    }
+    else{
+      resolve(null);
+    }
+  })
 }
 
 
@@ -3386,6 +3390,7 @@ var cda = {
         const {...query} = cda;    
         query.user = authToken.user;      
         const _cda = await _getRequestGrabberInfo(query);
+        console.log(_cda)
         return _cda;
       }  
       else{
