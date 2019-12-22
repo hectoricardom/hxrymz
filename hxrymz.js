@@ -2811,10 +2811,12 @@ const _getRequestGrabberInfo = async(q) => {
       method: 'GET'
     }, 
     function (err, respns, body) {
-        return body?Base64$1.encode(body.toString()):'';
+        return body?Base64$1.encode(JSON.stringify(body)):'';
     })
   }
-  return '';
+  else{
+    return '';
+  }
 }
 
 
@@ -3384,13 +3386,10 @@ var cda = {
         const {...query} = cda;    
         query.user = authToken.user;      
         const _cda = await _getRequestGrabberInfo(query);
-        if (_cda.errors) {
-          console.log({_error: 'Could not find'});
-        }      
         return _cda;
       }  
       else{
-        return [];
+        return null;
       }
     }
   },
