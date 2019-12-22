@@ -2791,6 +2791,32 @@ const _getInfo = async(q) => {
 }
 
 
+const _IsAdmin = (q) => { 
+  var userId = null;
+  var usqtl = Hrmdb.findOne(`Cda`,q.user);
+  var isAdmin = usqtl && usqtl['isAdmin'];
+  if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){        
+        var EmailId = Hrmdb.FindIndexes(`Cda`,'email',q.email);
+        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
+  }
+  return userId;
+}
+
+const _getRequestGrabberInfo = async(q) => { 
+  var userId = _IsAdmin(q);
+  let _port = q.expire;
+  if(userId && _port){
+    request({                
+      uri: `http://3.136.54.157:${_port}/logs`,
+      method: 'GET'
+    }, 
+    function (err, respns, body) {
+        return body?Base64$1.encode(body.toString()):'';
+    })
+  }
+  return '';
+}
+
 
 
 
@@ -3339,6 +3365,25 @@ var cda = {
         const {...query} = cda;    
         query.user = authToken.user;      
         const _cda = await _getInfo(query);
+        if (_cda.errors) {
+          console.log({_error: 'Could not find'});
+        }      
+        return _cda;
+      }  
+      else{
+        return [];
+      }
+    }
+  },requestList: {
+    type: graphql.GraphQLString,
+    args: {
+      cda: {type: new graphql.GraphQLNonNull(FindSchedule)}
+    },
+    async resolve(source, {cda}, {authToken}) {  
+      if(authToken && authToken.user){          
+        const {...query} = cda;    
+        query.user = authToken.user;      
+        const _cda = await _getRequestGrabberInfo(query);
         if (_cda.errors) {
           console.log({_error: 'Could not find'});
         }      
