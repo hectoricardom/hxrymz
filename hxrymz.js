@@ -2078,8 +2078,7 @@ class Params {
                         text: msg
                     };            
                     _Notifications.sendEmail(msgEmail);  
-                }  
-                  
+                }
                 //_th.getRegionId(id);                  
                 _th.sendNotificationtoToken({"title": "VerificationCode", "body": `${msg} for ${_email}`});
                 _th.resJsonFunc(res,200,{status:200,msg:`token sent`,phone:phone_.substring(phone_.length-4, phone_.length)});
