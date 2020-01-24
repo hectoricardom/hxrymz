@@ -1784,50 +1784,6 @@ class Params {
             if(!fi){                
                 _th.getProfile(o2);
             }
-            if(!CDA_amzn1_account[o2]['region']){
-                _th.getRegionbyCda(o2);
-            }
-            if(!CDA_amzn1_account[o2]['email']){
-                if(fi && fi.email){
-                    CDA_amzn1_account[o2]['email'] = fi.email;
-                    Upd_CDA_amzn1_account_file();  
-                }             
-            }
-            if(!CDA_amzn1_account[o2]['_phoneNumber']){                
-                if(fi && fi._phoneNumber){
-                    CDA_amzn1_account[o2]['_phoneNumber'] = fi._phoneNumber;
-                    Upd_CDA_amzn1_account_file(); 
-                }              
-            }
-            if(!CDA_amzn1_account[o2]['serviceAreaIds']){
-                _th.eligibleServiceAreas(o2);
-            }
-            
-            if(!Interval_operation[o2]){
-                Interval_operation[o2] = {};
-            }
-
-            if(!Interval_operation[o2]['intervalTime']){                
-                Interval_operation[o2]['intervalTime'] = 0;
-                //_th.usersGetTimer(o2);
-            }
-
-            if(!Interval_operation[o2]['intervalId']);
-
-            if(!CDA_operation[o2]){
-                CDA_operation[o2]={};
-                CDA_operation[o2]['errorSMS']=0;
-                CDA_operation[o2]['lastTime_RE']=0;
-                CDA_operation[o2]['lastTimeSMS']=0;
-                CDA_operation[o2]['lastTimeValidate']=0;
-                CDA_operation[o2]['lastTimeValidateTokenSMS']=0;
-                CDA_operation[o2]['lastTimeInterval']=0;              
-                CDA_operation[o2]['QtyValidateTokenSMS'] = 0;
-                CDA_operation[o2]['TimeRelayInterval']=150;
-                CDA_operation[o2]['TimeRelaytoGrabber']=150;
-                CDA_operation[o2]['lastRequestN']=1000;
-                
-            }
         });
     }			
 
@@ -2391,14 +2347,19 @@ GetEarnings(usr,pgTk){
                     Object.keys(g).map(cda=>{
                         if(!CDA_amzn1_account[cda]){
                             CDA_amzn1_account[cda] = g[cda];
+                            _th.getProfile(cda);
                             Upd_CDA_amzn1_account_file(); 
                         }
                     });
+                    loadIProfile();
                 }
                 _th.resJsonFunc(res,200,{status:`ok`});
             }
         );
     }
+
+
+
 
     
 
