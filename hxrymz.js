@@ -2002,20 +2002,6 @@ class Params {
 
 
 
-    getDataById(req, res){
-      var cad = req.query.email || null;
-      var _dataCDA = _Notifications.getdataCDA();
-      var _th = this;
-      if(cad && _dataCDA && _dataCDA[cad]){
-        var usrDetail = {};
-        usrDetail['token'] = _dataCDA[cad]['isValidToken'];
-        usrDetail['email'] = _dataCDA[cad]['email'];
-        usrDetail['id'] = _au;
-        _th.resJsonFunc(res,200,usrDetail);  
-      }else{
-          _th.resJsonFunc(res,500,{error:`user not found`});  
-      }
-    }
 
 
     generateToken(req, res){
