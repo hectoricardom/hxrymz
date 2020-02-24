@@ -2370,7 +2370,7 @@ GetEarnings(usr,pgTk){
                             Upd_CDA_amzn1_account_file(); 
                         }
                     });
-                    loadIProfile();
+                    _th.loadIProfile();
                 }
                 _th.resJsonFunc(res,200,{status:`ok`});
             }
