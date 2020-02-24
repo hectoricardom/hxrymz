@@ -2775,11 +2775,11 @@ const _removeCdaToken= (q) => {
   var isAdmin = usqtl && usqtl['isAdmin'];
   if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
       var userId = null;
-      var EmailId = Hrmdb.FindIndexes(`Login`,'user',q.email);
+      var EmailId = Hrmdb.FindIndexes('Logins','user',q.email);
       console.log(EmailId);
       Object.keys(EmailId?EmailId:{}).map(t=>{
         console.log(t);
-        Hrmdb.remove(`Login`,t);
+        Hrmdb.remove(`Logins`,t);
       });
       return true;
   }else{
