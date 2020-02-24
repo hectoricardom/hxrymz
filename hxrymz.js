@@ -2776,6 +2776,7 @@ const _removeCdaToken= (q) => {
   if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
       var userId = null;
       var EmailId = Hrmdb.FindIndexes(`Login`,'user',q.email);
+      console.log(EmailId);
       Object.keys(EmailId?EmailId:{}).map(t=>{
         console.log(t);
         Hrmdb.remove(`Login`,t);
@@ -4082,7 +4083,7 @@ var cda$1 = {
   removeCdaToken: {
     type: graphql.GraphQLBoolean,
     args: {
-      flt: {type: new graphql.GraphQLNonNull(UpdateIsActive)}
+      cda: {type: new graphql.GraphQLNonNull(UpdateIsActive)}
     },
     async resolve(source, {flt}, {authToken}) {
       if(authToken && authToken.user){ 
