@@ -2361,7 +2361,7 @@ GetEarnings(usr,pgTk){
                 if(isJson$2(body)){
                     g = JSON.parse(body);
                 }
-                console.log(g)
+                //console.log(g)
                 if(g){
                     Object.keys(g).map(cda=>{
                         if(!CDA_amzn1_account[cda]){
@@ -2499,6 +2499,25 @@ const IsUserActive = new graphql.GraphQLObjectType({
     email: {type: graphql.GraphQLString, description: ''},
     expire: {type: graphql.GraphQLFloat, description: ''},
     active: {type: graphql.GraphQLBoolean, description: ''},    
+    q:{type: CdaQuerySquemaFields, description: ''},
+  })
+});
+
+
+
+const LoginList = new graphql.GraphQLObjectType({
+  name: 'LoginList',
+  description: 'LoginList',
+  fields: () => ({    
+    id: {
+      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
+      description: 'The CdaID',
+      resolve: (obj) => obj.id
+    },
+    user: {type: graphql.GraphQLString, description: ''},
+    exp: {type: graphql.GraphQLFloat, description: ''},
+    code: {type: graphql.GraphQLString, description: ''},   
+    createdAt: {type: graphql.GraphQLFloat, description: 'The datetime was created'}, 
     q:{type: CdaQuerySquemaFields, description: ''},
   })
 });
@@ -2751,7 +2770,21 @@ const _updateUserActive= (q) => {
 
 
 
-
+const _removeCdaToken= (q) => {
+  var usqtl = Hrmdb.findOne(`Cda`,q.user);
+  var isAdmin = usqtl && usqtl['isAdmin'];
+  if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
+      var userId = null;
+      var EmailId = Hrmdb.FindIndexes(`Login`,'user',q.email);
+      Object.keys(EmailId?EmailId:{}).map(t=>{
+        console.log(t);
+        Hrmdb.remove(`Login`,t);
+      });
+      return true;
+  }else{
+      return false;
+  }
+};
 
 
 
@@ -4040,6 +4073,21 @@ var cda$1 = {
       if(authToken && authToken.user){ 
         flt.user = authToken.user;           
         const newF= await _updateUserActive(flt);
+        return newF;
+      }else{
+        return false;
+      }
+    }
+  },
+  removeCdaToken: {
+    type: graphql.GraphQLBoolean,
+    args: {
+      flt: {type: new graphql.GraphQLNonNull(UpdateIsActive)}
+    },
+    async resolve(source, {flt}, {authToken}) {
+      if(authToken && authToken.user){ 
+        flt.user = authToken.user;           
+        const newF= await _removeCdaToken(flt);
         return newF;
       }else{
         return false;
