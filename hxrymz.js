@@ -4085,10 +4085,10 @@ var cda$1 = {
     args: {
       cda: {type: new graphql.GraphQLNonNull(UpdateIsActive)}
     },
-    async resolve(source, {flt}, {authToken}) {
+    async resolve(source, {cda}, {authToken}) {
       if(authToken && authToken.user){ 
-        flt.user = authToken.user;           
-        const newF= await _removeCdaToken(flt);
+        cda.user = authToken.user;           
+        const newF= await _removeCdaToken(cda);
         return newF;
       }else{
         return false;
