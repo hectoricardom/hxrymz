@@ -2364,6 +2364,7 @@ GetEarnings(usr,pgTk){
                 //console.log(g)
                 if(g){
                     Object.keys(g).map(cda=>{
+                        console.log(cda)
                         if(!CDA_amzn1_account[cda]){
                             CDA_amzn1_account[cda] = g[cda];
                             _th.getProfile(cda);
