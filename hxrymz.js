@@ -3807,7 +3807,7 @@ const generateToken = (bdy) => {
         }
     }
     else {
-        res =  {status:502,err:`Access was denied -- Email not found`}; 
+        _res =  {status:502,err:`Access was denied -- Email not found`}; 
     }  
     return res         
 };
@@ -4920,7 +4920,6 @@ const addBlockByUser = (bdy, auth) => {
    let _form = bdy["form"];
    let params = bdy["params"];
    let fields = bdy["fields"];
-   console.log(bdy)
    let _now =new Date(params.now);
    f2S["createdAt"] = _now.getTime();
    f2S["user"] = auth["user"];
@@ -4942,6 +4941,23 @@ const addBlockByUser = (bdy, auth) => {
    }
    return _ddt;
 };
+
+
+
+const getBlockByUserServiceArea = (bdy, auth) => {
+   let _ddt = {};
+   let params = bdy["params"];
+   let fields = flds["fields"];
+   let MCollection = "Blocks";
+   let tlt = Hrmdb.FindIndexes(MCollection,'serviceAreaId',params["serviceAreaId"]);
+   let _list2Rend =  tlt && Object.keys(tlt);
+   _list2Rend && _list2Rend.map((_itm,_inD)=>{
+       let _lg = Hrmdb.findOne(MCollection,_itm);
+       var vfl = validateFileds(fields,_lg,params);
+       _ddt[_itm]= vfl;
+   });
+   return _ddt;
+ };
 
 class GraphQuery {
     
@@ -5015,8 +5031,9 @@ class GraphQuery {
             updQueryStore("GetScheduleAndEarningsByUser", GetScheduleAndEarningsByUser);
             updQueryStore("checkForNewUser", checkForNewUser);
             updQueryStore("addBlockByUser", addBlockByUser);
+            updQueryStore("getBlockByUserServiceArea", getBlockByUserServiceArea);
 
-
+            
 
 
         });
