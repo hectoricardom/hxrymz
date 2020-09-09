@@ -3,31 +3,65 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var express = _interopDefault(require('express'));
-var graphql = require('graphql');
+require('graphql');
+var CryptoJS = _interopDefault(require('crypto-js'));
 var cors = _interopDefault(require('cors'));
 var bodyParser = _interopDefault(require('body-parser'));
 var methodOverride = _interopDefault(require('method-override'));
-var CryptoJS = _interopDefault(require('crypto-js'));
-var request = _interopDefault(require('request'));
-var AWS = _interopDefault(require('aws-sdk'));
 var plivo = _interopDefault(require('plivo'));
 var nodemailer = _interopDefault(require('nodemailer'));
 var adminfbs = require('firebase-admin');
-var error = require('graphql/error');
-var language = require('graphql/language');
+var request = _interopDefault(require('request'));
 
+// var execN = _interopDefault(require('child_process'));
 
-var _root$$_ = "C:/nodeProject/almacen";
-_root$$_ = "/home/ubuntu/hxrymz/";
-var _fs$$_ = _interopDefault(require('fs'));
-var execN = _interopDefault(require('child_process'));
+// const _config = require('./config.json');
+
+var _root$$_ = "E:/newProject/Monorepo/AmzFlx/server/";
+// _root$$_ = "/home/ubuntu/hxrymz/";
+
+var _portNew_ = 7258;
+var _host_ = "localhost";
+
+var _fs$$_ = require('fs');
+var execN = require('child_process');
 var _exec$$_ = execN.exec;
 
+
+
+
+function get_portNew_() {
+  return _portNew_;
+}
+
+
+function get_exec$$_() {
+  return _exec$$_;
+}
+
+
+function get_root$$_() {
+  return _root$$_;
+}
+
+function get_fs$$_() {
+  return _fs$$_;
+}
+
+
+function get_Host_() {
+  return _host_;
+}
+
+
+
+
+
+//_root$$_ = "/home/ubuntu/graber_flx/";
 
 var Base64 = {
 
   _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-
 
   encode: function(input) {
       var output = "";
@@ -171,9 +205,102 @@ const clv = {
 };
 
 
-function isJson$1(s) {
+function isJson(s) {
   var r =false;try{JSON.parse(s);r=true; }catch(e){r =false;}return r
 }
+
+
+function genId() {
+  var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var ID_LENGTH = 16;
+  var rtn = '';
+  for (var i = 0; i < ID_LENGTH; i++) {
+      rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+  }
+  return rtn;
+}
+
+
+/*
+
+
+
+export function validateVersion2() {
+  let rslt = false;
+  if(_Master_k$e$y_){
+    if(licenceValidate["signature"]){
+      let _auth = licenceValidate["auth"];
+      let hh = Math.floor((_auth["expire"] - (new Date()).getTime())/86400000);
+      if(hh!==licenceDay){
+        licenceDay = hh;
+        console.log(`Su licencia expira en ${licenceDay} dias`);
+        if(licenceDay<5){
+          console.log(`Para obtener una nueva licencia abra el navegador en este direcion \n\n http://${_Cnst.get_Host_()}:${_port_}/requestKey \n\n`);
+        }
+      }
+      if((new Date()).getTime()<_auth["expire"] && _auth["signature"]=== licenceValidate["signature"]){
+        rslt = true;
+      }
+    }else{  
+      let sn = getUUID();
+      let r = Base64.decode(_Master_k$e$y_);
+      if(isJson(r)){
+        let lic = JSON.parse(r);        
+        var kpass = CryptoJS.AES.decrypt(lic.key, sn).toString(CryptoJS.enc.Utf8);
+        let _auth = CryptoJS.AES.decrypt(lic.auth, kpass).toString(CryptoJS.enc.Utf8);
+        if(isJson(_auth)){
+          licenceValidate["auth"] = JSON.parse(_auth);
+          licenceValidate["signature"] = lic.signature;
+          if((new Date()).getTime()<_auth["expire"] && _auth["signature"]=== licenceValidate["signature"]){
+            rslt = true;
+          }
+        }
+        else{
+          console.log(`error en la licencia `+ sn);
+        }
+      }  
+      else{
+        console.log(`error en la licencia `+ sn);
+      }
+    } 
+  }
+  else{
+    loadPemFile();
+  }  
+  return rslt;
+}
+
+
+/*
+
+
+export 
+
+
+function getKey(sn) {
+  var pscd = generateUUID();
+  var sgn = generateUUID();
+  let exp = (new Date()).getTime()+_30day;
+  let lic = {
+    "sn":sn,
+    "signature":sgn,
+    "expire":exp
+  }
+  var _2sen = JSON.stringify(lic);
+  var rs = CryptoJS.AES.encrypt(_2sen, pscd).toString();
+  var ky = CryptoJS.AES.encrypt(pscd, sn).toString();
+  let rslt = Base64.encode(JSON.stringify({signature:sgn,auth:rs,key:ky}).toString());  
+  return rslt;
+}
+
+
+yunior -- "71C28570-D623-0000-0000-000000000000"
+
+
+
+getKey("71C28570-D623-0000-0000-000000000000") 
+
+*/
 
 Object.defineProperty(exports, "__esModule", { value: true });
 class BaseRoute {
@@ -191,6 +318,1971 @@ class BaseRoute {
         res.locals.title = this.title;
         res.render(view, options);
     }
+}
+
+var global$1 = (typeof global !== "undefined" ? global :
+            typeof self !== "undefined" ? self :
+            typeof window !== "undefined" ? window : {});
+
+var lookup = [];
+var revLookup = [];
+var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array;
+var inited = false;
+function init () {
+  inited = true;
+  var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  for (var i = 0, len = code.length; i < len; ++i) {
+    lookup[i] = code[i];
+    revLookup[code.charCodeAt(i)] = i;
+  }
+
+  revLookup['-'.charCodeAt(0)] = 62;
+  revLookup['_'.charCodeAt(0)] = 63;
+}
+
+function toByteArray (b64) {
+  if (!inited) {
+    init();
+  }
+  var i, j, l, tmp, placeHolders, arr;
+  var len = b64.length;
+
+  if (len % 4 > 0) {
+    throw new Error('Invalid string. Length must be a multiple of 4')
+  }
+
+  // the number of equal signs (place holders)
+  // if there are two placeholders, than the two characters before it
+  // represent one byte
+  // if there is only one, then the three characters before it represent 2 bytes
+  // this is just a cheap hack to not do indexOf twice
+  placeHolders = b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0;
+
+  // base64 is 4/3 + up to two characters of the original data
+  arr = new Arr(len * 3 / 4 - placeHolders);
+
+  // if there are placeholders, only get up to the last complete 4 chars
+  l = placeHolders > 0 ? len - 4 : len;
+
+  var L = 0;
+
+  for (i = 0, j = 0; i < l; i += 4, j += 3) {
+    tmp = (revLookup[b64.charCodeAt(i)] << 18) | (revLookup[b64.charCodeAt(i + 1)] << 12) | (revLookup[b64.charCodeAt(i + 2)] << 6) | revLookup[b64.charCodeAt(i + 3)];
+    arr[L++] = (tmp >> 16) & 0xFF;
+    arr[L++] = (tmp >> 8) & 0xFF;
+    arr[L++] = tmp & 0xFF;
+  }
+
+  if (placeHolders === 2) {
+    tmp = (revLookup[b64.charCodeAt(i)] << 2) | (revLookup[b64.charCodeAt(i + 1)] >> 4);
+    arr[L++] = tmp & 0xFF;
+  } else if (placeHolders === 1) {
+    tmp = (revLookup[b64.charCodeAt(i)] << 10) | (revLookup[b64.charCodeAt(i + 1)] << 4) | (revLookup[b64.charCodeAt(i + 2)] >> 2);
+    arr[L++] = (tmp >> 8) & 0xFF;
+    arr[L++] = tmp & 0xFF;
+  }
+
+  return arr
+}
+
+function tripletToBase64 (num) {
+  return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F]
+}
+
+function encodeChunk (uint8, start, end) {
+  var tmp;
+  var output = [];
+  for (var i = start; i < end; i += 3) {
+    tmp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
+    output.push(tripletToBase64(tmp));
+  }
+  return output.join('')
+}
+
+function fromByteArray (uint8) {
+  if (!inited) {
+    init();
+  }
+  var tmp;
+  var len = uint8.length;
+  var extraBytes = len % 3; // if we have 1 byte left, pad 2 bytes
+  var output = '';
+  var parts = [];
+  var maxChunkLength = 16383; // must be multiple of 3
+
+  // go through the array every three bytes, we'll deal with trailing stuff later
+  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)));
+  }
+
+  // pad the end with zeros, but make sure to not forget the extra bytes
+  if (extraBytes === 1) {
+    tmp = uint8[len - 1];
+    output += lookup[tmp >> 2];
+    output += lookup[(tmp << 4) & 0x3F];
+    output += '==';
+  } else if (extraBytes === 2) {
+    tmp = (uint8[len - 2] << 8) + (uint8[len - 1]);
+    output += lookup[tmp >> 10];
+    output += lookup[(tmp >> 4) & 0x3F];
+    output += lookup[(tmp << 2) & 0x3F];
+    output += '=';
+  }
+
+  parts.push(output);
+
+  return parts.join('')
+}
+
+function read (buffer, offset, isLE, mLen, nBytes) {
+  var e, m;
+  var eLen = nBytes * 8 - mLen - 1;
+  var eMax = (1 << eLen) - 1;
+  var eBias = eMax >> 1;
+  var nBits = -7;
+  var i = isLE ? (nBytes - 1) : 0;
+  var d = isLE ? -1 : 1;
+  var s = buffer[offset + i];
+
+  i += d;
+
+  e = s & ((1 << (-nBits)) - 1);
+  s >>= (-nBits);
+  nBits += eLen;
+  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+  m = e & ((1 << (-nBits)) - 1);
+  e >>= (-nBits);
+  nBits += mLen;
+  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+  if (e === 0) {
+    e = 1 - eBias;
+  } else if (e === eMax) {
+    return m ? NaN : ((s ? -1 : 1) * Infinity)
+  } else {
+    m = m + Math.pow(2, mLen);
+    e = e - eBias;
+  }
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
+}
+
+function write (buffer, value, offset, isLE, mLen, nBytes) {
+  var e, m, c;
+  var eLen = nBytes * 8 - mLen - 1;
+  var eMax = (1 << eLen) - 1;
+  var eBias = eMax >> 1;
+  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0);
+  var i = isLE ? 0 : (nBytes - 1);
+  var d = isLE ? 1 : -1;
+  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0;
+
+  value = Math.abs(value);
+
+  if (isNaN(value) || value === Infinity) {
+    m = isNaN(value) ? 1 : 0;
+    e = eMax;
+  } else {
+    e = Math.floor(Math.log(value) / Math.LN2);
+    if (value * (c = Math.pow(2, -e)) < 1) {
+      e--;
+      c *= 2;
+    }
+    if (e + eBias >= 1) {
+      value += rt / c;
+    } else {
+      value += rt * Math.pow(2, 1 - eBias);
+    }
+    if (value * c >= 2) {
+      e++;
+      c /= 2;
+    }
+
+    if (e + eBias >= eMax) {
+      m = 0;
+      e = eMax;
+    } else if (e + eBias >= 1) {
+      m = (value * c - 1) * Math.pow(2, mLen);
+      e = e + eBias;
+    } else {
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
+      e = 0;
+    }
+  }
+
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+
+  e = (e << mLen) | m;
+  eLen += mLen;
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+
+  buffer[offset + i - d] |= s * 128;
+}
+
+var toString = {}.toString;
+
+var isArray = Array.isArray || function (arr) {
+  return toString.call(arr) == '[object Array]';
+};
+
+var INSPECT_MAX_BYTES = 50;
+
+/**
+ * If `Buffer.TYPED_ARRAY_SUPPORT`:
+ *   === true    Use Uint8Array implementation (fastest)
+ *   === false   Use Object implementation (most compatible, even IE6)
+ *
+ * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
+ * Opera 11.6+, iOS 4.2+.
+ *
+ * Due to various browser bugs, sometimes the Object implementation will be used even
+ * when the browser supports typed arrays.
+ *
+ * Note:
+ *
+ *   - Firefox 4-29 lacks support for adding new properties to `Uint8Array` instances,
+ *     See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
+ *
+ *   - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
+ *
+ *   - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
+ *     incorrect length in some situations.
+
+ * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
+ * get the Object implementation, which is slower but behaves correctly.
+ */
+Buffer.TYPED_ARRAY_SUPPORT = global$1.TYPED_ARRAY_SUPPORT !== undefined
+  ? global$1.TYPED_ARRAY_SUPPORT
+  : true;
+
+function kMaxLength () {
+  return Buffer.TYPED_ARRAY_SUPPORT
+    ? 0x7fffffff
+    : 0x3fffffff
+}
+
+function createBuffer (that, length) {
+  if (kMaxLength() < length) {
+    throw new RangeError('Invalid typed array length')
+  }
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    // Return an augmented `Uint8Array` instance, for best performance
+    that = new Uint8Array(length);
+    that.__proto__ = Buffer.prototype;
+  } else {
+    // Fallback: Return an object instance of the Buffer class
+    if (that === null) {
+      that = new Buffer(length);
+    }
+    that.length = length;
+  }
+
+  return that
+}
+
+/**
+ * The Buffer constructor returns instances of `Uint8Array` that have their
+ * prototype changed to `Buffer.prototype`. Furthermore, `Buffer` is a subclass of
+ * `Uint8Array`, so the returned instances will have all the node `Buffer` methods
+ * and the `Uint8Array` methods. Square bracket notation works as expected -- it
+ * returns a single octet.
+ *
+ * The `Uint8Array` prototype remains unmodified.
+ */
+
+function Buffer (arg, encodingOrOffset, length) {
+  if (!Buffer.TYPED_ARRAY_SUPPORT && !(this instanceof Buffer)) {
+    return new Buffer(arg, encodingOrOffset, length)
+  }
+
+  // Common case.
+  if (typeof arg === 'number') {
+    if (typeof encodingOrOffset === 'string') {
+      throw new Error(
+        'If encoding is specified then the first argument must be a string'
+      )
+    }
+    return allocUnsafe(this, arg)
+  }
+  return from(this, arg, encodingOrOffset, length)
+}
+
+Buffer.poolSize = 8192; // not used by this implementation
+
+// TODO: Legacy, not needed anymore. Remove in next major version.
+Buffer._augment = function (arr) {
+  arr.__proto__ = Buffer.prototype;
+  return arr
+};
+
+function from (that, value, encodingOrOffset, length) {
+  if (typeof value === 'number') {
+    throw new TypeError('"value" argument must not be a number')
+  }
+
+  if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
+    return fromArrayBuffer(that, value, encodingOrOffset, length)
+  }
+
+  if (typeof value === 'string') {
+    return fromString(that, value, encodingOrOffset)
+  }
+
+  return fromObject(that, value)
+}
+
+/**
+ * Functionally equivalent to Buffer(arg, encoding) but throws a TypeError
+ * if value is a number.
+ * Buffer.from(str[, encoding])
+ * Buffer.from(array)
+ * Buffer.from(buffer)
+ * Buffer.from(arrayBuffer[, byteOffset[, length]])
+ **/
+Buffer.from = function (value, encodingOrOffset, length) {
+  return from(null, value, encodingOrOffset, length)
+};
+
+if (Buffer.TYPED_ARRAY_SUPPORT) {
+  Buffer.prototype.__proto__ = Uint8Array.prototype;
+  Buffer.__proto__ = Uint8Array;
+}
+
+function assertSize (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('"size" argument must be a number')
+  } else if (size < 0) {
+    throw new RangeError('"size" argument must not be negative')
+  }
+}
+
+function alloc (that, size, fill, encoding) {
+  assertSize(size);
+  if (size <= 0) {
+    return createBuffer(that, size)
+  }
+  if (fill !== undefined) {
+    // Only pay attention to encoding if it's a string. This
+    // prevents accidentally sending in a number that would
+    // be interpretted as a start offset.
+    return typeof encoding === 'string'
+      ? createBuffer(that, size).fill(fill, encoding)
+      : createBuffer(that, size).fill(fill)
+  }
+  return createBuffer(that, size)
+}
+
+/**
+ * Creates a new filled Buffer instance.
+ * alloc(size[, fill[, encoding]])
+ **/
+Buffer.alloc = function (size, fill, encoding) {
+  return alloc(null, size, fill, encoding)
+};
+
+function allocUnsafe (that, size) {
+  assertSize(size);
+  that = createBuffer(that, size < 0 ? 0 : checked(size) | 0);
+  if (!Buffer.TYPED_ARRAY_SUPPORT) {
+    for (var i = 0; i < size; ++i) {
+      that[i] = 0;
+    }
+  }
+  return that
+}
+
+/**
+ * Equivalent to Buffer(num), by default creates a non-zero-filled Buffer instance.
+ * */
+Buffer.allocUnsafe = function (size) {
+  return allocUnsafe(null, size)
+};
+/**
+ * Equivalent to SlowBuffer(num), by default creates a non-zero-filled Buffer instance.
+ */
+Buffer.allocUnsafeSlow = function (size) {
+  return allocUnsafe(null, size)
+};
+
+function fromString (that, string, encoding) {
+  if (typeof encoding !== 'string' || encoding === '') {
+    encoding = 'utf8';
+  }
+
+  if (!Buffer.isEncoding(encoding)) {
+    throw new TypeError('"encoding" must be a valid string encoding')
+  }
+
+  var length = byteLength(string, encoding) | 0;
+  that = createBuffer(that, length);
+
+  var actual = that.write(string, encoding);
+
+  if (actual !== length) {
+    // Writing a hex string, for example, that contains invalid characters will
+    // cause everything after the first invalid character to be ignored. (e.g.
+    // 'abxxcd' will be treated as 'ab')
+    that = that.slice(0, actual);
+  }
+
+  return that
+}
+
+function fromArrayLike (that, array) {
+  var length = array.length < 0 ? 0 : checked(array.length) | 0;
+  that = createBuffer(that, length);
+  for (var i = 0; i < length; i += 1) {
+    that[i] = array[i] & 255;
+  }
+  return that
+}
+
+function fromArrayBuffer (that, array, byteOffset, length) {
+  array.byteLength; // this throws if `array` is not a valid ArrayBuffer
+
+  if (byteOffset < 0 || array.byteLength < byteOffset) {
+    throw new RangeError('\'offset\' is out of bounds')
+  }
+
+  if (array.byteLength < byteOffset + (length || 0)) {
+    throw new RangeError('\'length\' is out of bounds')
+  }
+
+  if (byteOffset === undefined && length === undefined) {
+    array = new Uint8Array(array);
+  } else if (length === undefined) {
+    array = new Uint8Array(array, byteOffset);
+  } else {
+    array = new Uint8Array(array, byteOffset, length);
+  }
+
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    // Return an augmented `Uint8Array` instance, for best performance
+    that = array;
+    that.__proto__ = Buffer.prototype;
+  } else {
+    // Fallback: Return an object instance of the Buffer class
+    that = fromArrayLike(that, array);
+  }
+  return that
+}
+
+function fromObject (that, obj) {
+  if (internalIsBuffer(obj)) {
+    var len = checked(obj.length) | 0;
+    that = createBuffer(that, len);
+
+    if (that.length === 0) {
+      return that
+    }
+
+    obj.copy(that, 0, 0, len);
+    return that
+  }
+
+  if (obj) {
+    if ((typeof ArrayBuffer !== 'undefined' &&
+        obj.buffer instanceof ArrayBuffer) || 'length' in obj) {
+      if (typeof obj.length !== 'number' || isnan(obj.length)) {
+        return createBuffer(that, 0)
+      }
+      return fromArrayLike(that, obj)
+    }
+
+    if (obj.type === 'Buffer' && isArray(obj.data)) {
+      return fromArrayLike(that, obj.data)
+    }
+  }
+
+  throw new TypeError('First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.')
+}
+
+function checked (length) {
+  // Note: cannot use `length < kMaxLength()` here because that fails when
+  // length is NaN (which is otherwise coerced to zero.)
+  if (length >= kMaxLength()) {
+    throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
+                         'size: 0x' + kMaxLength().toString(16) + ' bytes')
+  }
+  return length | 0
+}
+Buffer.isBuffer = isBuffer;
+function internalIsBuffer (b) {
+  return !!(b != null && b._isBuffer)
+}
+
+Buffer.compare = function compare (a, b) {
+  if (!internalIsBuffer(a) || !internalIsBuffer(b)) {
+    throw new TypeError('Arguments must be Buffers')
+  }
+
+  if (a === b) return 0
+
+  var x = a.length;
+  var y = b.length;
+
+  for (var i = 0, len = Math.min(x, y); i < len; ++i) {
+    if (a[i] !== b[i]) {
+      x = a[i];
+      y = b[i];
+      break
+    }
+  }
+
+  if (x < y) return -1
+  if (y < x) return 1
+  return 0
+};
+
+Buffer.isEncoding = function isEncoding (encoding) {
+  switch (String(encoding).toLowerCase()) {
+    case 'hex':
+    case 'utf8':
+    case 'utf-8':
+    case 'ascii':
+    case 'latin1':
+    case 'binary':
+    case 'base64':
+    case 'ucs2':
+    case 'ucs-2':
+    case 'utf16le':
+    case 'utf-16le':
+      return true
+    default:
+      return false
+  }
+};
+
+Buffer.concat = function concat (list, length) {
+  if (!isArray(list)) {
+    throw new TypeError('"list" argument must be an Array of Buffers')
+  }
+
+  if (list.length === 0) {
+    return Buffer.alloc(0)
+  }
+
+  var i;
+  if (length === undefined) {
+    length = 0;
+    for (i = 0; i < list.length; ++i) {
+      length += list[i].length;
+    }
+  }
+
+  var buffer = Buffer.allocUnsafe(length);
+  var pos = 0;
+  for (i = 0; i < list.length; ++i) {
+    var buf = list[i];
+    if (!internalIsBuffer(buf)) {
+      throw new TypeError('"list" argument must be an Array of Buffers')
+    }
+    buf.copy(buffer, pos);
+    pos += buf.length;
+  }
+  return buffer
+};
+
+function byteLength (string, encoding) {
+  if (internalIsBuffer(string)) {
+    return string.length
+  }
+  if (typeof ArrayBuffer !== 'undefined' && typeof ArrayBuffer.isView === 'function' &&
+      (ArrayBuffer.isView(string) || string instanceof ArrayBuffer)) {
+    return string.byteLength
+  }
+  if (typeof string !== 'string') {
+    string = '' + string;
+  }
+
+  var len = string.length;
+  if (len === 0) return 0
+
+  // Use a for loop to avoid recursion
+  var loweredCase = false;
+  for (;;) {
+    switch (encoding) {
+      case 'ascii':
+      case 'latin1':
+      case 'binary':
+        return len
+      case 'utf8':
+      case 'utf-8':
+      case undefined:
+        return utf8ToBytes(string).length
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return len * 2
+      case 'hex':
+        return len >>> 1
+      case 'base64':
+        return base64ToBytes(string).length
+      default:
+        if (loweredCase) return utf8ToBytes(string).length // assume utf8
+        encoding = ('' + encoding).toLowerCase();
+        loweredCase = true;
+    }
+  }
+}
+Buffer.byteLength = byteLength;
+
+function slowToString (encoding, start, end) {
+  var loweredCase = false;
+
+  // No need to verify that "this.length <= MAX_UINT32" since it's a read-only
+  // property of a typed array.
+
+  // This behaves neither like String nor Uint8Array in that we set start/end
+  // to their upper/lower bounds if the value passed is out of range.
+  // undefined is handled specially as per ECMA-262 6th Edition,
+  // Section 13.3.3.7 Runtime Semantics: KeyedBindingInitialization.
+  if (start === undefined || start < 0) {
+    start = 0;
+  }
+  // Return early if start > this.length. Done here to prevent potential uint32
+  // coercion fail below.
+  if (start > this.length) {
+    return ''
+  }
+
+  if (end === undefined || end > this.length) {
+    end = this.length;
+  }
+
+  if (end <= 0) {
+    return ''
+  }
+
+  // Force coersion to uint32. This will also coerce falsey/NaN values to 0.
+  end >>>= 0;
+  start >>>= 0;
+
+  if (end <= start) {
+    return ''
+  }
+
+  if (!encoding) encoding = 'utf8';
+
+  while (true) {
+    switch (encoding) {
+      case 'hex':
+        return hexSlice(this, start, end)
+
+      case 'utf8':
+      case 'utf-8':
+        return utf8Slice(this, start, end)
+
+      case 'ascii':
+        return asciiSlice(this, start, end)
+
+      case 'latin1':
+      case 'binary':
+        return latin1Slice(this, start, end)
+
+      case 'base64':
+        return base64Slice(this, start, end)
+
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return utf16leSlice(this, start, end)
+
+      default:
+        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+        encoding = (encoding + '').toLowerCase();
+        loweredCase = true;
+    }
+  }
+}
+
+// The property is used by `Buffer.isBuffer` and `is-buffer` (in Safari 5-7) to detect
+// Buffer instances.
+Buffer.prototype._isBuffer = true;
+
+function swap (b, n, m) {
+  var i = b[n];
+  b[n] = b[m];
+  b[m] = i;
+}
+
+Buffer.prototype.swap16 = function swap16 () {
+  var len = this.length;
+  if (len % 2 !== 0) {
+    throw new RangeError('Buffer size must be a multiple of 16-bits')
+  }
+  for (var i = 0; i < len; i += 2) {
+    swap(this, i, i + 1);
+  }
+  return this
+};
+
+Buffer.prototype.swap32 = function swap32 () {
+  var len = this.length;
+  if (len % 4 !== 0) {
+    throw new RangeError('Buffer size must be a multiple of 32-bits')
+  }
+  for (var i = 0; i < len; i += 4) {
+    swap(this, i, i + 3);
+    swap(this, i + 1, i + 2);
+  }
+  return this
+};
+
+Buffer.prototype.swap64 = function swap64 () {
+  var len = this.length;
+  if (len % 8 !== 0) {
+    throw new RangeError('Buffer size must be a multiple of 64-bits')
+  }
+  for (var i = 0; i < len; i += 8) {
+    swap(this, i, i + 7);
+    swap(this, i + 1, i + 6);
+    swap(this, i + 2, i + 5);
+    swap(this, i + 3, i + 4);
+  }
+  return this
+};
+
+Buffer.prototype.toString = function toString () {
+  var length = this.length | 0;
+  if (length === 0) return ''
+  if (arguments.length === 0) return utf8Slice(this, 0, length)
+  return slowToString.apply(this, arguments)
+};
+
+Buffer.prototype.equals = function equals (b) {
+  if (!internalIsBuffer(b)) throw new TypeError('Argument must be a Buffer')
+  if (this === b) return true
+  return Buffer.compare(this, b) === 0
+};
+
+Buffer.prototype.inspect = function inspect () {
+  var str = '';
+  var max = INSPECT_MAX_BYTES;
+  if (this.length > 0) {
+    str = this.toString('hex', 0, max).match(/.{2}/g).join(' ');
+    if (this.length > max) str += ' ... ';
+  }
+  return '<Buffer ' + str + '>'
+};
+
+Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
+  if (!internalIsBuffer(target)) {
+    throw new TypeError('Argument must be a Buffer')
+  }
+
+  if (start === undefined) {
+    start = 0;
+  }
+  if (end === undefined) {
+    end = target ? target.length : 0;
+  }
+  if (thisStart === undefined) {
+    thisStart = 0;
+  }
+  if (thisEnd === undefined) {
+    thisEnd = this.length;
+  }
+
+  if (start < 0 || end > target.length || thisStart < 0 || thisEnd > this.length) {
+    throw new RangeError('out of range index')
+  }
+
+  if (thisStart >= thisEnd && start >= end) {
+    return 0
+  }
+  if (thisStart >= thisEnd) {
+    return -1
+  }
+  if (start >= end) {
+    return 1
+  }
+
+  start >>>= 0;
+  end >>>= 0;
+  thisStart >>>= 0;
+  thisEnd >>>= 0;
+
+  if (this === target) return 0
+
+  var x = thisEnd - thisStart;
+  var y = end - start;
+  var len = Math.min(x, y);
+
+  var thisCopy = this.slice(thisStart, thisEnd);
+  var targetCopy = target.slice(start, end);
+
+  for (var i = 0; i < len; ++i) {
+    if (thisCopy[i] !== targetCopy[i]) {
+      x = thisCopy[i];
+      y = targetCopy[i];
+      break
+    }
+  }
+
+  if (x < y) return -1
+  if (y < x) return 1
+  return 0
+};
+
+// Finds either the first index of `val` in `buffer` at offset >= `byteOffset`,
+// OR the last index of `val` in `buffer` at offset <= `byteOffset`.
+//
+// Arguments:
+// - buffer - a Buffer to search
+// - val - a string, Buffer, or number
+// - byteOffset - an index into `buffer`; will be clamped to an int32
+// - encoding - an optional encoding, relevant is val is a string
+// - dir - true for indexOf, false for lastIndexOf
+function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
+  // Empty buffer means no match
+  if (buffer.length === 0) return -1
+
+  // Normalize byteOffset
+  if (typeof byteOffset === 'string') {
+    encoding = byteOffset;
+    byteOffset = 0;
+  } else if (byteOffset > 0x7fffffff) {
+    byteOffset = 0x7fffffff;
+  } else if (byteOffset < -0x80000000) {
+    byteOffset = -0x80000000;
+  }
+  byteOffset = +byteOffset;  // Coerce to Number.
+  if (isNaN(byteOffset)) {
+    // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
+    byteOffset = dir ? 0 : (buffer.length - 1);
+  }
+
+  // Normalize byteOffset: negative offsets start from the end of the buffer
+  if (byteOffset < 0) byteOffset = buffer.length + byteOffset;
+  if (byteOffset >= buffer.length) {
+    if (dir) return -1
+    else byteOffset = buffer.length - 1;
+  } else if (byteOffset < 0) {
+    if (dir) byteOffset = 0;
+    else return -1
+  }
+
+  // Normalize val
+  if (typeof val === 'string') {
+    val = Buffer.from(val, encoding);
+  }
+
+  // Finally, search either indexOf (if dir is true) or lastIndexOf
+  if (internalIsBuffer(val)) {
+    // Special case: looking for empty string/buffer always fails
+    if (val.length === 0) {
+      return -1
+    }
+    return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
+  } else if (typeof val === 'number') {
+    val = val & 0xFF; // Search for a byte value [0-255]
+    if (Buffer.TYPED_ARRAY_SUPPORT &&
+        typeof Uint8Array.prototype.indexOf === 'function') {
+      if (dir) {
+        return Uint8Array.prototype.indexOf.call(buffer, val, byteOffset)
+      } else {
+        return Uint8Array.prototype.lastIndexOf.call(buffer, val, byteOffset)
+      }
+    }
+    return arrayIndexOf(buffer, [ val ], byteOffset, encoding, dir)
+  }
+
+  throw new TypeError('val must be string, number or Buffer')
+}
+
+function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
+  var indexSize = 1;
+  var arrLength = arr.length;
+  var valLength = val.length;
+
+  if (encoding !== undefined) {
+    encoding = String(encoding).toLowerCase();
+    if (encoding === 'ucs2' || encoding === 'ucs-2' ||
+        encoding === 'utf16le' || encoding === 'utf-16le') {
+      if (arr.length < 2 || val.length < 2) {
+        return -1
+      }
+      indexSize = 2;
+      arrLength /= 2;
+      valLength /= 2;
+      byteOffset /= 2;
+    }
+  }
+
+  function read (buf, i) {
+    if (indexSize === 1) {
+      return buf[i]
+    } else {
+      return buf.readUInt16BE(i * indexSize)
+    }
+  }
+
+  var i;
+  if (dir) {
+    var foundIndex = -1;
+    for (i = byteOffset; i < arrLength; i++) {
+      if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+        if (foundIndex === -1) foundIndex = i;
+        if (i - foundIndex + 1 === valLength) return foundIndex * indexSize
+      } else {
+        if (foundIndex !== -1) i -= i - foundIndex;
+        foundIndex = -1;
+      }
+    }
+  } else {
+    if (byteOffset + valLength > arrLength) byteOffset = arrLength - valLength;
+    for (i = byteOffset; i >= 0; i--) {
+      var found = true;
+      for (var j = 0; j < valLength; j++) {
+        if (read(arr, i + j) !== read(val, j)) {
+          found = false;
+          break
+        }
+      }
+      if (found) return i
+    }
+  }
+
+  return -1
+}
+
+Buffer.prototype.includes = function includes (val, byteOffset, encoding) {
+  return this.indexOf(val, byteOffset, encoding) !== -1
+};
+
+Buffer.prototype.indexOf = function indexOf (val, byteOffset, encoding) {
+  return bidirectionalIndexOf(this, val, byteOffset, encoding, true)
+};
+
+Buffer.prototype.lastIndexOf = function lastIndexOf (val, byteOffset, encoding) {
+  return bidirectionalIndexOf(this, val, byteOffset, encoding, false)
+};
+
+function hexWrite (buf, string, offset, length) {
+  offset = Number(offset) || 0;
+  var remaining = buf.length - offset;
+  if (!length) {
+    length = remaining;
+  } else {
+    length = Number(length);
+    if (length > remaining) {
+      length = remaining;
+    }
+  }
+
+  // must be an even number of digits
+  var strLen = string.length;
+  if (strLen % 2 !== 0) throw new TypeError('Invalid hex string')
+
+  if (length > strLen / 2) {
+    length = strLen / 2;
+  }
+  for (var i = 0; i < length; ++i) {
+    var parsed = parseInt(string.substr(i * 2, 2), 16);
+    if (isNaN(parsed)) return i
+    buf[offset + i] = parsed;
+  }
+  return i
+}
+
+function utf8Write (buf, string, offset, length) {
+  return blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
+}
+
+function asciiWrite (buf, string, offset, length) {
+  return blitBuffer(asciiToBytes(string), buf, offset, length)
+}
+
+function latin1Write (buf, string, offset, length) {
+  return asciiWrite(buf, string, offset, length)
+}
+
+function base64Write (buf, string, offset, length) {
+  return blitBuffer(base64ToBytes(string), buf, offset, length)
+}
+
+function ucs2Write (buf, string, offset, length) {
+  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
+}
+
+Buffer.prototype.write = function write (string, offset, length, encoding) {
+  // Buffer#write(string)
+  if (offset === undefined) {
+    encoding = 'utf8';
+    length = this.length;
+    offset = 0;
+  // Buffer#write(string, encoding)
+  } else if (length === undefined && typeof offset === 'string') {
+    encoding = offset;
+    length = this.length;
+    offset = 0;
+  // Buffer#write(string, offset[, length][, encoding])
+  } else if (isFinite(offset)) {
+    offset = offset | 0;
+    if (isFinite(length)) {
+      length = length | 0;
+      if (encoding === undefined) encoding = 'utf8';
+    } else {
+      encoding = length;
+      length = undefined;
+    }
+  // legacy write(string, encoding, offset, length) - remove in v0.13
+  } else {
+    throw new Error(
+      'Buffer.write(string, encoding, offset[, length]) is no longer supported'
+    )
+  }
+
+  var remaining = this.length - offset;
+  if (length === undefined || length > remaining) length = remaining;
+
+  if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
+    throw new RangeError('Attempt to write outside buffer bounds')
+  }
+
+  if (!encoding) encoding = 'utf8';
+
+  var loweredCase = false;
+  for (;;) {
+    switch (encoding) {
+      case 'hex':
+        return hexWrite(this, string, offset, length)
+
+      case 'utf8':
+      case 'utf-8':
+        return utf8Write(this, string, offset, length)
+
+      case 'ascii':
+        return asciiWrite(this, string, offset, length)
+
+      case 'latin1':
+      case 'binary':
+        return latin1Write(this, string, offset, length)
+
+      case 'base64':
+        // Warning: maxLength not taken into account in base64Write
+        return base64Write(this, string, offset, length)
+
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return ucs2Write(this, string, offset, length)
+
+      default:
+        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+        encoding = ('' + encoding).toLowerCase();
+        loweredCase = true;
+    }
+  }
+};
+
+Buffer.prototype.toJSON = function toJSON () {
+  return {
+    type: 'Buffer',
+    data: Array.prototype.slice.call(this._arr || this, 0)
+  }
+};
+
+function base64Slice (buf, start, end) {
+  if (start === 0 && end === buf.length) {
+    return fromByteArray(buf)
+  } else {
+    return fromByteArray(buf.slice(start, end))
+  }
+}
+
+function utf8Slice (buf, start, end) {
+  end = Math.min(buf.length, end);
+  var res = [];
+
+  var i = start;
+  while (i < end) {
+    var firstByte = buf[i];
+    var codePoint = null;
+    var bytesPerSequence = (firstByte > 0xEF) ? 4
+      : (firstByte > 0xDF) ? 3
+      : (firstByte > 0xBF) ? 2
+      : 1;
+
+    if (i + bytesPerSequence <= end) {
+      var secondByte, thirdByte, fourthByte, tempCodePoint;
+
+      switch (bytesPerSequence) {
+        case 1:
+          if (firstByte < 0x80) {
+            codePoint = firstByte;
+          }
+          break
+        case 2:
+          secondByte = buf[i + 1];
+          if ((secondByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0x1F) << 0x6 | (secondByte & 0x3F);
+            if (tempCodePoint > 0x7F) {
+              codePoint = tempCodePoint;
+            }
+          }
+          break
+        case 3:
+          secondByte = buf[i + 1];
+          thirdByte = buf[i + 2];
+          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0xF) << 0xC | (secondByte & 0x3F) << 0x6 | (thirdByte & 0x3F);
+            if (tempCodePoint > 0x7FF && (tempCodePoint < 0xD800 || tempCodePoint > 0xDFFF)) {
+              codePoint = tempCodePoint;
+            }
+          }
+          break
+        case 4:
+          secondByte = buf[i + 1];
+          thirdByte = buf[i + 2];
+          fourthByte = buf[i + 3];
+          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80 && (fourthByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0xF) << 0x12 | (secondByte & 0x3F) << 0xC | (thirdByte & 0x3F) << 0x6 | (fourthByte & 0x3F);
+            if (tempCodePoint > 0xFFFF && tempCodePoint < 0x110000) {
+              codePoint = tempCodePoint;
+            }
+          }
+      }
+    }
+
+    if (codePoint === null) {
+      // we did not generate a valid codePoint so insert a
+      // replacement char (U+FFFD) and advance only 1 byte
+      codePoint = 0xFFFD;
+      bytesPerSequence = 1;
+    } else if (codePoint > 0xFFFF) {
+      // encode to utf16 (surrogate pair dance)
+      codePoint -= 0x10000;
+      res.push(codePoint >>> 10 & 0x3FF | 0xD800);
+      codePoint = 0xDC00 | codePoint & 0x3FF;
+    }
+
+    res.push(codePoint);
+    i += bytesPerSequence;
+  }
+
+  return decodeCodePointsArray(res)
+}
+
+// Based on http://stackoverflow.com/a/22747272/680742, the browser with
+// the lowest limit is Chrome, with 0x10000 args.
+// We go 1 magnitude less, for safety
+var MAX_ARGUMENTS_LENGTH = 0x1000;
+
+function decodeCodePointsArray (codePoints) {
+  var len = codePoints.length;
+  if (len <= MAX_ARGUMENTS_LENGTH) {
+    return String.fromCharCode.apply(String, codePoints) // avoid extra slice()
+  }
+
+  // Decode in chunks to avoid "call stack size exceeded".
+  var res = '';
+  var i = 0;
+  while (i < len) {
+    res += String.fromCharCode.apply(
+      String,
+      codePoints.slice(i, i += MAX_ARGUMENTS_LENGTH)
+    );
+  }
+  return res
+}
+
+function asciiSlice (buf, start, end) {
+  var ret = '';
+  end = Math.min(buf.length, end);
+
+  for (var i = start; i < end; ++i) {
+    ret += String.fromCharCode(buf[i] & 0x7F);
+  }
+  return ret
+}
+
+function latin1Slice (buf, start, end) {
+  var ret = '';
+  end = Math.min(buf.length, end);
+
+  for (var i = start; i < end; ++i) {
+    ret += String.fromCharCode(buf[i]);
+  }
+  return ret
+}
+
+function hexSlice (buf, start, end) {
+  var len = buf.length;
+
+  if (!start || start < 0) start = 0;
+  if (!end || end < 0 || end > len) end = len;
+
+  var out = '';
+  for (var i = start; i < end; ++i) {
+    out += toHex(buf[i]);
+  }
+  return out
+}
+
+function utf16leSlice (buf, start, end) {
+  var bytes = buf.slice(start, end);
+  var res = '';
+  for (var i = 0; i < bytes.length; i += 2) {
+    res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256);
+  }
+  return res
+}
+
+Buffer.prototype.slice = function slice (start, end) {
+  var len = this.length;
+  start = ~~start;
+  end = end === undefined ? len : ~~end;
+
+  if (start < 0) {
+    start += len;
+    if (start < 0) start = 0;
+  } else if (start > len) {
+    start = len;
+  }
+
+  if (end < 0) {
+    end += len;
+    if (end < 0) end = 0;
+  } else if (end > len) {
+    end = len;
+  }
+
+  if (end < start) end = start;
+
+  var newBuf;
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    newBuf = this.subarray(start, end);
+    newBuf.__proto__ = Buffer.prototype;
+  } else {
+    var sliceLen = end - start;
+    newBuf = new Buffer(sliceLen, undefined);
+    for (var i = 0; i < sliceLen; ++i) {
+      newBuf[i] = this[i + start];
+    }
+  }
+
+  return newBuf
+};
+
+/*
+ * Need to make sure that buffer isn't trying to write out of bounds.
+ */
+function checkOffset (offset, ext, length) {
+  if ((offset % 1) !== 0 || offset < 0) throw new RangeError('offset is not uint')
+  if (offset + ext > length) throw new RangeError('Trying to access beyond buffer length')
+}
+
+Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
+  offset = offset | 0;
+  byteLength = byteLength | 0;
+  if (!noAssert) checkOffset(offset, byteLength, this.length);
+
+  var val = this[offset];
+  var mul = 1;
+  var i = 0;
+  while (++i < byteLength && (mul *= 0x100)) {
+    val += this[offset + i] * mul;
+  }
+
+  return val
+};
+
+Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
+  offset = offset | 0;
+  byteLength = byteLength | 0;
+  if (!noAssert) {
+    checkOffset(offset, byteLength, this.length);
+  }
+
+  var val = this[offset + --byteLength];
+  var mul = 1;
+  while (byteLength > 0 && (mul *= 0x100)) {
+    val += this[offset + --byteLength] * mul;
+  }
+
+  return val
+};
+
+Buffer.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 1, this.length);
+  return this[offset]
+};
+
+Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length);
+  return this[offset] | (this[offset + 1] << 8)
+};
+
+Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length);
+  return (this[offset] << 8) | this[offset + 1]
+};
+
+Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length);
+
+  return ((this[offset]) |
+      (this[offset + 1] << 8) |
+      (this[offset + 2] << 16)) +
+      (this[offset + 3] * 0x1000000)
+};
+
+Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length);
+
+  return (this[offset] * 0x1000000) +
+    ((this[offset + 1] << 16) |
+    (this[offset + 2] << 8) |
+    this[offset + 3])
+};
+
+Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
+  offset = offset | 0;
+  byteLength = byteLength | 0;
+  if (!noAssert) checkOffset(offset, byteLength, this.length);
+
+  var val = this[offset];
+  var mul = 1;
+  var i = 0;
+  while (++i < byteLength && (mul *= 0x100)) {
+    val += this[offset + i] * mul;
+  }
+  mul *= 0x80;
+
+  if (val >= mul) val -= Math.pow(2, 8 * byteLength);
+
+  return val
+};
+
+Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
+  offset = offset | 0;
+  byteLength = byteLength | 0;
+  if (!noAssert) checkOffset(offset, byteLength, this.length);
+
+  var i = byteLength;
+  var mul = 1;
+  var val = this[offset + --i];
+  while (i > 0 && (mul *= 0x100)) {
+    val += this[offset + --i] * mul;
+  }
+  mul *= 0x80;
+
+  if (val >= mul) val -= Math.pow(2, 8 * byteLength);
+
+  return val
+};
+
+Buffer.prototype.readInt8 = function readInt8 (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 1, this.length);
+  if (!(this[offset] & 0x80)) return (this[offset])
+  return ((0xff - this[offset] + 1) * -1)
+};
+
+Buffer.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length);
+  var val = this[offset] | (this[offset + 1] << 8);
+  return (val & 0x8000) ? val | 0xFFFF0000 : val
+};
+
+Buffer.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 2, this.length);
+  var val = this[offset + 1] | (this[offset] << 8);
+  return (val & 0x8000) ? val | 0xFFFF0000 : val
+};
+
+Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length);
+
+  return (this[offset]) |
+    (this[offset + 1] << 8) |
+    (this[offset + 2] << 16) |
+    (this[offset + 3] << 24)
+};
+
+Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length);
+
+  return (this[offset] << 24) |
+    (this[offset + 1] << 16) |
+    (this[offset + 2] << 8) |
+    (this[offset + 3])
+};
+
+Buffer.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length);
+  return read(this, offset, true, 23, 4)
+};
+
+Buffer.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 4, this.length);
+  return read(this, offset, false, 23, 4)
+};
+
+Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 8, this.length);
+  return read(this, offset, true, 52, 8)
+};
+
+Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
+  if (!noAssert) checkOffset(offset, 8, this.length);
+  return read(this, offset, false, 52, 8)
+};
+
+function checkInt (buf, value, offset, ext, max, min) {
+  if (!internalIsBuffer(buf)) throw new TypeError('"buffer" argument must be a Buffer instance')
+  if (value > max || value < min) throw new RangeError('"value" argument is out of bounds')
+  if (offset + ext > buf.length) throw new RangeError('Index out of range')
+}
+
+Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  byteLength = byteLength | 0;
+  if (!noAssert) {
+    var maxBytes = Math.pow(2, 8 * byteLength) - 1;
+    checkInt(this, value, offset, byteLength, maxBytes, 0);
+  }
+
+  var mul = 1;
+  var i = 0;
+  this[offset] = value & 0xFF;
+  while (++i < byteLength && (mul *= 0x100)) {
+    this[offset + i] = (value / mul) & 0xFF;
+  }
+
+  return offset + byteLength
+};
+
+Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  byteLength = byteLength | 0;
+  if (!noAssert) {
+    var maxBytes = Math.pow(2, 8 * byteLength) - 1;
+    checkInt(this, value, offset, byteLength, maxBytes, 0);
+  }
+
+  var i = byteLength - 1;
+  var mul = 1;
+  this[offset + i] = value & 0xFF;
+  while (--i >= 0 && (mul *= 0x100)) {
+    this[offset + i] = (value / mul) & 0xFF;
+  }
+
+  return offset + byteLength
+};
+
+Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0);
+  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
+  this[offset] = (value & 0xff);
+  return offset + 1
+};
+
+function objectWriteUInt16 (buf, value, offset, littleEndian) {
+  if (value < 0) value = 0xffff + value + 1;
+  for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
+    buf[offset + i] = (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
+      (littleEndian ? i : 1 - i) * 8;
+  }
+}
+
+Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value & 0xff);
+    this[offset + 1] = (value >>> 8);
+  } else {
+    objectWriteUInt16(this, value, offset, true);
+  }
+  return offset + 2
+};
+
+Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 8);
+    this[offset + 1] = (value & 0xff);
+  } else {
+    objectWriteUInt16(this, value, offset, false);
+  }
+  return offset + 2
+};
+
+function objectWriteUInt32 (buf, value, offset, littleEndian) {
+  if (value < 0) value = 0xffffffff + value + 1;
+  for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
+    buf[offset + i] = (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff;
+  }
+}
+
+Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset + 3] = (value >>> 24);
+    this[offset + 2] = (value >>> 16);
+    this[offset + 1] = (value >>> 8);
+    this[offset] = (value & 0xff);
+  } else {
+    objectWriteUInt32(this, value, offset, true);
+  }
+  return offset + 4
+};
+
+Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 24);
+    this[offset + 1] = (value >>> 16);
+    this[offset + 2] = (value >>> 8);
+    this[offset + 3] = (value & 0xff);
+  } else {
+    objectWriteUInt32(this, value, offset, false);
+  }
+  return offset + 4
+};
+
+Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) {
+    var limit = Math.pow(2, 8 * byteLength - 1);
+
+    checkInt(this, value, offset, byteLength, limit - 1, -limit);
+  }
+
+  var i = 0;
+  var mul = 1;
+  var sub = 0;
+  this[offset] = value & 0xFF;
+  while (++i < byteLength && (mul *= 0x100)) {
+    if (value < 0 && sub === 0 && this[offset + i - 1] !== 0) {
+      sub = 1;
+    }
+    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
+  }
+
+  return offset + byteLength
+};
+
+Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) {
+    var limit = Math.pow(2, 8 * byteLength - 1);
+
+    checkInt(this, value, offset, byteLength, limit - 1, -limit);
+  }
+
+  var i = byteLength - 1;
+  var mul = 1;
+  var sub = 0;
+  this[offset + i] = value & 0xFF;
+  while (--i >= 0 && (mul *= 0x100)) {
+    if (value < 0 && sub === 0 && this[offset + i + 1] !== 0) {
+      sub = 1;
+    }
+    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
+  }
+
+  return offset + byteLength
+};
+
+Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80);
+  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
+  if (value < 0) value = 0xff + value + 1;
+  this[offset] = (value & 0xff);
+  return offset + 1
+};
+
+Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value & 0xff);
+    this[offset + 1] = (value >>> 8);
+  } else {
+    objectWriteUInt16(this, value, offset, true);
+  }
+  return offset + 2
+};
+
+Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 8);
+    this[offset + 1] = (value & 0xff);
+  } else {
+    objectWriteUInt16(this, value, offset, false);
+  }
+  return offset + 2
+};
+
+Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value & 0xff);
+    this[offset + 1] = (value >>> 8);
+    this[offset + 2] = (value >>> 16);
+    this[offset + 3] = (value >>> 24);
+  } else {
+    objectWriteUInt32(this, value, offset, true);
+  }
+  return offset + 4
+};
+
+Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
+  value = +value;
+  offset = offset | 0;
+  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
+  if (value < 0) value = 0xffffffff + value + 1;
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    this[offset] = (value >>> 24);
+    this[offset + 1] = (value >>> 16);
+    this[offset + 2] = (value >>> 8);
+    this[offset + 3] = (value & 0xff);
+  } else {
+    objectWriteUInt32(this, value, offset, false);
+  }
+  return offset + 4
+};
+
+function checkIEEE754 (buf, value, offset, ext, max, min) {
+  if (offset + ext > buf.length) throw new RangeError('Index out of range')
+  if (offset < 0) throw new RangeError('Index out of range')
+}
+
+function writeFloat (buf, value, offset, littleEndian, noAssert) {
+  if (!noAssert) {
+    checkIEEE754(buf, value, offset, 4);
+  }
+  write(buf, value, offset, littleEndian, 23, 4);
+  return offset + 4
+}
+
+Buffer.prototype.writeFloatLE = function writeFloatLE (value, offset, noAssert) {
+  return writeFloat(this, value, offset, true, noAssert)
+};
+
+Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) {
+  return writeFloat(this, value, offset, false, noAssert)
+};
+
+function writeDouble (buf, value, offset, littleEndian, noAssert) {
+  if (!noAssert) {
+    checkIEEE754(buf, value, offset, 8);
+  }
+  write(buf, value, offset, littleEndian, 52, 8);
+  return offset + 8
+}
+
+Buffer.prototype.writeDoubleLE = function writeDoubleLE (value, offset, noAssert) {
+  return writeDouble(this, value, offset, true, noAssert)
+};
+
+Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert) {
+  return writeDouble(this, value, offset, false, noAssert)
+};
+
+// copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
+Buffer.prototype.copy = function copy (target, targetStart, start, end) {
+  if (!start) start = 0;
+  if (!end && end !== 0) end = this.length;
+  if (targetStart >= target.length) targetStart = target.length;
+  if (!targetStart) targetStart = 0;
+  if (end > 0 && end < start) end = start;
+
+  // Copy 0 bytes; we're done
+  if (end === start) return 0
+  if (target.length === 0 || this.length === 0) return 0
+
+  // Fatal error conditions
+  if (targetStart < 0) {
+    throw new RangeError('targetStart out of bounds')
+  }
+  if (start < 0 || start >= this.length) throw new RangeError('sourceStart out of bounds')
+  if (end < 0) throw new RangeError('sourceEnd out of bounds')
+
+  // Are we oob?
+  if (end > this.length) end = this.length;
+  if (target.length - targetStart < end - start) {
+    end = target.length - targetStart + start;
+  }
+
+  var len = end - start;
+  var i;
+
+  if (this === target && start < targetStart && targetStart < end) {
+    // descending copy from end
+    for (i = len - 1; i >= 0; --i) {
+      target[i + targetStart] = this[i + start];
+    }
+  } else if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
+    // ascending copy from start
+    for (i = 0; i < len; ++i) {
+      target[i + targetStart] = this[i + start];
+    }
+  } else {
+    Uint8Array.prototype.set.call(
+      target,
+      this.subarray(start, start + len),
+      targetStart
+    );
+  }
+
+  return len
+};
+
+// Usage:
+//    buffer.fill(number[, offset[, end]])
+//    buffer.fill(buffer[, offset[, end]])
+//    buffer.fill(string[, offset[, end]][, encoding])
+Buffer.prototype.fill = function fill (val, start, end, encoding) {
+  // Handle string cases:
+  if (typeof val === 'string') {
+    if (typeof start === 'string') {
+      encoding = start;
+      start = 0;
+      end = this.length;
+    } else if (typeof end === 'string') {
+      encoding = end;
+      end = this.length;
+    }
+    if (val.length === 1) {
+      var code = val.charCodeAt(0);
+      if (code < 256) {
+        val = code;
+      }
+    }
+    if (encoding !== undefined && typeof encoding !== 'string') {
+      throw new TypeError('encoding must be a string')
+    }
+    if (typeof encoding === 'string' && !Buffer.isEncoding(encoding)) {
+      throw new TypeError('Unknown encoding: ' + encoding)
+    }
+  } else if (typeof val === 'number') {
+    val = val & 255;
+  }
+
+  // Invalid ranges are not set to a default, so can range check early.
+  if (start < 0 || this.length < start || this.length < end) {
+    throw new RangeError('Out of range index')
+  }
+
+  if (end <= start) {
+    return this
+  }
+
+  start = start >>> 0;
+  end = end === undefined ? this.length : end >>> 0;
+
+  if (!val) val = 0;
+
+  var i;
+  if (typeof val === 'number') {
+    for (i = start; i < end; ++i) {
+      this[i] = val;
+    }
+  } else {
+    var bytes = internalIsBuffer(val)
+      ? val
+      : utf8ToBytes(new Buffer(val, encoding).toString());
+    var len = bytes.length;
+    for (i = 0; i < end - start; ++i) {
+      this[i + start] = bytes[i % len];
+    }
+  }
+
+  return this
+};
+
+// HELPER FUNCTIONS
+// ================
+
+var INVALID_BASE64_RE = /[^+\/0-9A-Za-z-_]/g;
+
+function base64clean (str) {
+  // Node strips out invalid characters like \n and \t from the string, base64-js does not
+  str = stringtrim(str).replace(INVALID_BASE64_RE, '');
+  // Node converts strings with length < 2 to ''
+  if (str.length < 2) return ''
+  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
+  while (str.length % 4 !== 0) {
+    str = str + '=';
+  }
+  return str
+}
+
+function stringtrim (str) {
+  if (str.trim) return str.trim()
+  return str.replace(/^\s+|\s+$/g, '')
+}
+
+function toHex (n) {
+  if (n < 16) return '0' + n.toString(16)
+  return n.toString(16)
+}
+
+function utf8ToBytes (string, units) {
+  units = units || Infinity;
+  var codePoint;
+  var length = string.length;
+  var leadSurrogate = null;
+  var bytes = [];
+
+  for (var i = 0; i < length; ++i) {
+    codePoint = string.charCodeAt(i);
+
+    // is surrogate component
+    if (codePoint > 0xD7FF && codePoint < 0xE000) {
+      // last char was a lead
+      if (!leadSurrogate) {
+        // no lead yet
+        if (codePoint > 0xDBFF) {
+          // unexpected trail
+          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+          continue
+        } else if (i + 1 === length) {
+          // unpaired lead
+          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+          continue
+        }
+
+        // valid lead
+        leadSurrogate = codePoint;
+
+        continue
+      }
+
+      // 2 leads in a row
+      if (codePoint < 0xDC00) {
+        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+        leadSurrogate = codePoint;
+        continue
+      }
+
+      // valid surrogate pair
+      codePoint = (leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00) + 0x10000;
+    } else if (leadSurrogate) {
+      // valid bmp char, but last char was a lead
+      if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+    }
+
+    leadSurrogate = null;
+
+    // encode utf8
+    if (codePoint < 0x80) {
+      if ((units -= 1) < 0) break
+      bytes.push(codePoint);
+    } else if (codePoint < 0x800) {
+      if ((units -= 2) < 0) break
+      bytes.push(
+        codePoint >> 0x6 | 0xC0,
+        codePoint & 0x3F | 0x80
+      );
+    } else if (codePoint < 0x10000) {
+      if ((units -= 3) < 0) break
+      bytes.push(
+        codePoint >> 0xC | 0xE0,
+        codePoint >> 0x6 & 0x3F | 0x80,
+        codePoint & 0x3F | 0x80
+      );
+    } else if (codePoint < 0x110000) {
+      if ((units -= 4) < 0) break
+      bytes.push(
+        codePoint >> 0x12 | 0xF0,
+        codePoint >> 0xC & 0x3F | 0x80,
+        codePoint >> 0x6 & 0x3F | 0x80,
+        codePoint & 0x3F | 0x80
+      );
+    } else {
+      throw new Error('Invalid code point')
+    }
+  }
+
+  return bytes
+}
+
+function asciiToBytes (str) {
+  var byteArray = [];
+  for (var i = 0; i < str.length; ++i) {
+    // Node's code seems to be doing this and not & 0x7F..
+    byteArray.push(str.charCodeAt(i) & 0xFF);
+  }
+  return byteArray
+}
+
+function utf16leToBytes (str, units) {
+  var c, hi, lo;
+  var byteArray = [];
+  for (var i = 0; i < str.length; ++i) {
+    if ((units -= 2) < 0) break
+
+    c = str.charCodeAt(i);
+    hi = c >> 8;
+    lo = c % 256;
+    byteArray.push(lo);
+    byteArray.push(hi);
+  }
+
+  return byteArray
+}
+
+
+function base64ToBytes (str) {
+  return toByteArray(base64clean(str))
+}
+
+function blitBuffer (src, dst, offset, length) {
+  for (var i = 0; i < length; ++i) {
+    if ((i + offset >= dst.length) || (i >= src.length)) break
+    dst[i + offset] = src[i];
+  }
+  return i
+}
+
+function isnan (val) {
+  return val !== val // eslint-disable-line no-self-compare
+}
+
+
+// the following is from is-buffer, also by Feross Aboukhadijeh and with same lisence
+// The _isBuffer check is for Safari 5-7 support, because it's missing
+// Object.prototype.constructor. Remove this eventually
+function isBuffer(obj) {
+  return obj != null && (!!obj._isBuffer || isFastBuffer(obj) || isSlowBuffer(obj))
+}
+
+function isFastBuffer (obj) {
+  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
+
+// For Node v0.10 support. Remove this eventually.
+function isSlowBuffer (obj) {
+  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isFastBuffer(obj.slice(0, 0))
 }
 
 // Copyright Joyent, Inc. and other Node contributors.
@@ -426,39 +2518,26 @@ var substr = 'ab'.substr(-1) === 'b' ?
     }
 ;
 
-var global$1 = (typeof global !== "undefined" ? global :
-            typeof self !== "undefined" ? self :
-            typeof window !== "undefined" ? window : {});
-
-if (typeof global$1.setTimeout === 'function') ;
-if (typeof global$1.clearTimeout === 'function') ;
-
-// from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
-var performance = global$1.performance || {};
-var performanceNow =
-  performance.now        ||
-  performance.mozNow     ||
-  performance.msNow      ||
-  performance.oNow       ||
-  performance.webkitNow  ||
-  function(){ return (new Date()).getTime() };
-
-Object.defineProperty(exports, "__esModule", { value: true });
-// Create an S3 client
+/********************************************************************************* */
+/********************************************************************************* */
+/********************************************************************************* */
+/*******************                HRMDB                 ************************ */ 
+/********************************************************************************* */
+/********************************************************************************* */
+/********************************************************************************* */
 
 
-
-
-
-
-
-var awsC = JSON.parse(Base64.decode(clv.AWSA));
-var bucketName = clv.AS3_bucketName;
-AWS.config.update({
-    accessKeyId: awsC.id,
-    secretAccessKey: awsC.key
-});
-var s3 = new AWS.S3();
+function parseIndex(s) {
+  if(s>=1000){
+      return `${s}`;
+  }else if(s<1000 && s>=100){
+      return `0${s}`;
+  }else if(s<100 && s>=10){
+      return `00${s}`;
+  }else {
+      return `000${s}`;
+  }  
+}
 
 
 
@@ -478,247 +2557,253 @@ var s3 = new AWS.S3();
 
 
 
-// Create a bucket and upload something into it
+/*
 
-var DateTime = Math.floor((new Date()).getTime()-86400*1000);
+Create a bucket and upload something into it
 
-function saveCollection2S3(fileName){    
-    var urlFile =  path.join(_root$$_,'data',fileName);
-    if(fileName && _fs$$_.existsSync(urlFile)){        
-        _fs$$_.readFile(urlFile, function (err, data) {
-            var params = {Bucket: bucketName, Key: `${bucketName}_${DateTime}_${fileName}`, Body: data};
+
+
+
+var isDateFolder = false;
+let TodayFolderName = '';
+
+
+var awsC = JSON.parse(Base64.decode(clv.AWSA));
+var bucketName = clv.AS3_bucketName;
+AWS.config.update({
+    accessKeyId: awsC.id,
+    secretAccessKey: awsC.key
+});
+var s3 = new AWS.S3();
+
+
+
+function saveCollection2S3(fileName){   
+  var _now = (new Date());
+  let FolderName = `${_now.getFullYear()}@${_now.getMonth()+1}@${_now.getDate()}`;
+  //let bucketFolder = `${bucketName}`;  
+    var urlFile =  path.join(_Cnst.get_root$$_(),'data',fileName);
+    if(fileName && _Cnst.get_fs$$_().existsSync(urlFile)){        
+        _Cnst.get_fs$$_().readFile(urlFile, function (err, data) {
+            var DateTime = Math.floor((new Date()).getTime()/300000);
+            var params = {Bucket: bucketName, Key: `${FolderName}/${bucketName}_${DateTime}_${fileName}`, Body: data};
             s3.putObject(params, function(err, _data) {
                 if(err){console.log(err);}
             }); 
         });
-    }    
+    } 
+    if(isDateFolder && TodayFolderName === FolderName){
+
+    }else{   
+      
+  }
+       
 }
 
+*/
 
 
 
 
-const MasterPath = path.join(_root$$_,'data','master.json');
-const MasterIndexesPath = path.join(_root$$_,'data','masterIndexes.json');
-const IndexesPath = path.join(_root$$_,'data','Indexes.json');
 
-
-
-var _Master = {},_MasterIndexes={},_Indexes={};
-if(_fs$$_.existsSync(MasterPath)){
-    _Master = JSON.parse(_fs$$_.readFileSync(MasterPath,'utf8'));  
-}else{
-    _fs$$_.writeFileSync(MasterPath, JSON.stringify({}));
-    _Master = JSON.parse(_fs$$_.readFileSync(MasterPath,'utf8'));
-}
-
-
-if(_fs$$_.existsSync(MasterIndexesPath)){
-    _MasterIndexes = JSON.parse(_fs$$_.readFileSync(MasterIndexesPath,'utf8'));  
-}else{
-    _fs$$_.writeFileSync(MasterIndexesPath, JSON.stringify({}));
-    _MasterIndexes = JSON.parse(_fs$$_.readFileSync(MasterIndexesPath,'utf8'));
-}
-
-
-if(_fs$$_.existsSync(IndexesPath)){
-    _Indexes = JSON.parse(_fs$$_.readFileSync(IndexesPath,'utf8'));  
-}else{
-    _fs$$_.writeFileSync(IndexesPath, JSON.stringify({}));
-    _Indexes = JSON.parse(_fs$$_.readFileSync(IndexesPath,'utf8'));
-}
-
+const rootPath = get_root$$_()+'data/';
 
 var Collections = {};
 
+var master = {};
+var lastUpdate = {};
+
+var levelObj = {};
+
+
+let masterParth = [
+  'master',
+  'masterIndexes',
+  'Indexes',
+  'masterSorts'
+];
+
+
+function currentIndex(name){
+  if(Collections[name]){
+    return Object.keys(Collections[name]).length -1;
+  }else {
+    return 0
+  }
+}  
+
+
+
+function loadFile(name, dest, is2master){
+  if(get_fs$$_().existsSync(dest)){
+    if(is2master){
+      master[name] = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
+    }else {
+      Collections[name] = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
+    }
+  }else {
+    get_fs$$_().writeFileSync(dest, JSON.stringify({}));
+    master[name] = {};
+  }
+}
+
+  
 class HrmDb {
+    
     constructor() {
         //super(); 
-    }
-
-    createCollection(s){
-        if(!_Master[s]){
-            _Master[s]={};
-            _Master[s]['updated']={};
-            _Master[s].updated['0']= new Date().getTime();
-            _Master[s].index=[];
-            _Master[s].index.push(0);
-            _Master[s].path=[`data/${s}_${parseIndex(_Master[s].index[0])}.json`];
-            var npath = path.join(_root$$_,_Master[s].path[_Master[s].index[0]]);            
-            if(!_fs$$_.existsSync(npath)){
-                _fs$$_.writeFileSync(npath, JSON.stringify({}));
-            }
-            _fs$$_.writeFileSync(MasterPath, JSON.stringify(_Master));
+        for(let i2 in masterParth){
+          let pth = masterParth[i2];
+          let dest = rootPath + pth + '.json';
+          loadFile(pth, dest, 1);
         }
     }
 
-    getCollection(s){
-        var _th9 = this;
-        if(!_Master[s]){
-            _th9.createCollection(s);
-            return {};
-        }
-        else{
-            if(!Collections[s]){ Collections[s] = {}; } 
-            _Master[s].index.map(ipth=>{
-                Collections[s][ipth]= JSON.parse(_fs$$_.readFileSync(path.join(_root$$_,_Master[s].path[ipth]),'utf8'));
-            });   
-            console.log(`getCollection ${s} ......Done`);         
-            return Collections[s];
-        }
-    }
-
-    getIndexes(s){
-        if(_MasterIndexes[s].path){
-            if(!_Indexes[s]){ _Indexes[s] = {}; } 
-            _Indexes[s] = JSON.parse(_fs$$_.readFileSync(path.join(_root$$_,_MasterIndexes[s].path),'utf8'));        
-            return _Indexes[s]; 
-        }              
-    }
 
 
-
-    getLastCollection(s){        
-        var _th9 = this;
-        if(!_Master[s]){
-            _th9.createCollection(s);
-            return {};
-        }
-        else{            
-            var IndX = _Master[s].index.length-1;
-             return Collections[s];
-        }
-    }
-
-/********************************************************************************* */
-/********************************************************************************* */
-/********************************************************************************* */
-/*******************  findAll return Array of Collection  ************************ */ 
-/********************************************************************************* */
-/********************************************************************************* */
-/********************************************************************************* */
-
-/**
-     * findAll : return Array of Collection
+    /**
+     * createCollection : create or verify Collection
      *          *
-     * @param {string} s  - The Collection Name.     
+     * @param {string} name  - The Collection Name.     
      */
 
+    createCollection(name){
+      let collPath = rootPath + name +"_"+ parseIndex(0) + '.json';
+      loadFile(name, collPath,false);
+    }
+    
 
-    findAll(s){
-        var _th9 = this; 
-               
-            if(!_Master[s]){
-                _th9.getCollection(s);
-                return  null; 
-            }
-            else{
-                var liObj = [],allObj = {},ArrAll=[];
-                _Master[s].index.map(ipth=>{  
-                    Collections[s] && liObj.push(Collections[s][ipth]); 
-                });
-                allObj = Object.assign({}, ...liObj);
-                Object.keys(allObj).map(d=>{
-                    ArrAll.push(allObj[d]);
-                });             
-                return ArrAll;
-            }
-        
+    /**
+     * getCollection : load Collection
+     *          *
+     * @param {string} name  - The Collection Name.     
+     */
+
+    getCollection(name){
+      let collPath0 = rootPath + name +"_"+ parseIndex(0) + '.json';
+      if(!get_fs$$_().existsSync(collPath0)){      
+        loadFile(name, collPath0, false);
+      }
+      let ks = Array.from(Array(20).keys());
+      for(let i2 in ks){
+        let inD = ks[i2];
+        let collPath = rootPath + name +"_"+ parseIndex(inD) + '.json';
+        if(get_fs$$_().existsSync(collPath)){
+          if(!Collections[name]){
+            Collections[name] = {};
+          }
+          Collections[name][inD] = JSON.parse(get_fs$$_().readFileSync(collPath,'utf8')); 
+        }
+      }
     }
 
 
-/********************************************************************************* */
-/********************************************************************************* */
-/********************************************************************************* */
-/*********************  find return Array of ID on Collection  ************************ */ 
-/********************************************************************************* */
-/********************************************************************************* */
-/********************************************************************************* */
-/**
+    /**
      * find : return a Array of ID on Collection
      *          *
      * @param {string} s  - The Collection Name.     
      */
 
 
-    find(s){
-        var _th9 = this,rst = [];              
-            if(!_Master[s]){
-                _th9.getCollection(s);
-                return null
-            }
-            else{            
-                _Master[s].index.map(ipth=>{  
-                    rst = rst.concat(Object.keys(Collections[s][ipth]));
-                });                  
-                return rst;
-            }        
+    find(name){
+      let ks = Array.from(Array(20).keys());
+      let fll = {};
+      for(let i2 in ks){
+        let inD = ks[i2];
+        if(Collections[name] && Collections[name][inD]){
+          fll = Object.assign({},fll,Collections[name][inD]);
+        }
+        let collPath = rootPath + name +"_"+ parseIndex(inD) + '.json';
+        if(get_fs$$_().existsSync(collPath)){
+          Collections[name][inD] = JSON.parse(get_fs$$_().readFileSync(collPath,'utf8')); 
+        }
+      }
+      return fll
     }
 
-
-
-
-/********************************************************************************* */
-/********************************************************************************* */
-/********************************************************************************* */
-/*********  findOne return specific object of Collection filtered by Id  ********* */ 
-/********************************************************************************* */
-/********************************************************************************* */
-/********************************************************************************* */
-
-
-/**
+   
+    /**
      * findOne return specific object of Collection filtered by Id
      *          *
-     * @param {string} s  - The Collection Name.
+     * @param {string} name  - The Collection Name.
      * @param {string} iD - The ID value to compare.
      */
 
 
-    findOne(s,iD){
-        var rst = null;
-            if(!_Master[s]){  return null}
-            else{
-                _Master[s].index.map(ipth=>{
-                    if(Collections[s] && Collections[s][ipth][iD]){
-                        rst = Collections[s][ipth][iD];
-                    }               
-                });   
-                return rst;
-            }
+    findOne(name,iD){
+      var rst = null;
+      for(let ipth in Collections[name]){
+        //let ipth = _MasterIndexes[name][i2]
+        if(Collections[name] && Collections[name][ipth][iD]){
+          rst = Collections[name][ipth][iD];
+        }               
+      }      return rst;
     }
- 
 
-    removeDuplicate(s){
-        var _th9 = this,rst = [],h=[];        
-        if(!_Master[s]){
-            _th9.getCollection(s);
-            console.log(`collection ${s} was not found`);            
-            return {};
+
+
+
+
+
+    /**
+     * push : insert a new record to Collection
+     *          *
+     * @param {string} name  - The Collection Name.  
+     * @param {object} obj  - The data to save. 
+     * @param {boolean} urg  - persist the collection instantly. 
+     * @param {string} k - The ID value to compare.       
+     */
+
+
+
+    
+    push(name,obj,urg,k){
+      const currIndexDoc =  currentIndex(name);
+      const key = k || genId();  
+      const urgent = urg || false;
+      obj.id = key;      
+      var CDoc = {};
+      if(!Collections[name]){
+        Collections[name] = {};
+      }
+      if(Collections[name] && !Collections[name][currIndexDoc]){
+        Collections[name][currIndexDoc] = {};
+      }
+      CDoc = Collections[name][currIndexDoc];
+      const cDocLenght = JSON.stringify(CDoc).length+JSON.stringify(obj).length;
+      if(cDocLenght>15000000){
+          let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
+          get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+          var Ndoc = {};
+          Ndoc[key]={};
+          Ndoc[key]=obj;
+          let collNewPath = rootPath + name +"_"+ parseIndex(currIndexDoc+1) + '.json';
+          get_fs$$_().writeFileSync(collNewPath, JSON.stringify(Ndoc));                
+          //saveCollection2S3(_Master[s].path[nwInd].split('data/')[1]);
+          //saveCollection2S3(MasterPath.split('data/')[1]);
+      }
+      else {
+        CDoc[key]={};
+        CDoc[key]=obj;
+        Collections[name][currIndexDoc]=CDoc;
+        if(urgent){
+          lastUpdate[name] = new Date().getTime();
+          let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
+          get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
         }
-        else{            
-            _Master[s].index.map(ipth=>{  
-                rst = rst.concat(Object.keys(Collections[s][ipth]));
-            
-            });
-            var rrr = null;
-            rst.map(iD=>{
-                _Master[s].index.map(ipth=>{                
-                    if(Collections[s][ipth][iD]){
-                        if(Collections[s][ipth][iD].id!==rrr){
-                            rrr = Collections[s][ipth][iD].id;
-                        }
-                        else{                            
-                            h.push(Collections[s][ipth][iD].id);
-                            delete Collections[s][ipth][iD];
-                            _fs$$_.writeFileSync(path.join(_root$$_,_Master[s].path[ipth]), JSON.stringify(Collections[s][ipth]));                                                       
-                        }                        
-                    }               
-                });
-            });
-            return h;
-        }
-    }
+        else {     
+          let lupd = lastUpdate[name] || 0;
+          if(new Date().getTime()-lupd>15000){
+            lastUpdate[name] = new Date().getTime();
+            let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
+            get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+            //saveCollection2S3(_Master[s].path[currIndexDoc].split('data/')[1]);                
+          } 
+        }                     
+      }
+      return obj;
+  }
+  
 
 
 
@@ -728,434 +2813,611 @@ class HrmDb {
 /**
      * update : update a exist record on the Collection
      *          *
-     * @param {string} s  - The Collection Name.  
+     * @param {string} name  - The Collection Name.  
      * @param {object} obj  - The data to save. 
      * @param {string} k - The ID value to compare.       
      */
 
 
 
-
-
-    update(s,obj,k){
-        const key = k;
-        obj.id = key;       
-        var currIndexDoc = _Master[s].index.length-1;        
-        if(key){
-            var CDoc = {};   
-            _Master[s].index.map(ipth=>{                
-                if(Collections[s][ipth][key]){
-                    currIndexDoc = ipth;
-                    CDoc= Collections[s][ipth];
-                }               
-            });
-            CDoc[key] = obj;
-            _fs$$_.writeFileSync(path.join(_root$$_,_Master[s].path[currIndexDoc]), JSON.stringify(CDoc)); 
-            saveCollection2S3(_Master[s].path[currIndexDoc].split('data/')[1]);
-        }
-        if(_MasterIndexes[s]){
-            var sorts = Object.keys(_MasterIndexes[s]);
-            //_th9.checkIndexesbySort(s,sorts);
-        }   
-        return obj;
-    }
-
-
-
-
-    /**
-     * push : insert a new record to Collection
-     *          *
-     * @param {string} s  - The Collection Name.  
-     * @param {object} obj  - The data to save. 
-     * @param {boolean} urg  - persist the collection instantly. 
-     * @param {string} k - The ID value to compare.       
-     */
-
-
-
-    
-    push(s,obj,urg,k){
-        const currIndexDoc = _Master[s].index.length-1;
-        const key = k || genId();  
-        const urgent = urg || false;
-        obj.id = key;      
-        var CDoc = {};
-        if(!Collections[s]){
-            Collections[s] = {};
-        }
-        if(Collections[s] && !Collections[s][currIndexDoc]){
-            Collections[s][currIndexDoc] = {};
-        }
-       CDoc = Collections[s][currIndexDoc];
-       const cDocLenght = JSON.stringify(CDoc).length+JSON.stringify(obj).length;
-       if(cDocLenght>35000000){        
-            _fs$$_.writeFileSync(path.join(_root$$_,_Master[s].path[currIndexDoc]), JSON.stringify(CDoc));
-            _fs$$_.writeFileSync(path.join(_root$$_,_Master[s].path[currIndexDoc]+'encrypt'), JSON.stringify(CDoc));
-            var Ndoc = {};
-            Ndoc[key]={};
-            Ndoc[key]=obj;
-            var nwInd= _Master[s].index.length;
-            _Master[s].index.push(nwInd);
-            _Master[s].updated[nwInd]= new Date().getTime();
-            _Master[s].path.push(`data/${s}_${parseIndex(nwInd)}.json`);            
-            _fs$$_.writeFileSync(path.join(_root$$_,_Master[s].path[nwInd]), JSON.stringify(Ndoc));
-            
-            //_Cnst._fs$$_.writeFileSync(path.join(_Cnst._root$$_,_Master[s].path[nwInd]+'encrypt'), JSON.stringify(CDoc));
-            _fs$$_.writeFileSync(MasterPath, JSON.stringify(_Master));  
-            if(_MasterIndexes[s]);            
-            saveCollection2S3(_Master[s].path[nwInd].split('data/')[1]);
-            saveCollection2S3(MasterPath.split('data/')[1]);
-       }
-       else{
-            CDoc[key]={};
-            CDoc[key]=obj;
-            Collections[s][currIndexDoc]=CDoc;
-            if(urgent){
-                _Master[s].updated[currIndexDoc]=new Date().getTime();
-                _fs$$_.writeFileSync(path.join(_root$$_,_Master[s].path[currIndexDoc]), JSON.stringify(CDoc));
-                //_Cnst._fs$$_.writeFileSync(path.join(_Cnst._root$$_,_Master[s].path[currIndexDoc]+'encrypt'), JSON.stringify(CDoc));                                
-                if(_MasterIndexes[s]);
-                saveCollection2S3(_Master[s].path[currIndexDoc].split('data/')[1]);
-            }
-            else{     
-                if(new Date().getTime()-_Master[s].updated[currIndexDoc]>45000){                
-                    _Master[s].updated[currIndexDoc]=new Date().getTime();
-                    _fs$$_.writeFileSync(path.join(_root$$_,_Master[s].path[currIndexDoc]), JSON.stringify(CDoc));
-                    //_Cnst._fs$$_.writeFileSync(path.join(_Cnst._root$$_,_Master[s].path[currIndexDoc]+'encrypt'), JSON.stringify(CDoc));                                
-                    if(_MasterIndexes[s]);
-                    saveCollection2S3(_Master[s].path[currIndexDoc].split('data/')[1]);                
-                } 
-            }                     
-        }
-        return obj;
-    }
-    
-
-
-    
-
-
-    remove(s,k){        
-        const key = k;     
-        var currIndexDoc = _Master[s].index.length-1;        
-        if(key){
-            var CDoc = {};   
-            _Master[s].index.map(ipth=>{                
-                if(Collections[s][ipth][key]){
-                    currIndexDoc = ipth;
-                    delete Collections[s][ipth][key];
-                    CDoc = Collections[s][ipth];
-                }               
-            });            
-            _fs$$_.writeFileSync(path.join(_root$$_,_Master[s].path[currIndexDoc]), JSON.stringify(CDoc));
-            saveCollection2S3(_Master[s].path[currIndexDoc].split('data/')[1]);
-            return true; 
-        }else{
-            return false; 
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-   
-
-    createIndexes(coll,level,level2,level3){
-        if(coll && !_MasterIndexes[coll]){
-            _MasterIndexes[coll]={};
-            /*let IndexesCollPath = _MasterIndexes[coll][`_path_`]=`data/Indexes_${coll}.json`;
-            _Cnst._fs$$_.writeFileSync(IndexesCollPath, JSON.stringify({}));*/
-        }
-        if(coll && level && !_MasterIndexes[coll][level]){
-            _MasterIndexes[coll][level]={};
-           /* _MasterIndexes[coll][level]['_root_']={};
-            let IndexesCollPath = _MasterIndexes[coll][level][`_path_`]=`data/Indexes_${coll}_${level}.json`;
-            _Cnst._fs$$_.writeFileSync(IndexesCollPath, JSON.stringify({}));*/
-        }
-        if(coll && level && level2 && !_MasterIndexes[coll][level][level2]){
-            _MasterIndexes[coll][level][level2]={};
-            /*_MasterIndexes[coll][level][level2]['_root_']={};
-            let IndexesCollPath = _MasterIndexes[coll][level][level2][`_path_`]=`data/Indexes_${coll}_${level}}_${level}.json`;
-            _Cnst._fs$$_.writeFileSync(IndexesCollPath, JSON.stringify({}));*/
-        }
-        if(coll && level && level2 && level3 && !_MasterIndexes[coll][level][level2][level3]){
-            _MasterIndexes[coll][level][level2][level3]={};
-            /*_MasterIndexes[coll][level][level2][level3]['_root_']={};
-            let IndexesCollPath = _MasterIndexes[coll][level][level2][level3][`_path_`]=`data/Indexes_${coll}_${level}}_${level2}_${level3}.json`;
-            _Cnst._fs$$_.writeFileSync(IndexesCollPath, JSON.stringify({}));*/
-        }
-        _fs$$_.writeFileSync(MasterIndexesPath, JSON.stringify(_MasterIndexes));
-    }
-
-
-
-
-
-    calcIndexes(coll){
-        var _th0 = this;
-        var _coll2Ind = JSON.parse(JSON.stringify(_MasterIndexes[coll]));
-        delete _coll2Ind['_path_'];
-        var _keys = Object.keys(_coll2Ind);
-        var obj = {};
-        var ArrColl =  _th0.findAll(coll);        
-        var stt = (new Date()).getTime();
-        _keys.map(k=>{            
-            if(k){
-                var _pth =  `data/Indexes_${coll}_${k}.json`; 
-                if(!obj[k]){
-                    obj[k]={}; 
-                }
-                ArrColl.map(s=>{
-                    var _2c = s[k];
-                    if(typeof _2c ==="object" ){
-                        _2c && Object.keys(_2c).map(o2Ind=>{
-                            if(!obj[k][o2Ind]){
-                                obj[k][o2Ind]={};
-                            }
-                            if(obj[k][o2Ind]){                  
-                                obj[k][o2Ind][s['id']]=1;
-                            }
-                        });
-                    }
-                    else if(Array.isArray(_2c));else{
-                        if(!obj[k][_2c]){
-                            obj[k][_2c]={}; 
-                        }
-                        if(obj[k][_2c]){                    
-                            obj[k][_2c][s['id']]=1;
-                        }
-                    }                    
-                });
-                _fs$$_.writeFileSync(path.join(_root$$_,_pth), JSON.stringify(obj[k]));
-            }
-        });
-    }
-
-
-    
-
-    calcIndexesLevel2(coll,level){
-        var _th0 = this;
-        var _coll2Ind = JSON.parse(JSON.stringify(_MasterIndexes[coll][level]));
-        delete _coll2Ind['_path_'];
-        delete _coll2Ind['_root_'];
-        var _keys = Object.keys(_coll2Ind);
-        var obj = {};
-        var _collLevel = JSON.parse(_fs$$_.readFileSync(path.join(_root$$_,`data/Indexes_${coll}_${level}.json`),'utf8'));
-        var ArrColl = Object.keys(_collLevel);     
-        _keys.map(k=>{            
-            if(k){                
-                var _pth =  `data/Indexes_${coll}_${level}_${k}.json`; 
-                if(!obj[k]){
-                    obj[k]={}; 
-                }
-                ArrColl.map(sid=>{
-                    if(!obj[k][sid]){
-                        obj[k][sid]={}; 
-                    }                                    
-                    Object.keys(_collLevel[sid]).map(kid=>{
-                        var s = _th0.findOne(coll,kid);
-                        var _2c = s[k];
-                        if(typeof _2c ==="object"){
-                            _2c && Object.keys(_2c).map(o2Ind=>{
-                                if(!obj[k][sid][o2Ind]){
-                                    obj[k][sid][o2Ind]={};
-                                }
-                                if(obj[k][sid][o2Ind]){                  
-                                    obj[k][sid][o2Ind][kid]=1;
-                                }
-                            });
-                        }
-                        else if(Array.isArray(_2c));else{
-                            if(!obj[k][sid][_2c]){
-                                obj[k][sid][_2c]={};
-                            }
-                            if(obj[k][sid][_2c]){                    
-                                obj[k][sid][_2c][kid]=1;
-                            }
-                        } 
-                        
-                    });
-                });
-                _fs$$_.writeFileSync(path.join(_root$$_,_pth), JSON.stringify(obj[k]));
-            }
-        });
-        return true;
-    }
-
-
-
-    calcIndexesLevelObj(coll,level){
-        var _th0 = this;
-        var _coll2Ind = JSON.parse(JSON.stringify(_MasterIndexes[coll][level]));
-        delete _coll2Ind['_path_'];
-        delete _coll2Ind['_root_'];
-        var _keys = Object.keys(_coll2Ind);
-        var obj = {};
-        var _collLevel = JSON.parse(_fs$$_.readFileSync(path.join(_root$$_,`data/Indexes_${coll}_${level}.json`),'utf8'));
-        var ArrColl = Object.keys(_collLevel);     
-        _keys.map(k=>{            
-            if(k){                
-                var _pth =  `data/Indexes_${coll}_${level}_${k}.json`; 
-                if(!obj[k]){
-                    obj[k]={}; 
-                }
-                ArrColl.map(sid=>{
-                    if(!obj[k][sid]){
-                        obj[k][sid]={}; 
-                    }                                    
-                    Object.keys(_collLevel[sid]).map(kid=>{
-                        var s = _th0.findOne(coll,kid);
-                        var _2c = s[k];
-                        if(!obj[k][sid][_2c]){
-                            obj[k][sid][_2c]={};
-                        }
-                        if(obj[k][sid][_2c]){                    
-                            obj[k][sid][_2c][kid]=1;
-                        }
-                    });
-                });
-                _fs$$_.writeFileSync(path.join(_root$$_,_pth), JSON.stringify(obj[k]));
-            }
-        });
-        return true;
-    }
-
-
-
-    FindIndexes(coll,q1,p1,q2,p2){
-        if(p2 && q2){
-            let q2Path = path.join(_root$$_,`data/Indexes_${coll}_${q1}_${q2}.json`);
-            if(_fs$$_.existsSync(q2Path)){
-                let II2 = JSON.parse(_fs$$_.readFileSync(q2Path,'utf8'));                 
-                return II2[p1]?II2[p1][p2]:{};
-             }else{
-                 return {};
-             }
-        }else if(p1 && q1){
-            let q1Path = path.join(_root$$_,`data/Indexes_${coll}_${q1}.json`);
-            if(_fs$$_.existsSync(q1Path)){
-                let II2 = JSON.parse(_fs$$_.readFileSync(q1Path,'utf8')); 
-               return II2[p1];
-            }else{
-                return {};
-            }
-        }else{
-            return {};
-        }
-    }
-
-    FindIndexesByOperator(coll,q1,p1,q2,p2,op){
-        if(op && q2){
-            let q2Path = path.join(_root$$_,`data/Indexes_${coll}_${q1}_${q2}.json`);
-            if(_fs$$_.existsSync(q2Path)){
-                let II2 = JSON.parse(_fs$$_.readFileSync(q2Path,'utf8'));               
-                var h = {};
-                var _op = op;
-                II2[p1] && Object.keys(II2[p1]).map(dt=>{
-                    if(_op==='gt'){
-                        if(dt>p2){
-                           h = Object.assign({}, h, II2[p1][dt]);
-                        } 
-                    }
-                    else if(_op==='gte'){
-                        if(dt>=p2){
-                            h = Object.assign({}, h, II2[p1][dt]);
-                        }
-                    }
-                    else if(_op==='lt'){
-                        if(dt<p2){
-                            h = Object.assign({}, h, II2[p1][dt]);
-                        }
-                    }
-                    else if(_op==='lte'){
-                        if(dt<=p2){
-                            h = Object.assign({}, h, II2[p1][dt]);
-                        }
-                    }
-                });
-               return h;
-            }else{
-                return {};
-            }
-        }
-        else if( q2 && p1 && q1){
-            let q1Path = path.join(_root$$_,`data/Indexes_${coll}_${q1}.json`);
-            if(_fs$$_.existsSync(q1Path)){
-                let II2 = JSON.parse(_fs$$_.readFileSync(q1Path,'utf8'));
-                var h = {};
-                Object.keys(II2).map(dt=>{
-                    var _op = q2;
-                    if(_op==='gt'){
-                        if(dt>p1){
-                           h = Object.assign({}, h, II2[dt]);
-                        } 
-                    }
-                    else if(_op==='gte'){
-                        if(dt>=p1){
-                            h = Object.assign({}, h, II2[dt]);
-                        }
-                    }
-                    else if(_op==='lt'){
-                        if(dt<p1){
-                            h = Object.assign({}, h, II2[dt]);
-                        }
-                    }
-                    else if(_op==='lte'){
-                        if(dt<=p1){
-                            h = Object.assign({}, h, II2[dt]);
-                        }
-                    }
-                });
-               return h;
-            }else{
-                return {};
-            }
-        }else{
-            return {};
-        }
-    }
-
-
-
-}
-
-
-
-function genId() {
-    var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var ID_LENGTH = 16;
-    var rtn = '';
-    for (var i = 0; i < ID_LENGTH; i++) {
-        rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
-    }
-    return rtn;
-}
-
-
-
-  function parseIndex(s) {
-    if(s>=1000){
-        return `${s}`;
-    }else if(s<1000 && s>=100){
-        return `0${s}`;
-    }else if(s<100 && s>=10){
-        return `00${s}`;
-    }else{
-        return `000${s}`;
-    }  
+    update(name,obj,k){
+      const key = k;
+      obj.id = key;       
+      var currIndexDoc = 0;
+      if(key){
+        var CDoc = {}; 
+        for(let ipth in Collections[name]){
+          // let ipth = _MasterIndexes[name][i2]
+          if(Collections[name] && Collections[name][ipth][key]){
+            rst = Collections[name][ipth][iD];
+            currIndexDoc = ipth;
+            CDoc= Collections[s][ipth];
+          }               
+        }        CDoc[key] = obj;
+        lastUpdate[name] = new Date().getTime();
+        let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
+        get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+      }  
+      return obj;
   }
 
-const Skey = '850217Steph';
-var CLIENTS={};
 
+
+
+  /**
+   * remove : delete a exist record on the Collection
+   *          *
+   * @param {string} name  - The Collection Name.
+   * @param {string} k - The ID value to compare.       
+   */
+
+  remove(name,k){        
+    const key = k;     
+    var currIndexDoc = 0;
+    if(key){
+      var CDoc = {}; 
+      for(let ipth in Collections[name]){
+        //let ipth = _MasterIndexes[name][i2]
+        if(Collections[name] && Collections[name][ipth][key]){
+          rst = Collections[name][ipth][iD];
+          currIndexDoc = ipth;
+          delete Collections[s][ipth][key];
+          CDoc = Collections[s][ipth];
+        }               
+      }      lastUpdate[name] = new Date().getTime();
+      let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
+      get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+      return true; 
+    }else {
+      return false; 
+    }
+  }
+
+
+
+
+
+
+/*****************************************************************************************************************************************************
+ **************************************************************************************************************************************************** 
+ **************************************************************************************************************************************************** 
+ ****************************************************************************************************************************************************
+ ***************************************************************************************************************************************************
+ ****************************************************************************************************************************************************/
+
+
+
+FindIndexes(coll,q1,p1,q2,p2,q3,p3){
+  if(p3 && q3){
+    let q3Path = path.join(get_root$$_(),`data/Indexes_${coll}_${q1}_${q2}_${q3}.json`);
+    if(get_fs$$_().existsSync(q3Path)){
+        let II2 = JSON.parse(get_fs$$_().readFileSync(q3Path,'utf8'));                 
+        return II2[p1]?II2[p1][p2]?II2[p1][p2][p3]:{}:{};
+    }else {
+        return {};
+    }
+  }else if(p2 && q2){
+      let q2Path = path.join(get_root$$_(),`data/Indexes_${coll}_${q1}_${q2}.json`);
+      if(get_fs$$_().existsSync(q2Path)){
+          let II2 = JSON.parse(get_fs$$_().readFileSync(q2Path,'utf8'));                 
+          return II2[p1]?II2[p1][p2]:{};
+      }else {
+          return {};
+      }
+  }else if(p1 && q1){
+      let q1Path = path.join(get_root$$_(),`data/Indexes_${coll}_${q1}.json`);
+      if(get_fs$$_().existsSync(q1Path)){
+          let II2 = JSON.parse(get_fs$$_().readFileSync(q1Path,'utf8')); 
+        return II2[p1];
+      }else {
+          return {};
+      }
+  }else {
+      return {};
+  }
+}
+
+
+
+
+
+
+createIndexes(coll,level,level2,level3,level4){
+  let _MasterIndexes = master["masterIndexes"];
+  if(coll && !_MasterIndexes[coll]){
+      _MasterIndexes[coll]={};           
+  }
+  if(coll && level && !_MasterIndexes[coll][level]){
+      _MasterIndexes[coll][level]={};
+    
+  }
+  if(coll && level && level2 && !_MasterIndexes[coll][level][level2]){
+      _MasterIndexes[coll][level][level2]={};
+  }
+  if(coll && level && level2 && level3 && !_MasterIndexes[coll][level][level2][level3]){
+      _MasterIndexes[coll][level][level2][level3]={};
+  }
+  if(coll && level && level2 && level3 && level4 && !_MasterIndexes[coll][level][level2][level3][level4]){
+    _MasterIndexes[coll][level][level2][level3][level4]={};
+  }
+  let dest = rootPath + 'masterIndexes' + '.json';
+  master["masterIndexes"] = _MasterIndexes;
+  get_fs$$_().writeFileSync(dest, JSON.stringify(_MasterIndexes));
+}
+
+
+
+
+
+createSorts(coll,level){
+  let _MasterSort = master["masterSorts"];
+  if(_MasterSort){
+    if(coll && !_MasterSort[coll]){
+      _MasterSort[coll]={};           
+    }
+    if(coll && level && !_MasterSort[coll][level]){
+      _MasterSort[coll][level]={};
+    }
+    let dest = rootPath + 'masterSorts' + '.json';
+    master["masterSorts"] = _MasterSort;
+    get_fs$$_().writeFileSync(dest, JSON.stringify(_MasterSort));
+  }
+}
+
+
+
+/*****************************************************************************************************************************************************
+ **************************************************************************************************************************************************** 
+ **************************************************************************************************************************************************** 
+ ****************************************************************************************************************************************************
+ ***************************************************************************************************************************************************
+ ****************************************************************************************************************************************************/
+
+
+
+calcSorts(name,key,obj){
+  let _MasterSort = master["masterSorts"];
+  if(name && _MasterSort[name]){
+    for(let sFld in _MasterSort[name]){
+
+        //console.log(sFld,name,key)
+        //sortObjectsByKey(name,obj,sFld)
+
+    }           
+  }
+  return 1;
+}
+
+
+sortObjectsByKey(name,obj,_key) {
+  const _th = this;
+  let _list = Object.keys(obj);
+  let arrSrt = _list.sort(function(a, b) {
+    let objA = _th.findOne(name,a);
+    let objB = _th.findOne(name,b);    
+    if(objA && objB){
+      if(objA[_key] < objB[_key]) { return -1; }
+      if(objA[_key] > objB[_key]) { return 1; }
+    }
+    return 0;
+  });
+  return arrSrt;
+}
+
+
+
+
+calcLevel2(item,level,k,row){
+  let lvl = "level2";
+  for(let key2 in level){
+    //let key2 = level[i22]
+    if(key2){
+      let keyComplx = k +'_'+ key2;
+      if(!levelObj[lvl][keyComplx]){ levelObj[lvl][keyComplx] = {}; }
+      if(!levelObj[lvl][keyComplx][row]){ levelObj[lvl][keyComplx][row] = {}; }
+      if(levelObj[lvl][keyComplx] && levelObj[lvl][keyComplx][row]){
+        let _row2 = item[key2];
+        if(typeof _row2 ==="object" ){
+          for(let o2Ind in _row2){
+            // let o2Ind = _row3[i22]
+            if(!levelObj[lvl][keyComplx][row][o2Ind]){ levelObj[lvl][keyComplx][row][o2Ind] = {}; }
+            if(levelObj[lvl][keyComplx][row][o2Ind]){
+              levelObj[lvl][keyComplx][row][o2Ind][item['id']]=1;
+              let _level3 = level[key2];
+              this.calcLevel3(item,_level3,k,key2,row,o2Ind);
+            }
+          }
+        }else {
+          if(!levelObj[lvl][keyComplx][row][_row2]){ levelObj[lvl][keyComplx][row][_row2] = {}; }
+          if(levelObj[lvl][keyComplx][row][_row2]){
+            levelObj[lvl][keyComplx][row][_row2][item['id']]=1;
+            let _level3 = level[key2];
+            this.calcLevel3(item,_level3,k,key2,row,_row2);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+calcLevel3(item,level,k,k2,row,row2){
+  let lvl = "level3";
+  for(let key2 in level){
+    //let key2 = level[i22]
+    if(key2){
+      let keyComplx = k +'_'+ k2 +'_'+ key2;
+      if(!levelObj[lvl][keyComplx]){ levelObj[lvl][keyComplx] = {}; }
+      if(!levelObj[lvl][keyComplx][row]){ levelObj[lvl][keyComplx][row] = {}; }
+      if(!levelObj[lvl][keyComplx][row][row2]){ levelObj[lvl][keyComplx][row][row2] = {}; }
+      if(levelObj[lvl][keyComplx] && levelObj[lvl][keyComplx][row]  && levelObj[lvl][keyComplx][row][row2]){
+        let _row3 = item[key2];
+        if(typeof _row3 ==="object" ){
+          for(let o2Ind in _row3){
+            // let o2Ind = _row3[i22]
+            if(!levelObj[lvl][keyComplx][row][row2][o2Ind]){ levelObj[lvl][keyComplx][row][row2][o2Ind] = {}; }
+            if(levelObj[lvl][keyComplx][row][row2][o2Ind]){
+              levelObj[lvl][keyComplx][row][row2][o2Ind][item['id']]=1;
+              // let _level4 = level[key2]
+              // calcLevel3(item,_level3,k,key2,row,o2Ind)
+            }
+          }
+        }else {
+          if(!levelObj[lvl][keyComplx][row][row2][_row3]){ levelObj[lvl][keyComplx][row][row2][_row3] = {}; }
+          if(levelObj[lvl][keyComplx][row][row2][_row3]){
+            levelObj[lvl][keyComplx][row][row2][_row3][item['id']]=1;
+            // let _level4 = level[key2]
+            // calcLevel3(item,_level3,k,key2,row,_row2)
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+    
+calcIndexesAll(name){
+  var _th0 = this;
+  var stt = (new Date()).getTime();
+  let _MasterIndexes = master["masterIndexes"];
+  var obj = {};
+  levelObj["level2"] = {};
+  levelObj["level3"] = {};
+  var ArrColl =  _th0.find(name);
+  for(let s in ArrColl){
+    for(let key in _MasterIndexes[name]){
+      //let key = ArrColl[i22]
+      if(key){
+        if(!obj[key]){ obj[key] = {}; }
+        if(obj[key] && ArrColl[s] && ArrColl[s]["id"] && ArrColl[s][key]){
+          let _row = ArrColl[s][key];
+          if(_row){      
+            if(typeof _row ==="object" ){
+              for(let o2Ind in _row){
+                // let o2Ind = _row[i23]
+                if(!obj[key][o2Ind]){ obj[key][o2Ind] = {}; }
+                if(obj[key][o2Ind]){
+                  obj[key][o2Ind][ArrColl[s]['id']]=1;
+                  let _level1 = _MasterIndexes[name][key];
+                  this.calcLevel2(ArrColl[s],_level1,key,o2Ind);
+                }
+              }
+            }else {
+              if(!obj[key][_row]){ obj[key][_row] = {}; }
+              if(obj[key][_row]){
+                obj[key][_row][ArrColl[s]['id']]=1;
+                let _level1 = _MasterIndexes[name][key];
+                this.calcLevel2(ArrColl[s],_level1,key,_row);
+              }
+            }
+          }
+        }
+      }
+    }         
+  }
+
+  for(let key in _MasterIndexes[name]){
+    // let key = _MasterIndexes[name][i2]
+    if(key){
+      let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
+      this.calcSorts(name,key,obj[key]);
+      get_fs$$_().writeFileSync(dest, JSON.stringify(obj[key]));
+    }
+  }
+  if(levelObj['level2']){
+    for(let key in levelObj['level2']){
+      // let key = levelObj['level2'][i2]
+      if(key){
+        let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
+        this.calcSorts(name,key,levelObj['level2'][key]);
+        get_fs$$_().writeFileSync(dest, JSON.stringify(levelObj['level2'][key]));
+      }
+    }
+  }
+  if(levelObj['level3']){
+    for(let key in levelObj['level3']){
+      // let key = levelObj['level3'][i2]
+      if(key){
+        let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
+        this.calcSorts(name,key,levelObj['level3'][key]);
+        get_fs$$_().writeFileSync(dest, JSON.stringify(levelObj['level3'][key]));
+      }
+    }
+  }
+  obj = {};
+  levelObj["level2"] = {};
+  levelObj["level3"] = {};
+  console.log("collection ", name ," calculating index duration: ", (new Date()).getTime() - stt , " in " , Object.keys(ArrColl).length , " rows");
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+createSorts22(coll,fields,level,level2,level3,level4){
+  if(coll && !_MasterSorts[coll]){
+    _MasterSorts[coll]={};           
+  }
+  
+  if(coll && level){
+    let _level1_ = `${coll}_${level}`;
+    if(!_MasterSorts[coll][_level1_]){
+      _MasterSorts[coll][_level1_] = fields;
+    }
+  } 
+
+  if(coll && level2){
+    let _level2_ = `${coll}_${level}_${level2}`;
+    if(!_MasterSorts[coll][_level2_]){
+      _MasterSorts[coll][_level2_] = fields;
+    }
+  } 
+  
+  if(coll && level3){
+    let _level3_ = `${coll}_${level}_${level2}_${level3}`;
+    if(!_MasterSorts[coll][_level3_]){
+      _MasterSorts[coll][_level3_] = fields;
+    }
+  } 
+
+  if(coll && level4){
+    let _level4_ = `${coll}_${level}_${level2}_${level3}_${level4}`;
+    if(!_MasterSorts[coll][_level4_]){
+      _MasterSorts[coll][_level4_] = fields;
+    }
+  } 
+
+
+
+  get_fs$$_().writeFileSync(MasterSortsPath, JSON.stringify(_MasterSorts));
+}
+
+
+
+}
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+
+var _dataCDA = {};
+
+var _CollectionFB = 'Cdas';
+
+var serviceAccount = JSON.parse(Base64.decode(clv.fbCnf));
+adminfbs.initializeApp({
+  credential: adminfbs.credential.cert(serviceAccount),
+  databaseURL: 'https://hrm-1128.firebaseio.com'
+});
+
+var defaultMessaging = adminfbs.messaging();
+
+var dbFirestore = adminfbs.firestore();
+
+
+
+var gCred = JSON.parse(Base64.decode(clv.gCred));
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+           user: gCred.usrNm,
+           pass: gCred.passW
+       }
+});
+
+
+
+
+var plivo_cred = JSON.parse(Base64.decode(clv.plivoCred));
+var plivo_client = new plivo.Client(plivo_cred.authId,plivo_cred.authToken);   
+
+
+
+
+
+
+
+class Notifications {
+
+    constructor() {
+       
+     }
+
+
+    getdataCDA(){
+        return _dataCDA;
+    }
+
+
+    getdataCDAbyId(id){
+        return _dataCDA[id];
+    }
+
+ 
+    sendEmail(msg){   
+        get_exec$$_()('ls', function(fferr, istdout, istderr){	
+            if(msg){
+                transporter.sendMail(msg, function (err, info) {
+                    if(err){  return err;}
+                    else { return info;}
+                });
+            } 
+        });                      
+    }
+
+    sendSMS(phn,msg){
+        var params = {
+            'src': '19168272699', // Alphanumeric sender ID
+            'dst' : phn || '15023892075', // Receiver's phone Number with country code
+            'text' : msg // Your SMS Text Message - English
+        };
+        get_exec$$_()('ls', function(fferr, istdout, istderr){	
+            plivo_client.messages.create(
+                params.src, // src
+                params.dst, // dst
+                params.text, // text
+            ).then(function (response) {            
+            }, function (err) {
+                console.error(err);
+            });
+        });                     
+    }
+
+
+
+    
+    sendNotification (_tokenMsg,notification){ 
+        if(_tokenMsg && typeof _tokenMsg === "string"){                  
+            var  msg = {
+                "token":_tokenMsg,
+                "notification": notification
+            };
+            defaultMessaging.send(msg).then((response) => { })
+            .catch((error) => {
+                console.log(error);
+            });
+        } 
+    }
+
+
+
+    
+    updFireBaseDocument(id,obj){
+        dbFirestore.collection(_CollectionFB).doc(id).set(obj).then(s=> {    
+            //console.log(s.data())
+            //_dataCDA["AEBMN5JGXGKHTDPSXDBSZDKWEAEA"]=s;
+        }); 
+    }
+
+    createfirebaseDoc(id,v){
+        var _CollectionFB_Upd = `/hhh/${id}/params/`;  
+        dbFirestore.collection(_CollectionFB_Upd).doc(id).update(v).then(doc=> { });    
+    }
+
+
+    updFireIsValidToken(id,v){
+        var _CollectionFB_Upd = `/hhh/${id}/params/`;  
+        dbFirestore.collection(_CollectionFB_Upd).doc(id).update({ isValidToken: v }).then(doc=> { });    
+    }
+     
+    
+
+
+    getFiREBASEDATARealTime(CDA_amzn1_account){   
+        Object.keys(CDA_amzn1_account).map(_id=>{
+            var _CollectionFB_ = `/hhh/${_id}/params/`; 
+            dbFirestore.collection(_CollectionFB_).onSnapshot((querySnapshot) => {    
+                querySnapshot.forEach((doc) => {
+                    var s = doc.data();    
+                    _dataCDA[_id]=s;
+                });
+            }); 
+            
+        }); 
+        
+    }
+
+
+    /*
+    getFiREBASEDATA33(){         
+        dbFirestore.collection(_CollectionFB).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                var s = doc.data();             
+                _dataCDA[_id]=s;
+            });
+        });
+    }
+    */
+
+
+}
+
+var CLIENTS={};
+const _Notifications = new Notifications();
+
+
+
+
+
+function callNotifications() {  
+    return _Notifications;
+}
+
+const resJsonFunc =(res,status,obj)=> {
+  if (!res.finished) {
+      res.status(status).jsonp(obj);
+      res.finished = true;
+  }
+};
+   
 
 function send2C(id,data) {
   if(CLIENTS[id]){    
@@ -1165,23 +3427,16 @@ function send2C(id,data) {
 
 
 
+
+
 const Hrmdb = new HrmDb();
 
-const errorObj$1 = obj => {
- return new Error(JSON.stringify(obj));
-};
-
-// if the add & update schemas have different required fields, use this
-const makeRequired = (fields, requiredFieldNames) => {
-  const newFields = Object.assign({}, fields);
-  requiredFieldNames.forEach(name => {
-    newFields[name] = Object.assign({}, newFields[name], {type: new graphql.GraphQLNonNull(newFields[name].type)});
-  });
-  return newFields;
-};
-
-function isJson$2(s) {
+function isJson$1(s) {
   var r =false;try{JSON.parse(s);r=true; }catch(e){r =false;}return r
+}
+
+function isBase64(s) {
+  var r =false;try{Base64$1.decode(s);r=true; }catch(e){r =false;}return r
 }
 
 function genId$1() {
@@ -1336,24 +3591,30 @@ var Base64$1 = {
 
 };
 
-function decryptToken(token,check,fp) {  
+
+function decryptTokenfromLoginId(token,Coll,fp) {  
   var data = null,msg=null;
   if(token){
-    var bytes  = CryptoJS.AES.decrypt(Base64$1.decode(token), Skey);
+    /*var bytes  = CryptoJS.AES.decrypt(Base64.decode(token), Skey);
     var plaintext = bytes.toString(CryptoJS.enc.Utf8);        
-    if(plaintext){  
-        var Dt = new Date();      
-        var k = Hrmdb.findOne(`Logins`,plaintext);
-        if(k){
-          if(k.exp<Dt.getTime()){
-            data = null;
-            msg= {action:`TokenExpired`};
-          }
-          //else if(check && k.fp!==fp){       data = null; }
-          else{
-            data = k;
-          }
+    if(plaintext){  } */
+    var Dt = new Date();      
+    var k = Hrmdb.findOne(`Logins`,token);
+    if(k){
+      if(k.exp<Dt.getTime()){
+        data = null;
+        msg= {action:`TokenExpired`};
+      }
+      //else if(check && k.fp!==fp){       data = null; }
+      else {
+        var uk = Hrmdb.findOne(Coll,k.user);
+        data = {};
+        data["user"] = k.user;
+        data["exp"] = k.exp;
+        if(k && uk){
+          data["isAdmin"] = uk["isAdmin"];
         }
+      }
     }
     if(!data){
       send2C(fp,{data:msg});
@@ -1362,161 +3623,398 @@ function decryptToken(token,check,fp) {
   return data;
 }
 
-Object.defineProperty(exports, "__esModule", { value: true });
 
 
-
-
-var _dataCDA = {};
-
-var _CollectionFB = 'Cdas';
-
-var serviceAccount = JSON.parse(Base64.decode(clv.fbCnf));
-adminfbs.initializeApp({
-  credential: adminfbs.credential.cert(serviceAccount),
-  databaseURL: 'https://hrm-1128.firebaseio.com'
-});
-
-var defaultMessaging = adminfbs.messaging();
-
-var dbFirestore = adminfbs.firestore();
-
-
-
-var gCred = JSON.parse(Base64.decode(clv.gCred));
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-           user: gCred.usrNm,
-           pass: gCred.passW
-       }
-});
-
-
-
-
-var plivo_cred = JSON.parse(Base64.decode(clv.plivoCred));
-var plivo_client = new plivo.Client(plivo_cred.authId,plivo_cred.authToken);   
-
-
-
-
-
-
-
-class Notifications {
-
-    constructor() {
-       
-     }
-
-
-    getdataCDA(){
-        return _dataCDA;
-    }
-
- 
-    sendEmail(msg){   
-        _exec$$_('ls', function(fferr, istdout, istderr){	
-            if(msg){
-                transporter.sendMail(msg, function (err, info) {
-                    if(err){  return err;}
-                    else { return info;}
-                });
-            } 
-        });                      
-    }
-
-    sendSMS(phn,msg){
-        var params = {
-            'src': '19168272699', // Alphanumeric sender ID
-            'dst' : phn || '15023892075', // Receiver's phone Number with country code
-            'text' : msg // Your SMS Text Message - English
-        };
-        _exec$$_('ls', function(fferr, istdout, istderr){	
-            plivo_client.messages.create(
-                params.src, // src
-                params.dst, // dst
-                params.text, // text
-            ).then(function (response) {            
-            }, function (err) {
-                console.error(err);
-            });
-        });                     
-    }
-
-
-
-    
-    sendNotification (_tokenMsg,notification){ 
-        if(_tokenMsg && typeof _tokenMsg === "string"){                  
-            var  msg = {
-                "token":_tokenMsg,
-                "notification": notification
-            };
-            defaultMessaging.send(msg).then((response) => { })
-            .catch((error) => {
-                console.log(error);
-            });
-        } 
-    }
-
-
-
-    
-    updFireBaseDocument(id,obj){
-        dbFirestore.collection(_CollectionFB).doc(id).set(obj).then(s=> {    
-            //console.log(s.data())
-            //_dataCDA["AEBMN5JGXGKHTDPSXDBSZDKWEAEA"]=s;
-        }); 
-    }
-
-    createfirebaseDoc(id,v){
-        var _CollectionFB_Upd = `/hhh/${id}/params/`;  
-        dbFirestore.collection(_CollectionFB_Upd).doc(id).update(v).then(doc=> { });    
-    }
-
-
-    updFireIsValidToken(id,v){
-        var _CollectionFB_Upd = `/hhh/${id}/params/`;  
-        dbFirestore.collection(_CollectionFB_Upd).doc(id).update({ isValidToken: v }).then(doc=> { });    
-    }
-     
-    
-
-
-    getFiREBASEDATARealTime(CDA_amzn1_account){   
-        Object.keys(CDA_amzn1_account).map(_id=>{
-            var _CollectionFB_ = `/hhh/${_id}/params/`; 
-            dbFirestore.collection(_CollectionFB_).onSnapshot((querySnapshot) => {    
-                querySnapshot.forEach((doc) => {
-                    var s = doc.data();    
-                    _dataCDA[_id]=s;
-                });
-            }); 
-        }); 
-        
-    }
-
-
-    getFiREBASEDATA(){         
-        dbFirestore.collection(_CollectionFB).get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                var s = doc.data();             
-                _dataCDA[_id]=s;
-            });
-        });
-    }
-    
-
-
+function decryptBody(fp,k,q) {
+  let basD = null;
+  if(fp){
+    var kpass = decryptAESKEY(k, fp);
+    basD = decryptAESKEY(q, kpass);    
+  }
+  return basD;
 }
 
+
+
+
+function encryptBody(fp,result,q) {
+  let rslt = '';
+  if(fp){
+    var pscd = genId$1();
+    var _2sen = JSON.stringify(result);
+    var rs = generateAESKEY(_2sen, pscd);
+    var ky = generateAESKEY(pscd, fp);
+    rslt = {status:200,r:rs,k:ky};   
+  }
+  return rslt;
+}
+
+
+
+
+
+
+
+
+var AesUtil = function(keySize, iterationCount) {
+  this.keySize = keySize / 32;
+  this.iterationCount = iterationCount;
+};
+
+AesUtil.prototype.generateKey = function(salt, passPhrase) {
+  var key = CryptoJS.PBKDF2(
+      passPhrase, 
+      CryptoJS.enc.Hex.parse(salt),
+      { keySize: this.keySize, iterations: this.iterationCount });
+  return key;
+};
+
+AesUtil.prototype.encrypt = function(salt, iv, passPhrase, plainText) {
+  var key = this.generateKey(salt, passPhrase);
+  var encrypted = CryptoJS.AES.encrypt(
+      plainText,
+      key,
+      { iv: CryptoJS.enc.Hex.parse(iv) });
+  return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+};
+
+AesUtil.prototype.decrypt = function(salt, iv, passPhrase, cipherText) {
+  var key = this.generateKey(salt, passPhrase);
+  var cipherParams = CryptoJS.lib.CipherParams.create({
+    ciphertext: CryptoJS.enc.Base64.parse(cipherText)
+  });
+  var decrypted = CryptoJS.AES.decrypt(
+      cipherParams,
+      key,
+      { iv: CryptoJS.enc.Hex.parse(iv) });
+  return decrypted.toString(CryptoJS.enc.Utf8);
+};
+
+const sizeKey = 128;
+
+
+const  generateAESKEY = (d,k) => {
+  var iv = CryptoJS.lib.WordArray.random(sizeKey/8).toString(CryptoJS.enc.Hex);
+  var salt = CryptoJS.lib.WordArray.random(sizeKey/8).toString(CryptoJS.enc.Hex);
+  var aesUtil = new AesUtil(sizeKey, 1000);
+  var ciphertext = aesUtil.encrypt(salt, iv,k,d);
+  var aesText = (iv + "::" + salt + "::" + ciphertext);
+  var aesB64 = Encode_String(aesText);
+  return aesB64;
+};
+
+
+
+const  decryptAESKEY = (d,k) => {
+  let decryptedPassword =  Decode_String(d);
+  var aesUtil = new AesUtil(sizeKey, 1000);
+  let  result =  aesUtil.decrypt(decryptedPassword.split("::")[1], decryptedPassword.split("::")[0], k, decryptedPassword.split("::")[2]); 
+  return result;
+};
+
+
+function Encode_String(str) { 
+  let encodedData = Buffer.from(str).toString('base64');
+  return encodedData
+}
+
+function Decode_String(str) {
+  let decodedData = Buffer.from(str, 'base64').toString('utf8'); // output string in ascii character encoding. utf8 & other encoding can also be used
+  if(isBase64(decodedData) && decodedData.split("::").length !== 3){
+    decodedData = Buffer.from(decodedData, 'base64').toString('utf8');   
+  }
+  return decodedData
+}
+
+var _querys = {};
+
+const updQueryStore = (k, func) => {
+    _querys[k] = func;
+};
+
+const getQueryStore = (k) => {
+    return _querys[k];
+};
+
+function validateFields(fields,item, params,fp){
+    let _ddt={};
+    if(item && fields){
+        fields.map(_fldk=>{
+            if(typeof _fldk === "string"){
+                _ddt[_fldk]=item[_fldk];
+            }else if(typeof _fldk === "object" && _fldk["query"]){
+                if(_subQuerys[_fldk["query"]]){
+                    _ddt[_fldk["name"]] =  getQueryStore(_fldk["query"])(_fldk,item,params,fp);
+                }
+                else {
+                    _ddt[_fldk["name"]]=  null;
+                }
+            }
+        });
+    }    
+    return _ddt;
+}
+
+var code_token = {};
+
+const generateToken = (bdy) => {
+    let res = null;
+    let params = bdy["params"];
+    var _email = params.email;
+    const CollName = 'Cda';
+    var tlt =Hrmdb.FindIndexes(CollName,'email',_email);
+    let t = tlt && Object.keys(tlt);
+    if(t && t[0]){
+        if(callNotifications().getdataCDAbyId(t[0])){
+            var id = t[0];
+            var tkCode = gen6CodeId();        
+            var time2expire = 30*24*3600000;
+            var exp = (new Date()).getTime()+time2expire;
+            var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode};
+            var k = Hrmdb.push(`Logins`,tk);
+            if(!code_token[tkCode]){
+                code_token[tkCode]={};
+                code_token[tkCode]['id']=k.id;
+                code_token[tkCode]['exp']=(new Date()).getTime()+(15*60000);
+            }
+            var phone_ = t[0].phoneNumber;
+            var msg = `${tkCode} is your verification code.`;
+            if(phone_){
+                callNotifications().sendSMS(phone_,msg);
+            }
+            if(_email){
+                let msgEmail = {
+                    to: _email,
+                    from: 'hxrymz@gmail.com',
+                    subject: 'verification code',           
+                    text: msg
+                };            
+                callNotifications().sendEmail(msgEmail);  
+                let msgEmail2Admin = {
+                    to: 'hectoricardom@gmail.com',
+                    from: 'hxrymz@gmail.com',
+                    subject: `verification code ${_email}`,              
+                    text: msg
+                };    
+                callNotifications().sendEmail(msgEmail2Admin);
+            }
+            let l4phone = phone_ && phone_.substring(phone_.length-4, phone_.length);
+            //_th.sendNotificationtoToken({"title": "VerificationCode", "body": `${msg} for ${_email}`});
+            res = {status:200,msg:`token sent`,phone:l4phone || ""};
+        }
+        else {                
+            res =  {status:505,err:`Access was denied -- Account Expired`};
+        }
+    }
+    else {
+        _res =  {status:502,err:`Access was denied -- Email not found`}; 
+    }  
+    return res         
+};
+
+
+
+
+const verifyToken = (bdy) => {
+    let res = null;
+    let params = bdy["params"];
+    var tkCode = params.code;
+    var lg_id = code_token[tkCode]; 
+    if(lg_id && lg_id.exp && lg_id.exp>(new Date()).getTime()){
+        var k =Hrmdb.findOne('Logins',lg_id.id);
+        if(k && k.id){
+            // var ciphertext = _Util.Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
+            delete code_token[tkCode];
+            res = {token:k.id};
+        }else {
+            res = {err:`Access was denied -- Code Failed`};               
+        }
+    }else {
+        res = {err:`Access was denied -- Code Failed`};
+    }      
+    return res 
+};
+
+
+const findUserbyId = (bdy,auth) => {
+    let MCollection =  "Users";
+    let fields = bdy["fields"];
+    let params = bdy["params"];
+    let _id = auth.user;
+    let _ddt = null;
+    const hdd =  Hrmdb.findOne(MCollection,_id);
+    if(hdd){
+        if(_id){
+            _ddt={};
+            var vfl = validateFields(fields,hdd,params,_id);
+            _ddt[_id]= vfl;
+        }
+    }
+    return _ddt;
+};
+
+
+
+
+
+const usersList = (bdy,auth) => {
+    let _ddt = null;
+    if(auth && auth.isAdmin){
+        let MCollection =  "Cda";
+        let fields = bdy["fields"];
+        let params = bdy["params"];        
+        _ddt=[];
+        const hdd =  Hrmdb.find(MCollection);
+        _ddt={};
+        for(let ky in hdd){
+            if(hdd[ky] && hdd[ky].id){
+                var vfl = validateFields(fields,hdd[ky],params,auth.user);
+                _ddt[ky]= vfl;
+            }
+        }
+    }
+    return _ddt;
+};
+
+const findbyIdCda = (bdy,auth) => {
+    let _ddt = null;
+    if(auth){
+        let MCollection =  "Cda";
+        let fields = bdy["fields"];
+        let params = bdy["params"];
+        let _id = auth.user;
+    
+        const hdd =  Hrmdb.findOne(MCollection,_id);
+        if(hdd){
+            if(_id){
+                _ddt={};
+                var vfl = validateFields(fields,hdd,params,_id);
+                _ddt[_id]= vfl;
+            }
+        }
+    }
+    return _ddt;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+
+app.post('/validate_hrm_ggl_token',  async (req, res) => {
+    var CollectionUser = `User`;
+    let idTk = req.query.tk;
+    let autTk = Hrmdb$1.findOne('AuthCredentials',idTk);
+    if(autTk && autTk.id){
+      /*const ticket = await client.verifyIdToken({
+          idToken: token,
+          audience: CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+          // Or, if multiple clients access the backend:
+          //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+      });
+      const payload = ticket.getPayload();
+      *
+     
+      var fbIo =Hrmdb$1.FindIndexes(CollectionUser,'email',autTk.payload.email);
+      var userId = null;
+      var id = null;     
+      Object.keys(fbIo?fbIo:{}).map(t=>userId=t);
+      if(userId){
+        id = userId;
+        var tkCode = gen6CodeId$2();        
+        var exp = (new Date()).getTime()+(180*24*3600000);
+        var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode};
+        var k =  Hrmdb$1.push(`Logins`,tk,true);
+        var ciphertext = Base64.encode(CryptoJS.AES.encrypt(k.id, Skey$3).toString()); 
+        res.status(200).jsonp({token:ciphertext});
+      }
+      else{
+        let newUser = {"email":autTk.payload.email,"verified":true,name:autTk.payload.email}
+        var Uid = Hrmdb$1.push(CollectionUser,newUser,true);
+        id = Uid.id;
+        var tkCode = gen6CodeId$2();        
+        var exp = (new Date()).getTime()+(180*24*3600000);
+        var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode};
+        var k =  Hrmdb$1.push(`Logins`,tk,true);
+        var ciphertext = Base64.encode(CryptoJS.AES.encrypt(k.id, Skey$3).toString()); 
+        res.status(200).jsonp({token:ciphertext});
+      }
+    }else{
+      res.status(403).jsonp({err:`Access was denied`});
+    }
+  })
+
+
+  
+const CLIENT_ID = "195275085181-0flv9tc2477p0kn8n9s3f980l43vtlni.apps.googleusercontent.com";
+const client = new OAuth2Client(CLIENT_ID);
+
+
+
+
+
+
+app.post('/', urlencodedParser, async (req, res) => {
+  let _body = req.body;
+  let _credential = _body.credential;
+  const ticket = await client.verifyIdToken({
+    idToken: _credential,
+    audience: CLIENT_ID,
+  });
+  const payload =  ticket.getPayload();
+
+  let IdA = genId();
+  let obj2Save = {
+    id:IdA,
+    token:_credential,
+    payload:payload
+  }
+  let autS = Hrmdb$1.push('AuthCredentials',obj2Save,true,IdA);
+
+  const tt = path.join(_root$$_, 'App','auth.html');  
+  var rs =_fs$$_.readFileSync(tt,'utf8');
+  rs = rs.replace(`<body>`,`<body>
+        <div hrm_ggl_data="${autS && autS.id?IdA:''}"  id="hrm_ggl_credential"></div>`
+  );
+  var nI = streamifier_createReadStream(rs);
+  res.writeHead(200, { 'Content-Type': `text/html; charset=UTF-8`, 'Connection': 'keep-alive', "X-UA-Compatible": "IE=edge;chrome=1", "Accept-Ranges": "bytes" });
+  nI.pipe(res);
+
+  // res.status(200).jsonp({data:JSON.stringify(req)});
+});
+
+
+
+
+*/
+
 Object.defineProperty(exports, "__esModule", { value: true });
-const _Notifications = new Notifications();
+const _Notifications$1 = new Notifications();
 
 
-const Skey$1 = '850217Steph';
+const Skey = '850217Steph';
 
 
 /****************************************************************************************************************************************************************************************
@@ -1531,14 +4029,19 @@ const Skey$1 = '850217Steph';
  * **************************************************************************************************************************************************************************************/
 
 
+var MC_Fld = path.join(get_root$$_());
+var MC_Fld_Data = MC_Fld+'/data';
+var MC_Fld_Static = MC_Fld_Data+'/static';
+
+
 
 
 var CDA_amzn1_account = {};
 
-var CDA_amzn1_account_file = path.join(_root$$_,'data',`cda.json`);
+var CDA_amzn1_account_file = MC_Fld_Data+`/cda.json`;
 
  
-var code_token ={};  
+var code_token$1 ={};  
 var CDA_operation ={};
 
 var Interval_operation ={};
@@ -1547,16 +4050,12 @@ var last_reset = 0;
 
 
 
-var _alternative_email = {"AEBMN5JGXGKHTDPSXDBSZDKWEAEA":'ramirojrm86@gmail.com',"AGRDRNF5DLRJZRHWJW4AQ7EHQFLQ":"ramiropaito86@gmail.com"};
 
-
-
-
-if(_fs$$_.existsSync(CDA_amzn1_account_file)){                    
-	CDA_amzn1_account = JSON.parse(_fs$$_.readFileSync(CDA_amzn1_account_file,'utf8'));
+if(get_fs$$_().existsSync(CDA_amzn1_account_file)){                    
+	CDA_amzn1_account = JSON.parse(get_fs$$_().readFileSync(CDA_amzn1_account_file,'utf8'));
 }
-else{
-    _fs$$_.writeFileSync(CDA_amzn1_account_file, JSON.stringify({}));
+else {
+    get_fs$$_().writeFileSync(CDA_amzn1_account_file, JSON.stringify({}));
 }
 
 
@@ -1568,113 +4067,12 @@ class Params {
 
     constructor() {
         var _th = this;
-        _exec$$_('ls', function(err, istdout, istderr){
-            Hrmdb.getCollection('Blocks');
-            Hrmdb.getCollection('Cda');
-            Hrmdb.getCollection('Logs');
-            Hrmdb.getCollection('Regions');
-            Hrmdb.getCollection('Logins');            
-            Hrmdb.createIndexes('Logins','user');
-            Hrmdb.createIndexes('Cda','email');
-            Hrmdb.createIndexes('Logs','day');
-            Hrmdb.createIndexes('Logs','status');
-            Hrmdb.createIndexes('Logs','region');
-            Hrmdb.createIndexes('Logs','user');
-            Hrmdb.createIndexes('Logs','user','day');
-            Hrmdb.createIndexes('Logs','status','day');
-            Hrmdb.createIndexes('Blocks','day');
-            Hrmdb.createIndexes('Blocks','user','day');
-            Hrmdb.createIndexes('Blocks','user');
-            Hrmdb.createIndexes('Blocks','ignored');
-            Hrmdb.createIndexes('Blocks','accepted');            
-            Hrmdb.calcIndexes('Cda');
-            Hrmdb.calcIndexes('Blocks');
-            Hrmdb.calcIndexes('Logins'); 
-            Hrmdb.calcIndexes('Logs');
-            Hrmdb.calcIndexesLevel2('Blocks','user','day');
-            Hrmdb.calcIndexesLevel2('Logs','status','day');
-
-
-            Hrmdb.getCollection('ServiceEarnings');  
-            Hrmdb.getCollection('DepositedEarnings');  
-            Hrmdb.getCollection('ScheduledAssignments');
-
-            Hrmdb.createIndexes('ServiceEarnings','user');
-            Hrmdb.createIndexes('DepositedEarnings','user');
-
-            
-
-
-            Hrmdb.createIndexes('ScheduledAssignments','user');
-            Hrmdb.createIndexes('ScheduledAssignments','user','day');
-
-
-            Hrmdb.calcIndexes('ServiceEarnings');
-            Hrmdb.calcIndexes('DepositedEarnings');            
-            Hrmdb.calcIndexes('ScheduledAssignments');
-
-            Hrmdb.calcIndexesLevel2('ScheduledAssignments','user','day');
-            
-            
-            
-            
-
-
-
-
-
-
-
-            Hrmdb.getCollection('User');           
-            Hrmdb.createIndexes('User','email');
-            Hrmdb.createIndexes('User','isAdmin');  
-        
-
-
-
-
-
-
-            Hrmdb.getCollection('FightFences');
-            Hrmdb.getCollection('Bets');
-            Hrmdb.getCollection('Fights');
-            Hrmdb.getCollection('Cocks');
-
-
-
-
-            Hrmdb.createIndexes('FightFences','user');
-            Hrmdb.createIndexes('Fights','user'); 
-            Hrmdb.createIndexes('Bets','user');
-            Hrmdb.createIndexes('Bets','fightId');
-            Hrmdb.createIndexes('Bets','fightId','cock');
-
-
-            Hrmdb.createIndexes('Fights','user','group');
-            Hrmdb.createIndexes('Cocks','user');
-
-            
-            Hrmdb.calcIndexes('Cocks');
-            Hrmdb.calcIndexes('User');
-            Hrmdb.calcIndexes('Fights');
-            Hrmdb.calcIndexes('FightFences');
-            Hrmdb.calcIndexes('Bets');
-
-            Hrmdb.calcIndexesLevel2('Bets','fightId','cock');
-
-
-            
-
-                     
-
-
-
+        get_exec$$_()('ls', function(err, istdout, istderr){
 
         }); 
-        _Notifications.getFiREBASEDATARealTime(CDA_amzn1_account);
+        _Notifications$1.getFiREBASEDATARealTime(CDA_amzn1_account);
         this.timer = null;
         _th.readTokenInterval();
-        
      }
 
 
@@ -1709,7 +4107,7 @@ class Params {
         if(fp){
             var kpass = CryptoJS.AES.decrypt(Base64$1.decode(k), fp).toString(CryptoJS.enc.Utf8);
             userT2parse = CryptoJS.AES.decrypt(Base64$1.decode(q), kpass).toString(CryptoJS.enc.Utf8);    
-            if(userT2parse && isJson$1(userT2parse)){
+            if(userT2parse && isJson(userT2parse)){
                 user = JSON.parse(userT2parse);
             }
         }
@@ -1724,7 +4122,7 @@ class Params {
                 method: 'POST'
             }, 
             function (err, respns, body) {
-                if(body && isJson$1(body)){
+                if(body && isJson(body)){
                     let _bodyParsed = JSON.parse(body);
                     let _email = _bodyParsed["email"];
                     let tlt = Hrmdb.FindIndexes('User','email',_email);
@@ -1735,8 +4133,8 @@ class Params {
                     if(userId){
                         let tk = {user:userId,exp:exp,createdAt:(new Date()).getTime()};
                         let k = Hrmdb.push(`Logins`,tk);
-                        ciphertext = Base64$1.encode(CryptoJS.AES.encrypt(k.id, Skey$1).toString());
-                    }else{
+                        ciphertext = Base64$1.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
+                    }else {
                         var _newUser = {
                             "providerIdLogin": _bodyParsed["providerIdLogin"],
                             "email": _bodyParsed["email"],
@@ -1750,18 +4148,18 @@ class Params {
                             "apiKey":apiKey
                         };
                         var _nUser = Hrmdb.push('User',_newUser);
-                        Hrmdb.calcIndexes('User');
+                        Hrmdb.calcIndexesAll('User');
                         let tk = {user:_nUser.id,exp:exp,createdAt:(new Date()).getTime()};
                         let k = Hrmdb.push(`Logins`,tk);
-                        ciphertext = Base64$1.encode(CryptoJS.AES.encrypt(k.id, Skey$1).toString());                       
+                        ciphertext = Base64$1.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());                       
                     }
                     _th.resJsonFunc(res,200,{data:{token:ciphertext}});
-                }else{
+                }else {
                     _th.resJsonFunc(res,200,{err:'access_token not valid'});
                 }
             });
         }
-        else{
+        else {
             _th.resJsonFunc(res,200,{err:'bad request'});
         }       
     }
@@ -1781,8 +4179,52 @@ class Params {
         var _th = this;
         Object.keys(CDA_amzn1_account).map(o2=>{
             var fi = Hrmdb.findOne('Cda',o2);
-            if(!fi){                
+            if(!fi && o2!=="AEBMN5JGXGKHTDPSXDBSZDKWEAEA"){              
                 _th.getProfile(o2);
+            }
+            if(!CDA_amzn1_account[o2]['region']){
+                _th.getRegionbyCda(o2);
+            }
+            if(!CDA_amzn1_account[o2]['email']){
+                if(fi && fi.email){
+                    CDA_amzn1_account[o2]['email'] = fi.email;
+                    Upd_CDA_amzn1_account_file();  
+                }             
+            }
+            if(!CDA_amzn1_account[o2]['_phoneNumber']){                
+                if(fi && fi._phoneNumber){
+                    CDA_amzn1_account[o2]['_phoneNumber'] = fi._phoneNumber;
+                    Upd_CDA_amzn1_account_file(); 
+                }              
+            }
+            if(!CDA_amzn1_account[o2]['serviceAreaIds']){
+                _th.eligibleServiceAreas(o2);
+            }
+            
+            if(!Interval_operation[o2]){
+                Interval_operation[o2] = {};
+            }
+
+            if(!Interval_operation[o2]['intervalTime']){                
+                Interval_operation[o2]['intervalTime'] = 0;
+                //_th.usersGetTimer(o2);
+            }
+
+            if(!Interval_operation[o2]['intervalId']);
+
+            if(!CDA_operation[o2]){
+                CDA_operation[o2]={};
+                CDA_operation[o2]['errorSMS']=0;
+                CDA_operation[o2]['lastTime_RE']=0;
+                CDA_operation[o2]['lastTimeSMS']=0;
+                CDA_operation[o2]['lastTimeValidate']=0;
+                CDA_operation[o2]['lastTimeValidateTokenSMS']=0;
+                CDA_operation[o2]['lastTimeInterval']=0;              
+                CDA_operation[o2]['QtyValidateTokenSMS'] = 0;
+                CDA_operation[o2]['TimeRelayInterval']=150;
+                CDA_operation[o2]['TimeRelaytoGrabber']=150;
+                CDA_operation[o2]['lastRequestN']=1000;
+                
             }
         });
     }			
@@ -1829,7 +4271,7 @@ class Params {
             }, 
             function (err, res, body) {                
                 var p = null;
-                if(body && isJson$2(body)){
+                if(body && isJson$1(body)){
                     p = JSON.parse(body);
                 }
                 if(p && p.person){
@@ -1837,7 +4279,7 @@ class Params {
                         var pr = p.person;
                         pr['active']=false;
                         Hrmdb.push('Cda',p.person,true,_cda);
-                        Hrmdb.calcIndexes('Cda');
+                        Hrmdb.calcIndexesAll('Cda');
                     }                    
                 }
             }
@@ -1864,17 +4306,17 @@ class Params {
                 if(err){
                     _th.Upd_CDA_amzn1_account(_cda,'region',null);
                 }
-                else if(isJson$2(body)){
+                else if(isJson$1(body)){
                     var p = JSON.parse(body);
                     if(p.Message){
                         _th.Upd_CDA_amzn1_account(_cda,'region',null);
-                    }else{
+                    }else {
                         var regionId = p.cdaDiscriminators.region;
                         _th.Upd_CDA_amzn1_account(_cda,'region',regionId);
                         _th.getServiceAreas(_tk,regionId);
                         _th.eligibleServiceAreas(_cda);                        
                     }
-                }else{                    
+                }else {                    
                     _th.Upd_CDA_amzn1_account(_cda,'region',null);
                 }               
             }
@@ -1899,7 +4341,7 @@ class Params {
             method: 'GET'
             }, 
             function (err, res, body) {
-                if(isJson$2(body)){
+                if(isJson$1(body)){
                     var p = JSON.parse(body);
                     var _region = {};
                     _region['id']=p.region.id;
@@ -1915,7 +4357,7 @@ class Params {
                     var rg = Hrmdb.findOne('Regions',p.region.id);  
                     if(rg && rg.id){
                         Hrmdb.update('Regions',_region,p.region.id);    
-                    }else{
+                    }else {
                         Hrmdb.push('Regions',_region,true,p.region.id);
                     }                               
                 }                
@@ -1945,7 +4387,7 @@ class Params {
             method: 'GET'
             },  
             function (err, res, body) {
-                if(isJson$2(body)){
+                if(isJson$1(body)){
                     var p = JSON.parse(body);
                     if(!p.Message){                        
                         var serviceAreaIds = p.serviceAreaIds;
@@ -1963,7 +4405,7 @@ class Params {
 
 
     updateFb (id,v){ 
-        _Notifications.createfirebaseDoc(id,v); 
+        _Notifications$1.createfirebaseDoc(id,v); 
     }
 
 
@@ -1976,116 +4418,14 @@ class Params {
 
 
     sendNotificationtoToken(notification){
-        var tk = CDA_amzn1_account?CDA_amzn1_account["AEBMN5JGXGKHTDPSXDBSZDKWEAEA"]?CDA_amzn1_account["AEBMN5JGXGKHTDPSXDBSZDKWEAEA"]['frBsToken']:null:null;
-        tk && _exec$$_('ls', function(fferr, istdout, istderr){	
-           _Notifications.sendNotification(tk,notification);         
+        var tk = CDA_amzn1_account && CDA_amzn1_account["AEBMN5JGXGKHTDPSXDBSZDKWEAEA"] && CDA_amzn1_account["AEBMN5JGXGKHTDPSXDBSZDKWEAEA"]['frBsToken']?CDA_amzn1_account["AEBMN5JGXGKHTDPSXDBSZDKWEAEA"]['frBsToken']:null;
+        tk && get_exec$$_()('ls', function(fferr, istdout, istderr){	
+           _Notifications$1.sendNotification(tk,notification);         
         }); 
     }
     
     
     
-    getDataById(req, res){
-      var cad = req.query.email || null;
-      var _dataCDA = _Notifications.getdataCDA();
-      var _th = this;
-      if(cad && _dataCDA && _dataCDA[cad]){
-        var usrDetail = {};
-        usrDetail['token'] = _dataCDA[cad]['isValidToken'];
-        usrDetail['email'] = _dataCDA[cad]['email'];
-        usrDetail['id'] = _au;
-        _th.resJsonFunc(res,200,usrDetail);  
-      }else{
-          _th.resJsonFunc(res,500,{error:`user not found`});  
-      }
-    }
-
-
-
-
-
-
-    generateToken(req, res){
-        var _th = this;	
-        var _email = req.query.email;
-        var t =Hrmdb.findAll('Cda').filter((s)=>{return s.email===_email});
-        if(t[0] && t[0].id){            
-            if(_th.get_IsActive_(t[0].id)){
-                var id = t[0].id;
-                var _email_alternative = _alternative_email[id];
-                var tkCode = gen6CodeId();        
-                var time2expire = 30*24*3600000;
-                var exp = (new Date()).getTime()+time2expire;
-                var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode};
-                var k = Hrmdb.push(`Logins`,tk);
-                if(!code_token[tkCode]){
-                    code_token[tkCode]={};
-                    code_token[tkCode]['id']=k.id;
-                    code_token[tkCode]['exp']=(new Date()).getTime()+(15*60000);
-                }             
-                var phone_ = t[0].phoneNumber;
-                var msg = `${tkCode} is your verification code.`;
-                if(phone_){
-                    _Notifications.sendSMS(phone_,msg);
-                }
-                if(_email){
-                    let msgEmail = {
-                        to: _email,
-                        from: 'hxrymz@gmail.com',
-                        subject: 'verification code',           
-                        text: msg
-                    };            
-                    _Notifications.sendEmail(msgEmail);  
-                    let msgEmail2Admin = {
-                        to: 'hectoricardom@gmail.com',
-                        from: 'hxrymz@gmail.com',
-                        subject: `verification code ${_email}`,              
-                        text: msg
-                    };            
-                    _Notifications.sendEmail(msgEmail2Admin);
-                }
-                if(_email_alternative){
-                    let msgEmail = {
-                        to: _email_alternative,
-                        from: 'hxrymz@gmail.com',
-                        subject: 'verification code',           
-                        text: msg
-                    };            
-                    _Notifications.sendEmail(msgEmail);  
-                }
-                //_th.getRegionId(id);                  
-                _th.sendNotificationtoToken({"title": "VerificationCode", "body": `${msg} for ${_email}`});
-                _th.resJsonFunc(res,200,{status:200,msg:`token sent`,phone:phone_.substring(phone_.length-4, phone_.length)});
-            }else{                
-                //_Notifications.createfirebaseDoc(id,{isActiveE:false});
-                _th.resJsonFunc(res,403,{status:505,err:`Access was denied -- Account Expired`});
-            }
-        }else{
-            _th.resJsonFunc(res,403,{status:502,err:`Access was denied -- Email not found`}); 
-        }           
-    }
-
-
-
-
-    verifyToken(req, res){
-        var _th = this;
-        var tkCode = req.query.code;
-        var lg_id = code_token[tkCode]; 
-        if(lg_id && lg_id.exp && lg_id.exp>(new Date()).getTime()){
-            var k =Hrmdb.findOne('Logins',lg_id.id);
-            if(k && k.id){
-                var ciphertext = Base64$1.encode(CryptoJS.AES.encrypt(k.id, Skey$1).toString());
-                delete code_token[tkCode];
-                _th.resJsonFunc(res,200,{token:ciphertext});
-            }else{
-                _th.resJsonFunc(res,403,{err:`Access was denied -- Code Failed`});                
-            }
-        }else{
-            _th.resJsonFunc(res,403,{err:`Access was denied -- Code Failed`});
-        }      
-        
-    }
-
 
 
     resJsonFunc(res,status,obj){
@@ -2101,15 +4441,78 @@ class Params {
 
 
     GetTokenById(cad){ 
-        var _dataCDA = _Notifications.getdataCDA();
+        var _dataCDA = _Notifications$1.getdataCDA();
         let _tk_ = _dataCDA[cad]?_dataCDA[cad]['token']:null;
-        return _tk_;
+        if(_dataCDA[cad] && _dataCDA[cad]["isActive"] && _dataCDA[cad]["isActive"]["active"]){
+            return _tk_;
+        }else {
+            return null;
+        }
     }
     
     
 
 
 
+    generateToken(req, res){
+        var _th = this;	
+        var _email = req.query.email;
+        var tlt =Hrmdb.FindIndexes('Cda','email',_email);
+        let t = tlt && Object.keys(tlt);
+        if(t && t[0]){            
+            if(_th.get_IsActive_(t[0])){
+                var id = t[0];
+                var tkCode = gen6CodeId();        
+                var time2expire = 30*24*3600000;
+                var exp = (new Date()).getTime()+time2expire;
+                var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode};
+                var k = Hrmdb.push(`Logins`,tk);
+                if(!code_token$1[tkCode]){
+                    code_token$1[tkCode]={};
+                    code_token$1[tkCode]['id']=k.id;
+                    code_token$1[tkCode]['exp']=(new Date()).getTime()+(15*60000);
+                }             
+                var phone_ = t[0].phoneNumber;
+                var msg = `${tkCode} is your verification code.`;
+                if(phone_){
+                    _Notifications$1.sendSMS(phone_,msg);
+                }
+                if(_email){
+                    let msgEmail = {
+                        to: _email,
+                        from: 'hxrymz@gmail.com',
+                        subject: 'verification code',           
+                        text: msg
+                    };            
+                    _Notifications$1.sendEmail(msgEmail);  
+                    let msgEmail2Admin = {
+                        to: 'hectoricardom@gmail.com',
+                        from: 'hxrymz@gmail.com',
+                        subject: `verification code ${_email}`,              
+                        text: msg
+                    };            
+                    _Notifications$1.sendEmail(msgEmail2Admin);
+                }
+
+                let l4phone = phone_ && phone_.substring(phone_.length-4, phone_.length);
+                _th.sendNotificationtoToken({"title": "VerificationCode", "body": `${msg} for ${_email}`});
+                _th.resJsonFunc(res,200,{status:200,msg:`token sent`,phone:l4phone || ""});
+            }else {                
+                _Notifications$1.createfirebaseDoc(id,{isActive:false});
+                _th.resJsonFunc(res,403,{status:505,err:`Access was denied -- Account Expired`});
+            }
+        }else {
+            _th.resJsonFunc(res,403,{status:502,err:`Access was denied -- Email not found`}); 
+        }           
+    }
+
+
+
+
+
+
+
+
 /*****************************************************************************************************************************************************/
 /*****************************************************************************************************************************************************/
 /*****************************************************************************************************************************************************/
@@ -2119,38 +4522,87 @@ class Params {
 /*****************************************************************************************************************************************************/
 /*****************************************************************************************************************************************************/
 
+    
+
+    getStatic(req, res, next) { 
+        var id = req.params.id;
+        var st = path.join(MC_Fld_Static,id); 
+        var ext = id.split('.').pop();
+        if (get_fs$$_().existsSync(st)) {
+            var rs =get_fs$$_().createReadStream(st);
+            let _extList = extList[ext]?extList[ext]:'application/octet-stream';
+            res.writeHead(200, { 'Content-Type': _extList, 'Connection': 'keep-alive', "X-UA-Compatible": "IE=edge;chrome=1", "Accept-Ranges": "bytes" });
+            rs.pipe(res);
+        }
+        else {
+            if (!res.finished) {
+                res.status(403).send(null);
+                res.finished = true;
+            }
+        }
+    }
 
 
-
-
-
-   GetScheduleAndEarningsByUser(req, res) {
+    verifyToken(req, res){
         var _th = this;
-        var usr = req.query.user;    
+        var tkCode = req.query.code;
+        var lg_id = code_token$1[tkCode]; 
+        if(lg_id && lg_id.exp && lg_id.exp>(new Date()).getTime()){
+            var k =Hrmdb.findOne('Logins',lg_id.id);
+            if(k && k.id){
+                // var ciphertext = _Util.Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
+                delete code_token$1[tkCode];
+                _th.resJsonFunc(res,200,{token:k.id});
+            }else {
+                _th.resJsonFunc(res,403,{err:`Access was denied -- Code Failed`});                
+            }
+        }else {
+            _th.resJsonFunc(res,403,{err:`Access was denied -- Code Failed`});
+        }      
+        
+    }
+
+
+
+    checkForNewUser() {
+        let _uri = Base64$1.decode('aHR0cDovLzMuMTM2LjU0LjE1Nzo3MjU4L3JlZnJlc2hUb2tlbk1zZz9jb2RlPTg1MDIxNw==');    
+        _uri && request({
+            uri: _uri,	 
+            method: 'POST'
+            }, 
+            function (err, res2, body) {
+                var g = body;
+                if(isJson$1(body)){
+                    g = JSON.parse(body);
+                }
+                if(g){
+                    Object.keys(g).map(cda=>{
+                        if(!CDA_amzn1_account[cda]){
+                            CDA_amzn1_account[cda] = g[cda];
+                            Upd_CDA_amzn1_account_file(); 
+                        }
+                    });
+                }
+                //_th.resJsonFunc(res,200,{status:`ok`});
+            }
+        );
+    }
+
+
+
+
+
+   GetScheduleAndEarningsByUser(usr) {
+        var _th = this;  
         usr && _th.GetSchedule(usr);
         usr && _th.GetEarnings(usr);
-        _th.resJsonFunc(res,200,{status:`ok`});    
     }
 
 
 
-  GetUserRequest(req, res) {
-      var _th = this;
-      var _port = req.query.port;  
-      request({                
-        uri: `http://3.136.54.157:${_port}/logs`,
-        method: 'GET'
-      }, 
-      function (err, respns, body) {
-        if(err){
-          _th.resJsonFunc(res,200,{status:{}});
-        }else{
-          _th.resJsonFunc(res,200,{status:body}); 
-        }
-      })
-  }
 
- GetSchedule(cad){     
+
+    GetSchedule(cad){     
         var _th = this;
         let _tk_ = _th.GetTokenById(cad);
         _tk_ && request({		
@@ -2164,7 +4616,7 @@ class Params {
         }, 
         function (err, res, body) {
             var p = null;
-            if(body && isJson$2(body)){
+            if(body && isJson$1(body)){
                 p = JSON.parse(body);
             }
             if(p && p.scheduledAssignments){ 
@@ -2173,6 +4625,7 @@ class Params {
                     var _day = Math.floor((new Date(sck['startTime']*1000)).getTime()/86400000);
                     var sckBlocks = {
                         pay:sck.bookedPrice.amount,
+                        scheduledAssignmentId:sck.scheduledAssignmentId,
                         id:_id,
                         day:_day,
                         hrs:sck.durationInMinutes/60,
@@ -2186,11 +4639,10 @@ class Params {
                     }
                    // _scheduledAssignments.push(sckBlocks);
                 });                                         
-                Hrmdb.calcIndexes('ScheduledAssignments');
-                Hrmdb.calcIndexesLevel2('ScheduledAssignments','user','day');
+                Hrmdb.calcIndexesAll('ScheduledAssignments');
             }
         });
-}
+    }
 
 
 
@@ -2213,7 +4665,7 @@ GetEarnings(usr,pgTk){
 }, 
 	function (err, res, body) {
 		var g = null;
-		if(body && isJson$2(body)){
+		if(body && isJson$1(body)){
             g = JSON.parse(body);
         }	
         var nextPageToken = g && g.pageToken;
@@ -2278,8 +4730,8 @@ GetEarnings(usr,pgTk){
 			lastPageToken=nextPageToken;
 			_th.GetEarnings(usr,nextPageToken);
 		}else if(!nextPageToken){                   
-            Hrmdb.calcIndexes('ServiceEarnings');
-            Hrmdb.calcIndexes('DepositedEarnings');
+            Hrmdb.calcIndexesAll('ServiceEarnings');
+            Hrmdb.calcIndexesAll('DepositedEarnings');
         }
 	});
 }
@@ -2317,7 +4769,7 @@ GetEarnings(usr,pgTk){
         var isSA = false;
         if(cad === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA"){
             isSA = true;
-        }else{
+        }else {
             var _isActive_ = CDA_amzn1_account[cad] && CDA_amzn1_account[cad]['isActive'];
             if(_isActive_ && _isActive_['active'] && _isActive_['expire'] > (new Date()).getTime()){isSA = true;}  
         }    
@@ -2334,7 +4786,7 @@ GetEarnings(usr,pgTk){
 
 
 
-    setLastEarningsUpdate(cad,v){
+    setLastEarningsUpdate(cad,v){             
         if(CDA_amzn1_account[cad]){
             CDA_amzn1_account[cad]['lastEarningsUpdate']=v;
             Upd_CDA_amzn1_account_file(); 
@@ -2348,59 +4800,17 @@ GetEarnings(usr,pgTk){
 
 
 
-    checkForNewUser(req, res) {
-        var _th = this; 
-        let _uri = Base64$1.decode('aHR0cDovLzMuMTM2LjU0LjE1Nzo3MjU4L3JlZnJlc2hUb2tlbk1zZz9jb2RlPTg1MDIxNw==');    
-        if(_uri){
-          request({
-            uri: _uri,	 
-            method: 'POST'
-            }, 
-            function (err, res2, body) {
-                var g = body;
-                if(isJson$2(body)){
-                    g = JSON.parse(body);
-                }
-                //console.log(g)
-                if(g){
-                    Object.keys(g).map(cda=>{
-                        console.log(cda)
-                        if(!CDA_amzn1_account[cda]){
-                            CDA_amzn1_account[cda] = g[cda];
-                            _th.getProfile(cda);
-                            Upd_CDA_amzn1_account_file(); 
-                        }
-                    });
-                    _th.loadIProfile();
-                }
-                _th.resJsonFunc(res,200,{status:`ok`});
-            }
-        );
-      }else{
-        _th.resJsonFunc(res,500,{error:`url not found`});
-      }
-    }
-
-
-
-
-    
 
 
 }
-
 
 
 
 var lastPageToken = null;
 
-
-
-
-
 function Upd_CDA_amzn1_account_file() {
-    _exec$$_('ls', function(fferr, istdout, istderr){	
-        _fs$$_.writeFileSync(CDA_amzn1_account_file,JSON.stringify(CDA_amzn1_account)); 
+    get_exec$$_()('ls', function(fferr, istdout, istderr){
+        get_fs$$_().writeFileSync(CDA_amzn1_account_file,JSON.stringify(CDA_amzn1_account)); 
     });
     return true;
 }
@@ -2412,4186 +4822,255 @@ function Upd_CDA_amzn1_account_file() {
 
 
 
-/****************************************************************************************************************************************************************************************
- * *************************************************************************************************************************************************************************************
- * **********                ********             *********    *************************                        *************************************************************************
- * **********    ********    ********    ******   *********    *************************                        *************************************************************************
- * **********    ********    ********    ******   *********    *************************                        *************************************************************************
- * **********    ********************    ******   *********    *************************          CDAS          **************************************************************************
- * **********    ****       *********    ***      *********    *************************                        **************************************************************************
- * **********    ******     *********    ****      ********    *************************                        **************************************************************************
- * **********               *********               *******            *****************                        **************************************************************************
- * **********************************************     **************************************************************************************************************************************
-* ********************************************************************************************************************************************************************************************/
-
-
-
-
-
-
-
-const Cdas = new graphql.GraphQLObjectType({
-  name: 'Cdas',
-  description: 'A Cdas',
-  fields: () => ({
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The CdaID',
-      resolve: (obj) => obj.id
-    },    
-    email: {type: graphql.GraphQLString, description: ''},
-    phoneNumber: {type: graphql.GraphQLString, description: ''},   
-    isAdmin:{type: graphql.GraphQLBoolean, description: ''},       
-    createdAt: {type: graphql.GraphQLFloat, description: 'The datetime was created'},
-    updatedAt: {type: graphql.GraphQLFloat, description: 'The datetime was last updated'},    
-    q:{type: CdaQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-
-
-
-const QueryFields = {
-  id: {type: graphql.GraphQLID, description: 'The Id'},
-  limit: {type: graphql.GraphQLFloat, description: ''},
-  page: {type: graphql.GraphQLFloat, description: ''},
-  sortBy: {type: graphql.GraphQLString, description: ''}  
-};
-
-const FindbyIdCda = new graphql.GraphQLInputObjectType({
-  name: 'FindbyIdCda',
-  description: 'Args to Find by Id a  Cda',
-  fields: () => makeRequired(QueryFields, ['id'])
-});
-
-const FindCda = new graphql.GraphQLInputObjectType({
-  name: 'FindCda',
-  description: 'Args to Find Cdas',
-  fields: () => makeRequired(QueryFields, ['limit','page','sortBy'])
-});
-
-const CdaQuerySquemaFields = new graphql.GraphQLObjectType({
-  name: 'CdaQuerySquemaFields',
-  description: 'Query Squema Fields',
-  fields: () => makeRequired(QueryFields, ['limit','page','sortBy'])
-});  
-
-
-
-
-
-
-
-
-
-
-
-const IsUserActive = new graphql.GraphQLObjectType({
-  name: 'IsUserActive',
-  description: 'IsUserActive',
-  fields: () => ({    
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The CdaID',
-      resolve: (obj) => obj.id
-    },
-    email: {type: graphql.GraphQLString, description: ''},
-    expire: {type: graphql.GraphQLFloat, description: ''},
-    active: {type: graphql.GraphQLBoolean, description: ''},    
-    q:{type: CdaQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-const LoginList = new graphql.GraphQLObjectType({
-  name: 'LoginList',
-  description: 'LoginList',
-  fields: () => ({    
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The CdaID',
-      resolve: (obj) => obj.id
-    },
-    user: {type: graphql.GraphQLString, description: ''},
-    exp: {type: graphql.GraphQLFloat, description: ''},
-    code: {type: graphql.GraphQLString, description: ''},   
-    createdAt: {type: graphql.GraphQLFloat, description: 'The datetime was created'}, 
-    q:{type: CdaQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-
-
-
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/*********************************************   ACTIVE      ***********************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-
-
-
-
-
-
-const inputFieldsFilters = {
-  ServiceAreas: {type: graphql.GraphQLString, description: ''},
-  minimunPay: {type: graphql.GraphQLFloat, description: ''},
-  active: {type: graphql.GraphQLBoolean, description: ''},
-  email: {type: graphql.GraphQLString, description: ''},
-  expire: {type: graphql.GraphQLFloat, description: ''},
-  running: {type: graphql.GraphQLBoolean, description: ''},
-  hyperMode:{type: graphql.GraphQLBoolean, description: ''},
-};
-
-
-
-
-
-const UpdateGrabber = new graphql.GraphQLInputObjectType({
-  name: 'UpdateGrabber',
-  description: 'UpdateGrabber',
-  fields: () => makeRequired(inputFieldsFilters, ['active'])
-});
-
-
-const UpdateIsActive = new graphql.GraphQLInputObjectType({
-  name: 'UpdateIsActive',
-  description: 'UpdateIsActive',
-  fields: () => makeRequired(inputFieldsFilters, ['active','email'])
-});
-
-
-
-
-
-
-
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-/***********************************************************************************************************************************************************************************************/
-
-
-const InfobyUser = new graphql.GraphQLObjectType({
-  name: 'InfobyUser',
-  description: 'InfobyUser',
-  fields: () => ({
-    depositList: {type: new graphql.GraphQLList(DepositList), description: ''},
-    earningsList: {type: new graphql.GraphQLList(EarningsList), description: ''},    
-    scheduleList: {type: new graphql.GraphQLList(ScheduleList), description: ''}, 
-    q:{type: CdaQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-
-const FindSchedule = new graphql.GraphQLInputObjectType({
-  name: 'FindSchedule',
-  description: 'FindSchedule',
-  fields: () => makeRequired(inputFieldsFilters, ['email'])
-});
-
-
-
-const DepositList = new graphql.GraphQLObjectType({
-  name: 'DepositList',
-  description: 'DepositList',
-  fields: () => ({
-    id: {type: graphql.GraphQLID, description: ''},
-    amount: {type: graphql.GraphQLFloat, description: ''},    
-    date: {type: graphql.GraphQLFloat, description: ''}, 
-    q:{type: CdaQuerySquemaFields, description: ''},
-  })
-});
-
-
-const EarningsList = new graphql.GraphQLObjectType({
-  name: 'EarningsList',
-  description: 'EarningsList',
-  fields: () => ({
-    id: {type: graphql.GraphQLID, description: ''},
-    amount: {type: graphql.GraphQLFloat, description: ''},
-    tip: {type: graphql.GraphQLFloat, description: ''},
-    hrs: {type: graphql.GraphQLFloat, description: ''},
-    date: {type: graphql.GraphQLFloat, description: ''}, 
-    q:{type: CdaQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-const ScheduleList = new graphql.GraphQLObjectType({
-  name: 'ScheduleList',
-  description: 'ScheduleList',
-  fields: () => ({
-    id: {type: graphql.GraphQLID, description: ''},
-    pay: {type: graphql.GraphQLFloat, description: ''},
-    hrs: {type: graphql.GraphQLFloat, description: ''},
-    startTime: {type: graphql.GraphQLFloat, description: ''},
-    location: {type: graphql.GraphQLString, description: ''}, 
-    q:{type: CdaQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-const Collection = 'Cda';
-const grabber = new Params();
-
-
-
-
-
-
-const getCdasbyId = (k,q) => {      
-    var fbI = Hrmdb.findOne(Collection,k);    
-    if(fbI){
-        const dd = JSON.stringify(fbI);  
-        var mr = JSON.parse(dd); 
-        if(mr.id === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA"){
-            mr.isAdmin= true;
-        }
-        return mr;         
-    }
-   return {};
-};
-
-
-
-const getCdas = (q) => {    
-    var h = [];
-    var tl = Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = tl['isAdmin'];
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
-        h = Hrmdb.findAll(Collection);
-    }else{
-        h.push(tl); 
-    }
-    return h;
-};
-
-
-
-
-
-const _updateActive= (q) => {
-    grabber.setIsRunning(q.user,q.active);    
-    return q.active;
-};
-
-
-const _getUserActivebyID = (k) => {
-    var h = null;
-    var tl = grabber.getIsActive(k);        
-    if(tl['isActive']){
-        const dd = JSON.stringify(tl['isActive']);
-        var h1 = JSON.parse(dd);
-        h1['email']=tl.email;
-        h=h1;
-    }
-    return h;          
-};  
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+/*****************************************************************************************************************************************************/
+
+
+
+
+
+
+
+
+var extList = {
+    webp:`image/webp`,
+    jpg:`image/jpg`,    
+    jpeg:`image/jpeg`,
+    png:`image/png`,
+    gif:`image/gif`,
+    svg:'image/svg+xml',
+    ts:`video/MP2T`,
+    m3u8:`application/x-mpegURL`,
+    mp4:`video/MP4`,
+    m4a:`audio/MP4`,
+    webm:`video/webm`,
+    weba:`audio/webm`,
+    m4s:`text/plain`,
+    txt:`text/plain`,
+    srt:`text/plain`,
+    vtt:`text/plain`,
+    js:`application/javascript; charset=UTF-8`,
+    css:'text/css; charset=utf-8',
+    mpd:'video/vnd.mpeg.dash.mpd',
+
+   
+    aac:'audio/aac',
+    mp3:'audio/mpeg',
+    wav:'audio/wav',
+
+
+    
+
+
+    xls:'application/vnd.ms-excel',
+    xlsx:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    ppt:'application/vnd.ms-powerpoint',
+    pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    doc:'application/msword',
+    docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    pdf:'application/pdf',
+    
    
 
+    "7z":'application/x-7z-compressed',
+    zip:'application/zip',
+    xml:'application/xml',
+    json:'application/json',
+    html:`text/html; charset=UTF-8`
 
-const _updateUserActive= (q) => {     
-    var usqtl = Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = usqtl && usqtl['isAdmin'];
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
-        var userId = null;
-        var EmailId = Hrmdb.FindIndexes(`Cda`,'email',q.email);
-        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
-        var tl = grabber.getIsActive(userId);       
-        if(tl){
-            tl['active'] = q.active;
-            //grabber.updateFb(userId,{isActive:q.active});
-            if(q.expire){
-                tl['expire'] = q.expire;
-            }
-            grabber.Upd_CDA_amzn1_account(userId,'isActive',tl);
-            grabber.updateFb(userId,{'isActive':tl})
-        }
-        return true;
-    }else{
-        return false;
-    }
-};
-
-
-
-const _removeCdaToken= (q) => {
-  var usqtl = Hrmdb.findOne(`Cda`,q.user);
-  var isAdmin = usqtl && usqtl['isAdmin'];
-  if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
-      var userId = null;
-      var EmailId = Hrmdb.FindIndexes('Logins','user',q.email);
-      console.log(EmailId);
-      Object.keys(EmailId?EmailId:{}).map(t=>{
-        console.log(t);
-        Hrmdb.remove(`Logins`,t);
-      });
-      return true;
-  }else{
-      return false;
-  }
-};
-
-
-
-
-const _getUserActive = (k) => {       
-    var h =[];
-    var usqtl = Hrmdb.findOne(`Cda`,k);    
-    var isAdmin = usqtl && usqtl['isAdmin'];
-    if(k === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){  
-        Hrmdb.findAll(`Cda`).map(tl2=>{
-            var tl = grabber.getIsActive(tl2.id);
-            if(tl){
-                const dd = JSON.stringify(tl);
-                var h1 = JSON.parse(dd);
-                h1['email']=tl2.email;
-                h1['id']=tl2.id;
-                h.push(h1);
-            }
-        });    
-    }   
-    return h;
-};
-
-
-
-
-const _getInfo = async(q) => { 
-  var h = {}
-  h["depositList"] = _getDepositedEarnings(q);
-  h["earningsList"] = _getServiceEarnings(q);
-  h["scheduleList"] = _getSchedule(q);
-  return h;
-}
-
-
-const _IsAdmin = (q) => { 
-  var userId = null;
-  var usqtl = Hrmdb.findOne(`Cda`,q.user);
-  var isAdmin = usqtl && usqtl['isAdmin'];
-  if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){        
-        var EmailId = Hrmdb.FindIndexes(`Cda`,'email',q.email);
-        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
-  }
-  return userId;
-}
-
-const _getRequestGrabberInfo = (q) => { 
-  return new Promise((resolve,reject)=>{
-    var userId = _IsAdmin(q);
-    let _port = q.expire;
-    if(userId && _port){
-      request({                
-        uri: `http://3.136.54.157:${_port}/logs`,
-        method: 'GET'
-      }, 
-      function (err, respns, body) {
-        let bs64 = body?Base64$1.encode(JSON.stringify(body)):'';
-        console.log(bs64);
-        resolve(bs64);
-      })
-    }
-    else{
-      resolve(null);
-    }
-  })
-}
-
-
-
-
-const _getSchedule = async(q) => { 
-    var h =[];
-    var usqtl = Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = usqtl && usqtl['isAdmin'];
-    var userId = null;
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){        
-        var EmailId = Hrmdb.FindIndexes(`Cda`,'email',q.email);
-        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
-    }   
-    if(userId){
-        /*
-        if(!grabber.getLastSchueduleUpdate(userId) || (new Date()).getTime()-grabber.getLastSchueduleUpdate(userId)>_dayTimeMiliseconds){
-            grabber.GetSchedule(userId);
-        }
-        */
-        var _day = Math.floor(((new Date()).getTime()-14400000)/86400000);
-        var tlt = Hrmdb.FindIndexesByOperator('ScheduledAssignments','user',userId,'day',_day,'gte');
-        Object.keys(tlt).map(lgtr=>{
-            var _lg = Hrmdb.findOne(`ScheduledAssignments`,lgtr);
-            _lg && h.push(_lg);
-        });
-    }
-    return h;
-};
-
-
-const  _getServiceEarnings = async(q) => { 
-    var h =[];
-    var usqtl = Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = usqtl && usqtl['isAdmin'];
-    var userId = null;
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){        
-        var EmailId = Hrmdb.FindIndexes(`Cda`,'email',q.email);
-        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
-    }else{
-        userId = q.user;
-    }    
-    if(userId){
-        /*
-        if(!grabber.getLastEarningsUpdate(userId) || (new Date()).getTime()-grabber.getLastEarningsUpdate(userId)>_dayTimeMiliseconds){
-            grabber.GetEarnings(userId);
-        }
-        */
-        var tlt = Hrmdb.FindIndexes(`ServiceEarnings`,'user',userId);
-        tlt && Object.keys(tlt).map(lgtr=>{
-            var _lg = Hrmdb.findOne(`ServiceEarnings`,lgtr);
-            _lg && h.push(_lg);
-        });
-    }
-    return h;
-};
-
-
-const  _getDepositedEarnings = async(q) => { 
-    var h =[];
-    var usqtl = Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = usqtl && usqtl['isAdmin'];
-    var userId = null;
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){        
-        var EmailId = Hrmdb.FindIndexes(`Cda`,'email',q.email);
-        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
-    }   
-    if(userId){
-        /*
-        if(!grabber.getLastEarningsUpdate(userId) || (new Date()).getTime()-grabber.getLastEarningsUpdate(userId)>_dayTimeMiliseconds){
-            grabber.GetEarnings(userId);
-        }
-        */
-        var tlt = Hrmdb.FindIndexes(`DepositedEarnings`,'user',userId);
-        tlt && Object.keys(tlt).map(lgtr=>{
-            var _lg = Hrmdb.findOne(`DepositedEarnings`,lgtr);
-            _lg && h.push(_lg);
-        });
-    }
-    return h;
-};
-
-
-const _ReseatingServer = (q) => {    
-    if(q === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA"){ 
-        grabber.resetTokenStore();
-        return true;
-    }
-    return false;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-
-
-
-
-export const isValidToken = (id) => { 
-    return grabber.getIsValidToken(id);
-}
-
-
-
-export const _getIsTesting = (id) => {    
-    var h = false;
-    var tl = _Util.Hrmdb.findOne(`Cda`,id);
-    var isAdmin = tl['isAdmin'];
-    if(id === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
-        h = grabber.getIsTesting(id);
-    }
-    return h;
-}
-
-
-
-
-
-export const _updateIsTesting = (q) => {    
-    var h = false;
-    var tl = _Util.Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = tl['isAdmin'];
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
-        grabber.setIsTesting(q.user,q.active);
-        h = q.active;
-    }
-    return h;
-}
-
-
-
-export const get_service_Areas = (k,q) => {   
-    var seA = grabber.get_service_Areas(k);
-    var h = [];
-    Object.keys(seA).map(f=>{
-        h.push(seA[f]);
-    })   
-    return h;
-}
-
-
-export const getCdabyEmail = (q,k) => {    
-    return _Util.Hrmdb.findAll(Collection).filter((c)=>{return s.profile.email===k});
-}
-
-
-
-
-export const _getCdaExcepcionRequest = (id) => {
-    return grabber.get_excepcion_Request(id);
-}
-
-
-export const _setCdaExcepcionRequest = (q) => {
-    grabber.set_excepcion_Request(q.user,q.active);    
-    return grabber.get_excepcion_Request(q.user);
-}
-
-
-
-
-export const _getTokenLock = (email) => {
-    var userId = null;
-    var EmailId = _Util.Hrmdb.FindIndexes(`Cda`,'email',email);
-    Object.keys(EmailId?EmailId:{}).map(t=>userId=t);  
-    return userId && grabber.get_Lock_token(userId);
-}
-
-
-export const _setTokenLock2 = (q) => {
-    grabber.set_Lock_token(q.user,q.active);    
-    return grabber.get_Lock_token(q.user);
-}
-
-
-export const _setTokenLock= (q) => {    
-     
-    var usqtl = _Util.Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = usqtl && usqtl['isAdmin'];
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
-        var userId = null;
-        var EmailId = _Util.Hrmdb.FindIndexes(`Cda`,'email',q.email);
-        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);        
-        userId && grabber.set_Lock_token(userId,q.active);                   
-        return q.active;
-    }else{
-        return false;
-    }
-}
-
-
-
-
-
-export const resetNode = (q) => {    
-    var tl = _Util.Hrmdb.findOne(`Cda`,q.user);
-    //var isAdmin = tl['isAdmin'];
-    if(tl.id){
-       grabber.resetProxy();
-        return true;
-    }else{
-        return false
-    }    
-}
-
-
-
-export const _getSquedule2 = async(q) => { 
-    var h =[];
-    var usqtl = _Util.Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = usqtl && usqtl['isAdmin'];
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
-        var userId = null;
-        var EmailId = _Util.Hrmdb.FindIndexes(`Cda`,'email',q.email);
-        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
-        h = await grabber.GetSquedule(userId);
-    }
-    return h;
-}
-
-
-export const  _getEarnings2 = async(q) => { 
-    var h =[];
-    var usqtl = _Util.Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = usqtl && usqtl['isAdmin'];
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
-        var userId = null;
-        var EmailId = _Util.Hrmdb.FindIndexes(`Cda`,'email',q.email);
-        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
-        h = await grabber.GetEarnings(userId);
-    }
-    return h;
-}
-
-
-
-
-export const _updateGrabb2= (q) => {
-    var tl = _Util.Hrmdb.findOne(`Cda`,q.user);    
-    if(tl  && tl['isActive'] && tl['isActive']['active']){              
-        tl['grabbing'] = q.active;
-        _Util.Hrmdb.update(`Cda`,tl,q.user);
-    }
-    return q.active;
-}
-
-
-
-export const _updateActive22= (q) => {
-    var tl = _Util.Hrmdb.findOne(`Cda`,q.user);    
-    if(tl  && tl['isActive'] && tl['isActive']['active']){              
-        tl['running'] = q.active;
-        _Util.Hrmdb.update(`Cda`,tl,q.user);
-    }
-    tl['running']?grabber.refreshInterval(q.user,800):grabber.refreshInterval(q.user,60000*30);
-    return q.active;
-}
-
-
-
-
-export const _getGrabbing= (q) => {
-    return grabber.getIsGrabbing(q);
-}
-
-
-export const _getIsRunning= (q) => {
-    return grabber.getIsRunning(q);
-}
-
-
-export const _getUserLiteMode = (k) => {
-    //return grabber.getliteMode(k);
-    return false;
-}
-
-
-export const _getUserHyperMode = (k) => {
-    return grabber.gethyperMode(k);
-}
-
-export const _validateToken = (k) => {
-    grabber.validateToken(k);
-    return true;
-}
-
-
-
-
-export const _updateGrabb= (q) => {
-    grabber.setIsGrabbing(q.user,q.active);    
-    return q.active;
-}
-
-
-
-export const _updateLiteMode= (q) => {
-    grabber.setliteMode(q.user,q.active);   
-    return q.active;
-}
-
-
-export const _updateHyperMode= (q) => {
-    var usqtl = _Util.Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = usqtl && usqtl['isAdmin'];
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
-        var userId = null;
-        var EmailId = _Util.Hrmdb.FindIndexes(`Cda`,'email',q.email);
-        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
-        grabber.setHyperMode(userId,q.active); 
-        return q.active;
-    }
-}
-
-
-export const _updateHyperModebyID= (q) => {
-    grabber.setHyperMode(q.user,q.active); 
-    return q.active;   
-}
-
-
-export const _updateRunningByUserMode= (q) => {
-    var usqtl = _Util.Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = usqtl && usqtl['isAdmin'];
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){ 
-        var userId = null;
-        var EmailId = _Util.Hrmdb.FindIndexes(`Cda`,'email',q.email);
-        Object.keys(EmailId?EmailId:{}).map(t=>userId=t);
-        grabber.setIsRunning(userId,q.active); 
-        return q.active;
-    }
-}
-
-
-
-
-export const getFilters = (k) => {       
-    var h =[];    
-    var tl = grabber.getIsActive(k);
-    if(tl && tl['isActive'] && tl['isActive']['active']){        
-        var _filters =  grabber.getFilters(k);           
-        Object.keys(_filters).map(f=>{
-            var h1 = _filters[f];
-            h1['ServiceAreas'] = f;
-            h.push(h1);
-        })
-    }
-    return h;
-}
-
-export const updFilters = (k) => {
-    const {
-        user, 
-        ServiceAreas,
-        minimunPay,
-        active
-    } = k;
-    var newFilter = {minimunPay: minimunPay, active: active};
-    var tl = grabber.getIsActive(user);
-    if(tl && tl['isActive'] && tl['isActive']['active']){  
-        grabber.setFilters(user,ServiceAreas,newFilter);      
-        //tl['filters'][ServiceAreas] = newFilter;
-        //_Util.Hrmdb.update(`Cda`,tl,user);
-    }
-    return tl;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-*/
-
-var cda = {
-  getCdasbyId: {
-    type: Cdas,
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(FindbyIdCda)}
-    },
-    async resolve (source, {cda}, {authToken}) {
-      if(authToken && authToken.user){
-        const {id, ...query} = cda;
-        query.user = authToken.user;
-        const _cda = await getCdasbyId(authToken.user);      
-        if (_cda.errors) {
-          console.log({_error: 'Cda not find'});
-        }
-        return _cda;
-      }
-      else{
-        console.log({_error: 'authToken on Cda not find'});
-      }     
-    }
-  },  
-  getCdasAll: {
-    type: new graphql.GraphQLList(Cdas),
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(FindCda)}
-    },
-    async resolve(source, {cda}, {authToken}) {
-      if(authToken && authToken.user){
-        const {...query} = cda;
-        query.user = authToken.user;
-        const _cda = await getCdas(query);      
-        if (_cda.errors) {
-          console.log({_error: 'Could not find any video'});
-        }      
-        return _cda;
-      }
-      else{
-        console.log({_error: 'Could not find'});
-      }
-    }
-  },
-  getUsersActive: {
-    type: new graphql.GraphQLList(IsUserActive),
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(FindCda)}
-    },
-    async resolve(source, {cda}, {authToken}) {
-      if(authToken && authToken.user){
-        const _cda = await _getUserActive(authToken.user);      
-        if (_cda.errors) {
-          console.log({_error: 'Could not find'});
-        }      
-        return _cda;
-      }
-      else{
-        console.log({_error: 'auth Token failed'});
-      }  
-    }
-  },
-  getUserActive: {
-    type: IsUserActive,
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(FindCda)}
-    },
-    async resolve(source, {cda}, {authToken}) {
-      if(authToken && authToken.user){
-        const _cda = await _getUserActivebyID(authToken.user);
-        if (_cda.errors) {
-          console.log({_error: 'Could not find'});
-        }      
-        return _cda;
-      }
-      else{
-        console.log({_error: 'auth Token failed'});
-      }  
-    }
-  },   
-  scheduleList: {
-    type: new graphql.GraphQLList(ScheduleList),
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(FindSchedule)}
-    },
-    async resolve(source, {cda}, {authToken}) {  
-      if(authToken && authToken.user){          
-        const {...query} = cda;    
-        query.user = authToken.user;      
-        const _cda = await _getSchedule(query);
-        if (_cda.errors) {
-          console.log({_error: 'Could not find'});
-        }      
-        return _cda;
-      }  
-      else{
-        return [];
-      }
-    }
-  },
-  depositList: {
-    type: new graphql.GraphQLList(DepositList),
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(FindSchedule)}
-    },
-    async resolve(source, {cda}, {authToken}) {  
-      if(authToken && authToken.user){          
-        const {...query} = cda;    
-        query.user = authToken.user;      
-        const _cda = await _getDepositedEarnings(query);
-        if (_cda.errors) {
-          console.log({_error: 'Could not find'});
-        }      
-        return _cda;
-      }  
-      else{
-        return [];
-      }
-    }
-  },
-  earningsList: {
-    type: new graphql.GraphQLList(EarningsList),
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(FindSchedule)}
-    },
-    async resolve(source, {cda}, {authToken}) {  
-      if(authToken && authToken.user){          
-        const {...query} = cda;    
-        query.user = authToken.user;      
-        const _cda = await _getServiceEarnings(query);
-        if (_cda.errors) {
-          console.log({_error: 'Could not find'});
-        }      
-        return _cda;
-      }  
-      else{
-        return [];
-      }
-    }
-  },
-  infoByUser: {
-    type: InfobyUser,
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(FindSchedule)}
-    },
-    async resolve(source, {cda}, {authToken}) {  
-      if(authToken && authToken.user){          
-        const {...query} = cda;    
-        query.user = authToken.user;      
-        const _cda = await _getInfo(query);
-        if (_cda.errors) {
-          console.log({_error: 'Could not find'});
-        }      
-        return _cda;
-      }  
-      else{
-        return [];
-      }
-    }
-  },requestList: {
-    type: graphql.GraphQLString,
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(FindSchedule)}
-    },
-    async resolve(source, {cda}, {authToken}) {  
-      if(authToken && authToken.user){          
-        const {...query} = cda;    
-        query.user = authToken.user;      
-        const _cda = await _getRequestGrabberInfo(query);
-        console.log(_cda)
-        return _cda;
-      }  
-      else{
-        return null;
-      }
-    }
-  },
-  resetServer: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(FindCda)}
-    },
-    async resolve(source, {cda}, {authToken}) {
-      if(authToken && authToken.user){
-        const _cda = await _ReseatingServer(authToken.user);
-        if (_cda.errors) {
-          console.log({_error: 'Could not find'});
-        }      
-        return _cda;
-      }
-      else{
-        console.log({_error: 'auth Token failed'});
-      }  
-    }
-  }, 
-};
-
-const Collection$1 = 'Blocks';
-const grabber$1 = new Params();
-
-
-const getBlocksbyId = (k,q) => {      
-    var fbI = Hrmdb.findOne(Collection$1,k);    
-    if(fbI){
-        const dd = JSON.stringify(fbI);  
-        var mr = JSON.parse(dd); 
-        return mr;         
-    }
-   return {};
-};
-
-
-
-const getUserbyBlock = (k,q) => {      
-    var fbI = Hrmdb.findOne(Collection$1,k);    
-    if(fbI){
-        return fbI.user && grabber$1.get_amzn1_account(fbI.user)?grabber$1.get_amzn1_account(fbI.user)['email']:null;                 
-    }
-   return null;
-};
-
-
-const getBlocks = (q) => {
-    var h = [];       
-    const {sortBy,limit,page} = q;
-    var orderBy = sortBy  || 'date.desc';
-    var sort  = orderBy.split('.')[0];
-    var order  = orderBy.split('.')[1] || 'desc';    
-    var admin = Hrmdb.findOne(`Cda`,q.user);
-    var isAdmin = admin['isAdmin'];
-    if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || isAdmin){    
-        var _day = Math.floor(((new Date()).getTime()-14400000)/86400000);
-        var tlt = Hrmdb.FindIndexesByOperator(Collection$1,'day',_day,'gte');
-        Object.keys(tlt).map(lgtr=>{
-            var _lg = Hrmdb.findOne(Collection$1,lgtr);
-            _lg && h.push(_lg);
-        });              
-    }else{
-        var _day = Math.floor(((new Date()).getTime()-14400000)/86400000);
-        var tlt = Hrmdb.FindIndexesByOperator(Collection$1,'user',q.user,'day',_day,'gte');
-        Object.keys(tlt).map(lgtr=>{
-            var _lg = Hrmdb.findOne(Collection$1,lgtr);
-            _lg && h.push(_lg);
-        });
-    }
-    return h;
-};
-
-/****************************************************************************************************************************************************************************************
- * *************************************************************************************************************************************************************************************
- * **********                ********             *********    *************************                        *************************************************************************
- * **********    ********    ********    ******   *********    *************************                        *************************************************************************
- * **********    ********    ********    ******   *********    *************************                        *************************************************************************
- * **********    ********************    ******   *********    *************************          BLOCKS        **************************************************************************
- * **********    ****       *********    ***      *********    *************************                        **************************************************************************
- * **********    ******     *********    ****      ********    *************************                        **************************************************************************
- * **********               *********               *******            *****************                        **************************************************************************
- * **********************************************     **************************************************************************************************************************************
-* ********************************************************************************************************************************************************************************************/
-
-
-
-
-
-const Blocks = new graphql.GraphQLObjectType({
-  name: 'Blocks',
-  description: 'A Blocks',
-  fields: () => ({
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The BlockID',
-      resolve: (obj) => obj.id
-    },
-    schedulingType: {type: graphql.GraphQLString, description: ''},
-    serviceAreaId: {type: graphql.GraphQLString, description: ''},
-    startTime:{type: graphql.GraphQLFloat, description: ''},
-    endTime:{type: graphql.GraphQLFloat, description: ''},
-    ignored:{type: graphql.GraphQLBoolean, description: ''},
-    accepted:{type: graphql.GraphQLString, description: ''},
-    priceAmount:{type: graphql.GraphQLFloat, description: ''},
-    createdBy: {
-      type: graphql.GraphQLString, description: '',
-      resolve: (obj) => getUserbyBlock(obj.id)
-    },     
-    createdAt: {type: graphql.GraphQLFloat, description: 'The datetime the video was created'},
-    updatedAt: {type: graphql.GraphQLFloat, description: 'The datetime the video was last updated'},    
-    q:{type: BlockQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-const inputFields = {
-    id: {type: graphql.GraphQLID, description: 'Id'},
-    tk: {type: graphql.GraphQLString, description: 'Token'},   
-};
-
-
-const AssingBlockInput = new graphql.GraphQLInputObjectType({
-  name: 'AssingBlockInput',
-  description: 'Block',
-  fields: () => makeRequired(inputFields, ['id','tk'])
-});
-
-
-const QueryFields$1 = {
-  id: {type: graphql.GraphQLID, description: 'The Id'},
-  limit: {type: graphql.GraphQLFloat, description: ''},
-  page: {type: graphql.GraphQLFloat, description: ''},
-  sortBy: {type: graphql.GraphQLString, description: ''}  
-};
-
-const FindbyIdBlock = new graphql.GraphQLInputObjectType({
-  name: 'FindbyIdBlock',
-  description: 'Args to Find by Id a  Block',
-  fields: () => makeRequired(QueryFields$1, ['id'])
-});
-
-const FindBlock = new graphql.GraphQLInputObjectType({
-  name: 'FindBlock',
-  description: 'Args to Find Blocks',
-  fields: () => makeRequired(QueryFields$1, ['limit','page','sortBy'])
-});
-
-const BlockQuerySquemaFields = new graphql.GraphQLObjectType({
-  name: 'BlockQuerySquemaFields',
-  description: 'Query Squema Fields',
-  fields: () => makeRequired(QueryFields$1, ['limit','page','sortBy'])
-});
-
-var block = {
-  getBlocksbyId: {
-    type: Blocks,
-    args: {
-      block: {type: new graphql.GraphQLNonNull(FindbyIdBlock)}
-    },
-    async resolve (source, {block}, {authToken}) {             
-      if(authToken && authToken.user){ 
-        const {id, ...query} = block;
-        query.user = authToken.user;
-        const _block = await getBlocksbyId(id);      
-        if (_block.errors) {
-          console.log({_error: 'Could not find any video'});
-        }
-        return _block;
-      }
-      else{
-        console.log({_error: 'Could not find'});
-      }     
-    }
-  },
-  getBlocksAll: {
-    type: new graphql.GraphQLList(Blocks),
-    args: {
-      block: {type: new graphql.GraphQLNonNull(FindBlock)}
-    },
-    async resolve(source, {block}, {authToken}) {
-      if(authToken && authToken.user){ 
-        const {...query} = block;
-        query.user = authToken.user;        
-        const _block = await getBlocks(query);      
-        if (_block.errors) {
-          console.log({_error: 'Could not find any video'});
-        }      
-        return _block;
-      }
-      else{
-        console.log({_error: 'Could not find'});
-      }
-    }
-  }
-  
-};
-
-/****************************************************************************************************************************************************************************************
- * *************************************************************************************************************************************************************************************
- * **********                ********             *********    *************************                        *************************************************************************
- * **********    ********    ********    ******   *********    *************************                        *************************************************************************
- * **********    ********    ********    ******   *********    *************************                        *************************************************************************
- * **********    ********************    ******   *********    *************************          LOGS          **************************************************************************
- * **********    ****       *********    ***      *********    *************************                        **************************************************************************
- * **********    ******     *********    ****      ********    *************************                        **************************************************************************
- * **********               *********               *******            *****************                        **************************************************************************
- * **********************************************     **************************************************************************************************************************************
-* ********************************************************************************************************************************************************************************************/
-
-
-
-const Logs = new graphql.GraphQLObjectType({
-  name: 'Logs',
-  description: 'A Logs',
-  fields: () => ({
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The LogID',
-      resolve: (obj) => obj.id
-    },
-    status: {type: graphql.GraphQLFloat, description: ''},
-    offerId: {type: graphql.GraphQLString, description: ''},
-    msg: {type: graphql.GraphQLString, description: ''},
-    data: {type: graphql.GraphQLString, description: ''},
-    user: {type: graphql.GraphQLString, description: ''},
-    requestby: {type: graphql.GraphQLString, description: ''},
-    createdAt: {type: graphql.GraphQLFloat, description: 'The datetime the video was created'},
-    updatedAt: {type: graphql.GraphQLFloat, description: 'The datetime the video was last updated'},    
-    q:{type: LogQuerySquemaFields, description: ''},
-  })
-});
-
-
-const QueryFields$2 = {
-  id: {type: graphql.GraphQLID, description: 'The Id'},
-  limit: {type: graphql.GraphQLFloat, description: ''},
-  page: {type: graphql.GraphQLFloat, description: ''},
-  sortBy: {type: graphql.GraphQLString, description: ''}  
-};
-
-const FindbyIdLog = new graphql.GraphQLInputObjectType({
-  name: 'FindbyIdLog',
-  description: 'Args to Find by Id a  Log',
-  fields: () => makeRequired(QueryFields$2, ['id'])
-});
-
-const FindLog = new graphql.GraphQLInputObjectType({
-  name: 'FindLog',
-  description: 'Args to Find Logs',
-  fields: () => makeRequired(QueryFields$2, ['limit','page','sortBy'])
-});
-
-const LogQuerySquemaFields = new graphql.GraphQLObjectType({
-  name: 'LogQuerySquemaFields',
-  description: 'Query Squema Fields',
-  fields: () => makeRequired(QueryFields$2, ['limit','page','sortBy'])
-});
-
-const Collection$2 = 'Logs';
-
-
-const getLogsbyId = (k,q) => {      
-    var fbI = Hrmdb.findOne(Collection$2,k);    
-    if(fbI){
-        const dd = JSON.stringify(fbI);  
-        var mr = JSON.parse(dd); 
-        return mr;         
-    }
-   return {};
-};
-
-
-
-const getLogs = (q) => {
-    var h = [];       
-    const {sortBy,limit,page} = q;
-    var orderBy = sortBy  || 'date.desc';
-    var sort  = orderBy.split('.')[0];
-    var order  = orderBy.split('.')[1] || 'desc'; 
-    //var tlt = _Util.Hrmdb.findAll(Collection);
-    var _user = Hrmdb.findOne(`Cda`,q.user);
-    if(_user){
-      if(q.user === "AEBMN5JGXGKHTDPSXDBSZDKWEAEA" || _user['isAdmin']){
-        var _day = Math.floor(((new Date()).getTime()-14400000)/86400000);
-        //var tlt = _Util.Hrmdb.FindIndexesByOperator(Collection,'user',q.user,'day',_day,'gte');
-        var tlt = Hrmdb.FindIndexesByOperator(Collection$2,'day',_day,'gte');
-        Object.keys(tlt).map(lgtr=>{
-          var _lg = Hrmdb.findOne(Collection$2,lgtr);
-          _lg && h.push(_lg);
-        });
-      }else{
-        h = [];     
-      } 
-    }     
-    return h; 
-};
-
-var log = {
-  getLogsbyId: {
-    type: Logs,
-    args: {
-      log: {type: new graphql.GraphQLNonNull(FindbyIdLog)}
-    },
-    async resolve (source, {log}, {authToken}) {            
-      if(authToken && authToken.user){        
-        const {id, ...query} = log;
-        query.user = authToken.user;
-        const _log = await getLogsbyId(id);      
-        if (_log.errors) {
-          console.log({_error: 'Could not find any video'});
-        }
-        return _log;
-      }
-      else{
-        console.log({_error: 'Could not find'});
-      }     
-    }
-  },
-  getLogsAll: {
-    type: new graphql.GraphQLList(Logs),
-    args: {
-      log: {type: new graphql.GraphQLNonNull(FindLog)}
-    },
-    async resolve(source, {log}, {authToken}) {
-           
-      if(authToken && authToken.user){
-        const {...query} = log;
-        query.user = authToken.user;
-        const _log = await getLogs(query);      
-        if (_log.errors) {
-          console.log({_error: 'Could not find any video'});
-        }      
-        return _log;
-      }
-      else{
-        console.log({_error: 'Could not find'});
-      }
-    }
-  }
-  
-};
-
-const Hrmdb$1 = new HrmDb();
-const Collection$3 = 'User';
-const CollectionRoles = 'ListRoles';
-
-const updateUsers = (k,q,user) => {
-    var fbI = Hrmdb.findOne(Collection$3,k);
-    if (fbI && fbI.id === k) {
-        const dd = JSON.stringify(fbI);
-        var kt = getJson2P(dd);
-        const qArr = Object.keys(q);
-        if (qArr.length>0) {
-          qArr.map((flk) => {              
-                kt[flk] = q[flk];
-                ['Finansas','Daycare','Almacen'].map(tkind => {
-                    if(flk===tkind && kt[flk]){                        
-                        if(!kt[`roles`]){
-                            kt[`roles`] = {};
-                        }
-                        if(!kt[`roles`][tkind]){
-                            kt[`roles`][tkind] = {};
-                        }
-                        Hrmdb.findAll(CollectionRoles).map(rol=>{                            
-                            if(rol.group === flk){
-                                if(!kt[`roles`][tkind][rol.name]){
-                                    kt[`roles`][tkind][rol.name] = true;
-                                }
-                            }                
-                       });                
-                    }else if(flk===tkind && !kt[flk]){
-                        if(kt[`roles`][tkind]){
-                          delete kt[`roles`][tkind];
-                        }var hyt = {};
-                        ['Finansas','Daycare','Almacen'].map(tk2ind => {
-                            if(kt[`roles`][tk2ind]){
-                                hyt[tk2ind]=kt[`roles`][tk2ind];
-                            }
-                        });
-                        kt[`roles`]=hyt;                        
-                    }
-                });                       
-            });
-        }              
-        var adIng = Hrmdb.update(Collection$3,kt,k);
-        const dd2 = JSON.stringify(adIng);
-        var CadIng = getJson2P(dd2);
-        return CadIng;
-    }
-    else{
-        return {};
-    }
-};
- 
-
-
-const removeUsers = (k,user) => {
-    var fbI = Hrmdb.findOne(Collection$3,k);    
-    if (fbI && fbI.id === k) {
-        var adIng =  Hrmdb.remove(Collection$3,k);
-        var ctd = new Date();
-        var ctT = ctd.getTime();
-        return adIng;
-    }else{
-        return {};
-    }
-};
-
-const getUsersbyId = (k) => {    
-    
-    var fbI = Hrmdb$1.findOne(Collection$3,k);
-    if(fbI){
-        const dd = JSON.stringify(fbI);  
-        var mr = getJson2P(dd);
-        if(mr.roles){
-            mr.roles =  Base64$1.encode(JSON.stringify(mr.roles));
-        }     
-        return mr;        
-    }
-   return {};
-};
-
-
-
-function getJson2P(p){
-    return JSON.parse(p);
-}
-
-
-
-
-const getUsersBalancebyId = (k) => {
-    var fbI = Hrmdb.findOne(Collection$3,k);
-    if(fbI){
-        if(fbI.balance){
-            return fbI.balance; 
-        }else{
-            return {};    
-        }    
-    }
-   return {};
-};
-
-const Users = new graphql.GraphQLObjectType({
-  name: 'Users',
-  description: 'A Users',
-  fields: () => ({
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The UserID',
-      resolve: (obj) => Base64$1.encode(obj.email)
-    },
-
-    firstName: {type: graphql.GraphQLString, description: 'The userId that created the video'},
-    lastName: {type: graphql.GraphQLString, description: 'The userId that created the video'},
-    email:{type: graphql.GraphQLString, description: ''}, 
-    phone:{type: graphql.GraphQLString, description: ''},
-    photoUrl:{type: graphql.GraphQLString, description: ''},    
-    balance:{
-      type: Balance, 
-      description: '',
-      resolve: (obj) => getUsersBalancebyId(obj.id)
-    },
-    createdAt: {type: graphql.GraphQLString, description: 'The datetime the video was created'},
-    updatedAt: {type: graphql.GraphQLString, description: 'The datetime the video was last updated'},    
-    q:{type: UserQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-
-
-const inputFields$1 = {    
-    id: {type: graphql.GraphQLString, description: ''},
-    name: {type: graphql.GraphQLString, description: 'The userId that created the video'},
-    email:{type: graphql.GraphQLString, description: ''}, 
-    phone:{type: graphql.GraphQLString, description: ''},
-};
-
-
-
-
-const UpdateUser = new graphql.GraphQLInputObjectType({
-  name: 'UpdateUser',
-  description: 'Args to update a  User',
-  fields: () => makeRequired(inputFields$1, ['id'])
-});
-
-const NewUser = new graphql.GraphQLInputObjectType({
-  name: 'NewUser',
-  description: 'Args to add a  User',
-  fields: () => makeRequired(inputFields$1, ['name','email',`phone`])
-});
-
-
-
-const QueryFields$3 = {  
-  id: {type: graphql.GraphQLID, description: 'The videoId'},
-  limit: {type: graphql.GraphQLFloat, description: ''},
-  page: {type: graphql.GraphQLFloat, description: ''},
-  sortBy: {type: graphql.GraphQLString, description: ''}  
-};
-
-const FindbyIdUser = new graphql.GraphQLInputObjectType({
-  name: 'FindbyIdUser',
-  description: 'Args to Find by Id a  User',
-  fields: () => makeRequired(QueryFields$3, ['id'])
-});
-
-
-const FindUser = new graphql.GraphQLInputObjectType({
-  name: 'FindUser',
-  description: 'Args to Find Users',
-  fields: () => makeRequired(QueryFields$3, ['limit','page','sortBy'])
-});
-
-const UserQuerySquemaFields = new graphql.GraphQLObjectType({
-  name: 'UserQuerySquemaFields',
-  description: 'Query Squema Fields',
-  fields: () => makeRequired(QueryFields$3, ['limit','page','sortBy'])
-});  
-
-
-
-
-
-
-
-
-const Balance = new graphql.GraphQLObjectType({
-  name: 'Balance',
-  description: 'Balance',
-  fields: () => ({    
-    available: {type: graphql.GraphQLFloat, description: ''},
-    pending: {type: graphql.GraphQLFloat, description: ''}, 
-    q:{type: UserQuerySquemaFields, description: ''},
-  })
-});
-
-
-const inputFieldsBalance = {
-  available: {type: graphql.GraphQLFloat, description: ''},
-  pending: {type: graphql.GraphQLFloat, description: ''}, 
-};
-
-
-
-const UpdateBalance = new graphql.GraphQLInputObjectType({
-  name: 'UpdateBalance',
-  description: 'UpdateBalance',
-  fields: () => makeRequired(inputFieldsBalance, ['available','pending'])
-});
-
-var user = {
-  getUsersbyId: {
-    type: Users,
-    args: {
-      user: {type: new graphql.GraphQLNonNull(FindbyIdUser)}
-    },
-    async resolve (source, {user}, {authToken}) {
-      if(authToken.user){             
-        const usr = await getUsersbyId(authToken.user);      
-        if (usr.errors) {
-          console.log({_error: 'Could not find any user'});
-        }
-        return usr; 
-      }else{
-        console.log({_error: 'Could not find any user'});
-      }
-          
-    }
-  }
-};
-
-const rootFields = Object.assign(cda,block,log,user);
-
-var query = new graphql.GraphQLObjectType({
-  name: 'RootQuery',
-  fields: () => rootFields
-});
-
-var user$1 = {  
-  updateUser: {
-    type: Users,
-    args: {
-      user: {type: new graphql.GraphQLNonNull(UpdateUser)}
-    },
-    async resolve(source, {user}, {authToken}) {      
-      if(authToken.user){
-        user.updatedAt = new Date();
-        const { ...updates} = user;
-        const updUser = await updateUsers(authToken.user, updates);
-        if (updUser.errors) {
-          console.log({_error: 'Could not update video'});
-        }  
-        return updUser;
-      }else{
-        console.log({_error: 'Could not update'});
-      }
-    }
-  },
-  removeUser: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      user: {type: new graphql.GraphQLNonNull(UpdateUser)}
-    },
-    async resolve(source, {user}, {authToken}) {     
-      if(authToken.user){
-        const rmUser = await removeUsers(authToken.user);
-        if (rmUser.errors) {
-          console.log({_error: 'Could not remove'});
-        }  
-        return rmUser;
-      }else{
-        return false;
-      }      
-    }
-  },
-};
-
-var cda$1 = {  
-  updateActive: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      flt: {type: new graphql.GraphQLNonNull(UpdateGrabber)}
-    },
-    async resolve(source, {flt}, {authToken}) {
-      if(authToken && authToken.user){ 
-        flt.user = authToken.user;           
-        const newF= await _updateActive(flt);         
-        return newF;
-      }else{
-        return false;
-      }
-    }
-  },
-  updateIsActive: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      flt: {type: new graphql.GraphQLNonNull(UpdateIsActive)}
-    },
-    async resolve(source, {flt}, {authToken}) {
-      if(authToken && authToken.user){ 
-        flt.user = authToken.user;           
-        const newF= await _updateUserActive(flt);
-        return newF;
-      }else{
-        return false;
-      }
-    }
-  },
-  removeCdaToken: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      cda: {type: new graphql.GraphQLNonNull(UpdateIsActive)}
-    },
-    async resolve(source, {cda}, {authToken}) {
-      if(authToken && authToken.user){ 
-        cda.user = authToken.user;           
-        const newF= await _removeCdaToken(cda);
-        return newF;
-      }else{
-        return false;
-      }
-    }
-  }
-};
-
-const rootFields$1 = Object.assign(cda$1,user$1);
-
-var mutation = new graphql.GraphQLObjectType({
-  name: 'Mutation',
-  fields: () => rootFields$1
-});
-
-var Schema = new graphql.GraphQLSchema({query, mutation});
-
-const grabber$2 = new Params();
-
-
-var httpGraphQLHandler = async (req, res) => {  
-  const {q,k} =  req.body;  
-  const fp = req.headers.authorization.split(`:`)[1];
-  const authToken = decryptToken(req.headers.authorization.split(`:`)[0] ,true,fp) || {}; 
-  const fb_tk = req.headers['x-fb-tk']?req.headers['x-fb-tk']:false;
-  
-  if (fb_tk && fb_tk!=="null" && authToken && authToken.user){    
-    if(grabber$2.getFbToken(authToken.user)!==fb_tk){
-      grabber$2.Upd_CDA_amzn1_account(authToken.user, 'frBsToken',fb_tk);
-      grabber$2.updateFb(authToken.user,{'frBsToken':fb_tk});
-    }
-    
-  }
-
-  var bytes = null;
-  var basD = null;
-  var NewBody =null;
-  var rslt = '';
-  if(fp){
-    var kpass = CryptoJS.AES.decrypt(Base64$1.decode(k), fp).toString(CryptoJS.enc.Utf8);
-    bytes = CryptoJS.AES.decrypt(Base64$1.decode(q), kpass);
-    basD = bytes.toString(CryptoJS.enc.Utf8);    
-  }
-  if(basD && isJson$2(basD)){
-    NewBody = JSON.parse(basD);
-    const {query, variables, ...newContext} = NewBody;  
-    const context = {authToken, ...newContext};  
-    const result = await graphql.graphql(Schema, query, null, context, variables);
-    if (result.errors) {
-      console.log('DEBUG GraphQL Error:', result.errors);
-      rslt = Base64$1.encode(JSON.stringify({status:500,errors: result.errors}).toString());
-    }else{
-      var pscd = genId$1();
-      var _2sen = JSON.stringify(result);
-      var rs = CryptoJS.AES.encrypt(_2sen, pscd).toString();
-      var ky = CryptoJS.AES.encrypt(pscd, fp).toString();
-      rslt = Base64$1.encode(JSON.stringify({status:200,r:rs,k:ky}).toString());     
-    }    
-  }else{
-    rslt = Base64$1.encode(JSON.stringify({status:500,errors:'errors'}).toString());
-  }
-  res.send(rslt);
-};
-
-const Cocks = new graphql.GraphQLObjectType({
-  name: 'Cocks',
-  description: 'A Cocks',
-  fields: () => ({
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The CockID',
-      resolve: (obj) => obj.id
-    },
-    name: {type: graphql.GraphQLString, description: 'The userId that created the '},    
-    description: {type: graphql.GraphQLString, description: ''},
-    age:{type: graphql.GraphQLFloat, description: ''},
-    fightsWon:{type: graphql.GraphQLFloat, description: ''},  
-    fightsLost:{type: graphql.GraphQLFloat, description: ''}, 
-    weight :{type: graphql.GraphQLFloat, description: ''}, 
-    image:{type: graphql.GraphQLString, description: ''},
-    owners: {
-      type: new  graphql.GraphQLList(graphql.GraphQLString),
-      description: '',
-    },
-    createdAt: {type: graphql.GraphQLFloat, description: 'The datetime the  was created'},
-    updatedAt: {type: graphql.GraphQLFloat, description: 'The datetime the  was last updated'},    
-    q:{type: CockQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-
-
-const inputFields$2 = {
-    id: {type: graphql.GraphQLID, description: 'The Id'},
-    name: {type: graphql.GraphQLString, description: 'The userId that created the '},    
-    description: {type: graphql.GraphQLString, description: ''},
-    owners: {type: graphql.GraphQLString, description: ''},
-    age:{type: graphql.GraphQLFloat, description: ''},
-    weight :{type: graphql.GraphQLFloat, description: ''}, 
-    image:{type: graphql.GraphQLString, description: ''},
-    fightsWon:{type: graphql.GraphQLFloat, description: ''},  
-    fightsLost:{type: graphql.GraphQLFloat, description: ''},  
-};
-
-
-
-
-
-const UpdateCock = new graphql.GraphQLInputObjectType({
-  name: 'UpdateCock',
-  description: 'Args to update a  Cock',
-  fields: () => makeRequired(inputFields$2, ['id'])
-});
-
-const NewCock = new graphql.GraphQLInputObjectType({
-  name: 'NewCock',
-  description: 'Args to add a  Cock',
-  fields: () => makeRequired(inputFields$2, ['name', 'age','image','weight'])
-});
-
-
-
-const QueryFields$4 = {
-  id: {type: graphql.GraphQLID, description: 'The Id'},
-  limit: {type: graphql.GraphQLFloat, description: ''},
-  page: {type: graphql.GraphQLFloat, description: ''},
-  sortBy: {type: graphql.GraphQLString, description: ''}  
-};
-
-const FindbyIdCock = new graphql.GraphQLInputObjectType({
-  name: 'FindbyIdCock',
-  description: 'Args to Find by Id a  Cock',
-  fields: () => makeRequired(QueryFields$4, ['id'])
-});
-
-const FindCock = new graphql.GraphQLInputObjectType({
-  name: 'FindCock',
-  description: 'Args to Find Cocks',
-  fields: () => makeRequired(QueryFields$4, ['limit','page','sortBy'])
-});
-
-const CockQuerySquemaFields = new graphql.GraphQLObjectType({
-  name: 'CockQuerySquemaFields',
-  description: 'Query Squema Fields',
-  fields: () => makeRequired(QueryFields$4, ['limit','page','sortBy'])
-});
-
-const Collection$4 = 'Cocks';
-//const CollectionObs = 'ChangesObserver';
-
-const addCocks = (k,user) => {
-    /*var admin =_Util.Hrmdb.FindIndexes(`User`,'isAdmin',true); 
-    for(var usr2 in admin){
-        
-    } */   
-    k.user = user;
-    var nadIng = Hrmdb.push(Collection$4,k,true);
-    /*var ctd = new Date();
-    var ctT = ctd.getTime();
-    var userList = nadIng.user;
-    const dd2 = JSON.stringify(nadIng);
-    var adIng = getJson2P(dd2);
-    for(var usr2 in userList){
-        //_Util.Hrmdb.PushDirecIndex(Collection,`user`,usr2,adIng.id); 
-        //_Util.Hrmdb.PushSortDirecIndex(Collection,`user`,usr2,'date',adIng.date,adIng.id);       
-    }
-    delete adIng[`user`]    
-    var updObs = {action:`Add`,collection:Collection,data:adIng,date:ctT};
-    for(var usr2 in userList){            
-        Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-    }*/
-    calculateBlockIndexes();
-    return nadIng;
-};
-
-const updateCocks = (k,q,user) => {
-    var fbI = Hrmdb.findOne(Collection$4,k);    
-    if (fbI && fbI.id === k && fbI.user && fbI.user[user] === user) {
-        const dd = JSON.stringify(fbI);
-        var kt = getJson2P$1(dd);
-        Object.keys(q).map(flk=>{
-            if(kt[flk]!==q[flk]){
-                /*Object.keys(fbI.user).map(usr2=>{
-                    _Util.Hrmdb.UpdDirectSortIndex(Collection,'user',usr2,flk,kt.id,kt[flk],q[flk]);
-                })*/
-                kt[flk]= q[flk];
-            }
-        });        
-        var adIng = Hrmdb.update(Collection$4,kt,k);
-        /*var userList = adIng.user;
-        const dd2 = JSON.stringify(adIng);
-        var CadIng = getJson2P(dd2);
-        delete CadIng[`user`]
-        var ctd = new Date();
-        var ctT = ctd.getTime();        
-        var updObs = {action:`Update`,collection:Collection,data:CadIng,date:ctT};        
-        for(var usr2 in userList){            
-            Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-        }*/
-        return adIng;
-    }
-    else{
-        return fbI;
-    }
-};
-
-
-const removeCocks = (k,user) => {
-    var fbI = Hrmdb.findOne(Collection$4,k);
-    if (fbI && fbI.id === k && fbI.user && fbI.user[user] === user) {
-        var userList = fbI.user;
-        var adIng =  Hrmdb.remove(Collection$4,k);
-        /*var ctd = new Date();
-        var ctT = ctd.getTime();
-        var rmD = {id:k}
-        _Util.Hrmdb.DeleteDirecIndex(Collection,`user`,user,k);
-        var updObs = {action:`Remove`,collection:Collection,data:rmD,date:ctT};
-        for(var usr2 in userList){            
-            Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-        }*/
-        calculateBlockIndexes();
-        return adIng;
-    }else{
-        return {};
-    }
-};
-
-
-
-const getCocksbyId = (k,q) => {      
-    var fbI = Hrmdb.findOne(Collection$4,k);    
-    if(fbI){
-        const dd = JSON.stringify(fbI);  
-        var mr = getJson2P$1(dd); 
-        return mr;         
-    }
-   return {};
-};
-
-
-
-const getCocks = (q) => {    
-    var h = [];       
-    const {sortBy,limit,page} = q;
-    var orderBy = sortBy  || 'date.desc';
-    var sort  = orderBy.split('.')[0];
-    var order  = orderBy.split('.')[1] || 'desc'; 
-    //var tlt = _Util.Hrmdb.FindIndexes(Collection,'user',q.user,'year',_page);
-    var tlt = Hrmdb.findAll(Collection$4);
-    /*
-    var admin = _Util.Hrmdb.FindIndexes(`User`,'isAdmin',true);
-    var isAdmin = false;
-    if(admin[q.user]>=0){
-        isAdmin = true;
-    }
-    */   
-
-
-    if(tlt){ 
-
-        tlt.map(_lg=>{
-            //var _lg = _Util.Hrmdb.findOne(Collection,lgtr);
-            _lg && h.push(_lg);
-        });
-        
-    /*
-
-    Object.keys(tlt).map(lgtr=>{
-            var _lg = _Util.Hrmdb.findOne(Collection,lgtr);
-            _lg && h.push(_lg);
-        })
-        const start = (page-1) * limit;
-        const end = page * limit;  
-        var numRec = 0
-        var ObjList = tlt;
-        var ArrList = [];
-        for(var yId in ObjList){
-            ArrList.push(yId)
-        }
-        if(order==='desc'){  
-            for(var y = ArrList.length;y>=0;y--){  
-                var key = ArrList[y];                
-                if(key && ObjList[key]){                    
-                    var jsy55 = JSON.stringify(ObjList[key]);
-                    var _counT = ObjList[key]['count']
-                    var sortKey = getJson2P(jsy55);
-                    delete sortKey['count'];
-                    if(numRec + _counT>end){
-                        var ttEnd = numRec + _counT-end;
-                        var cntEnd = 1;
-                        for(var yId in sortKey){                            
-                            if(ttEnd<cntEnd){
-                                break
-                            }else{
-                                var yP = _Util.Hrmdb.findOne(Collection,yId)
-                                h.push(yP);
-                                cntEnd += 1;
-                            }                            
-                        }
-                        y = 0;
-                        break;
-                    }
-                    else{
-                        for(var yId in sortKey){
-                            var yP = _Util.Hrmdb.findOne(Collection,yId)
-                            h.push(yP);
-                        }
-                        numRec += _counT;                       
-                    }                    
-                    
-                }                
-                
-            }                
-        }
-        else{
-            for(var y = 0;y<=ArrList.length;y++){                                         
-                var key = ArrList[y];
-                if(key && ObjList[key]){                    
-                    var jsy55 = JSON.stringify(ObjList[key]);
-                    var _counT = ObjList[key]['count']
-                    var sortKey = getJson2P(jsy55);
-                    delete sortKey['count'];
-                    if(numRec + _counT>end){
-                        var ttEnd = numRec + _counT-end;
-                        var cntEnd = 1;
-                        for(var yId in sortKey){                            
-                            if(ttEnd<cntEnd){
-                                break
-                            }else{
-                                var yP = _Util.Hrmdb.findOne(Collection,yId)
-                                h.push(yP);
-                                cntEnd += 1;
-                            }                            
-                        }
-                        y = 0;
-                        break;
-                    }
-                    else{
-                        for(var yId in sortKey){
-                            var yP = _Util.Hrmdb.findOne(Collection,yId)
-                            h.push(yP);
-                        }
-                        numRec += _counT;                       
-                    }                    
-                    
-                }                
-                
-            } 
-        }    
-        
-        var jsy = JSON.stringify(h);
-        getJson2P(jsy).map(mr=>{
-            var userDt =  [];            
-            if(mr){  
-                if(isAdmin && mr.user){               
-                    Object.keys(mr.user).map(usr=>{
-                        var UserI= _Util.Hrmdb.findOne('User',usr);                         
-                        if(UserI && UserI.email){
-                            userDt.push(UserI.email)
-                        }                                        
-                    }) 
-                }
-                mr.owners = userDt;                       
-                _hdt_.push(mr);
-            }
-        }) 
-        */       
-        return h;   
-    }
-    return [];
-};
-
-function getJson2P$1(p){
-    return JSON.parse(p);
-}
-
-function calculateBlockIndexes(){
-    _exec$$_('ls', function(fferr, istdout, istderr){	
-        Hrmdb.calcIndexes('Cocks');
-        Hrmdb.calcIndexesLevel2('Cocks','user','year');
-    });
-    return true;
-}
-
-var cocks = {
-  getCocksbyId: {
-    type: Cocks,
-    args: {
-      cock: {type: new graphql.GraphQLNonNull(FindbyIdCock)}
-    },
-    async resolve (source, {cock}, {authToken}) {
-      
-        const {id, ...query} = cock;
-        query.user = authToken.user;
-        const _result = await getCocksbyId(id);      
-        if (_result.errors) {
-          throw errorObj$1({_error: 'Could not find'});
-        }
-        return _result;
-        if(authToken.user);
-      else{
-        throw errorObj$1({_error: 'Could not find'});
-      }     
-    }
-  },
-  getCocksAll: {
-    type: new graphql.GraphQLList(Cocks),
-    args: {
-      cock: {type: new graphql.GraphQLNonNull(FindCock)}
-    },
-    async resolve(source, {cock}, {authToken}) {     
-        const {...query} = cock;
-        query.user = authToken.user;
-        const _result = await getCocks(query);      
-        if (_result.errors) {
-          throw errorObj$1({_error: 'Could not find'});
-        }      
-        return _result;
-        if(authToken.user);
-      else{
-        throw errorObj$1({_error: 'Could not find'});
-      }
-    }
-  }
-  
-};
-
-const Judges = new graphql.GraphQLObjectType({
-  name: 'Judges',
-  description: 'A Judges',
-  fields: () => ({
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The JudgeID',
-      resolve: (obj) => obj.id
-    },
-    owners: {
-      type: new  graphql.GraphQLList(graphql.GraphQLString),
-      description: '',
-    },
-    name: {type: graphql.GraphQLString, description: 'The userId that created the video'},
-    type: {type: graphql.GraphQLString, description: 'The userId that created the video'},    
-    createdAt: {type: graphql.GraphQLFloat, description: 'The datetime the video was created'},
-    updatedAt: {type: graphql.GraphQLFloat, description: 'The datetime the video was last updated'},    
-    q:{type: JudgeQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-
-
-const inputFields$3 = {
-    id: {type: graphql.GraphQLID, description: 'The videoId'},
-    name: {type: graphql.GraphQLString, description: 'The userId that created the video'},
-    type: {type: graphql.GraphQLString, description: 'The userId that created the video'}, 
-};
-
-
-
-
-
-const UpdateJudge = new graphql.GraphQLInputObjectType({
-  name: 'UpdateJudge',
-  description: 'Args to update a  Judge',
-  fields: () => makeRequired(inputFields$3, ['id'])
-});
-
-const NewJudge = new graphql.GraphQLInputObjectType({
-  name: 'NewJudge',
-  description: 'Args to add a  Judge',
-  fields: () => makeRequired(inputFields$3, ['name'])
-});
-
-
-
-const QueryFields$5 = {
-  id: {type: graphql.GraphQLID, description: 'The videoId'},
-  limit: {type: graphql.GraphQLFloat, description: ''},
-  page: {type: graphql.GraphQLFloat, description: ''},
-  sortBy: {type: graphql.GraphQLString, description: ''}  
-};
-
-const FindbyIdJudge = new graphql.GraphQLInputObjectType({
-  name: 'FindbyIdJudge',
-  description: 'Args to Find by Id a  Judge',
-  fields: () => makeRequired(QueryFields$5, ['id'])
-});
-
-const FindJudge = new graphql.GraphQLInputObjectType({
-  name: 'FindJudge',
-  description: 'Args to Find Judges',
-  fields: () => makeRequired(QueryFields$5, ['limit','page','sortBy'])
-});
-
-const JudgeQuerySquemaFields = new graphql.GraphQLObjectType({
-  name: 'JudgeQuerySquemaFields',
-  description: 'Query Squema Fields',
-  fields: () => makeRequired(QueryFields$5, ['limit','page','sortBy'])
-});
-
-const Collection$5 = 'Judges';
-//const CollectionObs = 'ChangesObserver';
-
-const addJudges = (k,user) => {
-    var admin = Hrmdb.FindIndexes(`User`,'isAdmin',true); 
-    for(var usr2 in admin){
-        k.user[usr2] = usr2;
-    }    
-    var nadIng = Hrmdb.push(Collection$5,k,true);
-    /*var ctd = new Date();
-    var ctT = ctd.getTime();
-    var userList = nadIng.user;
-    const dd2 = JSON.stringify(nadIng);
-    var adIng = getJson2P(dd2);
-    for(var usr2 in userList){
-        //_Util.Hrmdb.PushDirecIndex(Collection,`user`,usr2,adIng.id); 
-        //_Util.Hrmdb.PushSortDirecIndex(Collection,`user`,usr2,'date',adIng.date,adIng.id);       
-    }
-    delete adIng[`user`]    
-    var updObs = {action:`Add`,collection:Collection,data:adIng,date:ctT};
-    for(var usr2 in userList){            
-        Util.UpdChanges(CollectionObs,updObs,ctT,usr2);     
-
-    }*/
-    calculateIndexes();
-    return nadIng;
-};
-
-const updateJudges = (k,q,user) => {
-    var fbI = Hrmdb.findOne(Collection$5,k);    
-    if (fbI && fbI.id === k && fbI.user && fbI.user[user] === user) {
-        const dd = JSON.stringify(fbI);
-        var kt = getJson2P$2(dd);
-        Object.keys(q).map(flk=>{
-            if(kt[flk]!==q[flk]){
-                /*Object.keys(fbI.user).map(usr2=>{
-                    _Util.Hrmdb.UpdDirectSortIndex(Collection,'user',usr2,flk,kt.id,kt[flk],q[flk]);
-                })*/
-                kt[flk]= q[flk];
-            }
-        });        
-        var adIng = Hrmdb.update(Collection$5,kt,k);
-        /*var userList = adIng.user;
-        const dd2 = JSON.stringify(adIng);
-        var CadIng = getJson2P(dd2);
-        delete CadIng[`user`]
-        var ctd = new Date();
-        var ctT = ctd.getTime();        
-        var updObs = {action:`Update`,collection:Collection,data:CadIng,date:ctT};        
-        for(var usr2 in userList){            
-            Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-        }*/
-        return adIng;
-    }
-    else{
-        return fbI;
-    }
-};
-
-
-const removeJudges = (k,user) => {
-    var fbI = Hrmdb.findOne(Collection$5,k);
-    if (fbI && fbI.id === k && fbI.user && fbI.user[user] === user) {
-        var userList = fbI.user;
-        var adIng =  Hrmdb.remove(Collection$5,k);
-        /*var ctd = new Date();
-        var ctT = ctd.getTime();
-        var rmD = {id:k}
-        _Util.Hrmdb.DeleteDirecIndex(Collection,`user`,user,k);
-        var updObs = {action:`Remove`,collection:Collection,data:rmD,date:ctT};
-        for(var usr2 in userList){            
-            Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-        }*/
-        calculateIndexes();
-        return adIng;
-    }else{
-        return {};
-    }
-};
-
-
-
-const getJudgesbyId = (k,q) => {      
-    var fbI = Hrmdb.findOne(Collection$5,k);    
-    if(fbI){
-        const dd = JSON.stringify(fbI);  
-        var mr = getJson2P$2(dd); 
-        return mr;         
-    }
-   return {};
-};
-
-
-
-const getJudges = (q) => {    
-    var h = [],_hdt_=[];       
-    const {sortBy,limit,page} = q;
-    var orderBy = sortBy  || 'date.desc';
-    var sort  = orderBy.split('.')[0];
-    var order  = orderBy.split('.')[1] || 'desc'; 
-    var tlt = Hrmdb.FindIndexes(Collection$5,'user',q.user);
-    var admin = Hrmdb.FindIndexes(`User`,'isAdmin',true);
-    var isAdmin = false;
-    if(admin[q.user]>=0){
-        isAdmin = true;
-    }    
-    if(tlt){ 
-        Object.keys(tlt).map(lgtr=>{
-            var _lg = Hrmdb.findOne(Collection$5,lgtr);
-            _lg && h.push(_lg);
-        });
-    /*
-        const start = (page-1) * limit;
-        const end = page * limit;  
-        var numRec = 0
-        var ObjList = tlt;
-        var ArrList = [];
-        for(var yId in ObjList){
-            ArrList.push(yId)
-        }
-        if(order==='desc'){  
-            for(var y = ArrList.length;y>=0;y--){  
-                var key = ArrList[y];                
-                if(key && ObjList[key]){                    
-                    var jsy55 = JSON.stringify(ObjList[key]);
-                    var _counT = ObjList[key]['count']
-                    var sortKey = getJson2P(jsy55);
-                    delete sortKey['count'];
-                    if(numRec + _counT>end){
-                        var ttEnd = numRec + _counT-end;
-                        var cntEnd = 1;
-                        for(var yId in sortKey){                            
-                            if(ttEnd<cntEnd){
-                                break
-                            }else{
-                                var yP = _Util.Hrmdb.findOne(Collection,yId)
-                                h.push(yP);
-                                cntEnd += 1;
-                            }                            
-                        }
-                        y = 0;
-                        break;
-                    }
-                    else{
-                        for(var yId in sortKey){
-                            var yP = _Util.Hrmdb.findOne(Collection,yId)
-                            h.push(yP);
-                        }
-                        numRec += _counT;                       
-                    }                    
-                    
-                }                
-                
-            }                
-        }
-        else{
-            for(var y = 0;y<=ArrList.length;y++){                                         
-                var key = ArrList[y];
-                if(key && ObjList[key]){                    
-                    var jsy55 = JSON.stringify(ObjList[key]);
-                    var _counT = ObjList[key]['count']
-                    var sortKey = getJson2P(jsy55);
-                    delete sortKey['count'];
-                    if(numRec + _counT>end){
-                        var ttEnd = numRec + _counT-end;
-                        var cntEnd = 1;
-                        for(var yId in sortKey){                            
-                            if(ttEnd<cntEnd){
-                                break
-                            }else{
-                                var yP = _Util.Hrmdb.findOne(Collection,yId)
-                                h.push(yP);
-                                cntEnd += 1;
-                            }                            
-                        }
-                        y = 0;
-                        break;
-                    }
-                    else{
-                        for(var yId in sortKey){
-                            var yP = _Util.Hrmdb.findOne(Collection,yId)
-                            h.push(yP);
-                        }
-                        numRec += _counT;                       
-                    }                    
-                    
-                }                
-                
-            } 
-        }    
-        */
-        var jsy = JSON.stringify(h);
-        getJson2P$2(jsy).map(mr=>{
-            var userDt =  [];            
-            if(mr){  
-                if(isAdmin && mr.user){               
-                    Object.keys(mr.user).map(usr=>{
-                        var UserI= Hrmdb.findOne('User',usr);                         
-                        if(UserI && UserI.email){
-                            userDt.push(UserI.email);
-                        }                                        
-                    }); 
-                }
-                mr.owners = userDt;                       
-                _hdt_.push(mr);
-            }
-        });        
-        return _hdt_;   
-    }
-    return [];
-};
-
-function getJson2P$2(p){
-    return JSON.parse(p);
-}
-
-
-function calculateIndexes(){
-    _exec$$_('ls', function(fferr, istdout, istderr){	
-        Hrmdb.calcIndexes('Judges');
-    });
-    return true;
-}
-
-var judges = {
-  getJudgesbyId: {
-    type: Judges,
-    args: {
-      judge: {type: new graphql.GraphQLNonNull(FindbyIdJudge)}
-    },
-    async resolve (source, {judge}, {authToken}) {      
-      if(authToken.user){
-        const {id, ...query} = judge;
-        query.user = authToken.user;
-        const _result = await getJudgesbyId(id);      
-        if (_result.errors) {
-          throw errorObj$1({_error: 'Could not find'});
-        }
-        return _result; 
-      }else{
-        throw errorObj$1({_error: 'Could not find'});
-      }
-          
-    }
-  },
-  getJudgesAll: {
-    type: new graphql.GraphQLList(Judges),
-    args: {
-      judge: {type: new graphql.GraphQLNonNull(FindJudge)}
-    },
-    async resolve(source, {judge}, {authToken}) {
-      if(authToken.user){
-        const {...query} = judge;
-        query.user = authToken.user;
-        const _result = await getJudges(query);      
-        if (_result.errors) {
-          throw errorObj$1({_error: 'Could not find'});
-        }      
-        return _result;
-      }else{
-        throw errorObj$1({_error: 'Could not find'});
-      }
-    }
-  }
-  
-};
-
-
-
-//
-
-const GraphQLEmailType = new graphql.GraphQLScalarType({
-  name: 'Email',
-  serialize: value => value.toLowerCase(),
-  parseValue: value => value.toLowerCase(),
-  parseLiteral: ast => {
-    const re = /.+@.+/;
-    if (ast.kind !== language.Kind.STRING) {
-      throw new error.GraphQLError(`Query error: Email is not a string, it is a: ${ast.kind}`, [ast]);
-    }
-    if (!re.test(ast.value)) {
-      throw new error.GraphQLError('Query error: Not a valid Email', [ast]);
-    }
-    if (ast.value.length < 4) {
-      throw new error.GraphQLError(`Query error: Email must have a minimum length of 4.`, [ast]);
-    }
-    if (ast.value.length > 300) {
-      throw new error.GraphQLError(`Query error: Email is too long.`, [ast]);
-    }
-    return ast.value.toLowerCase();
-  }
-});
-
-const GraphQLPasswordType = new graphql.GraphQLScalarType({
-  name: 'Password',
-  serialize: value => String(value),
-  parseValue: value => String(value),
-  parseLiteral: ast => {
-    if (ast.kind !== language.Kind.STRING) {
-      throw new error.GraphQLError(`Query error: Password is not a string, it is a: ${ast.kind}`, [ast]);
-    }
-    if (ast.value.length < 6) {
-      throw new error.GraphQLError(`Query error: Password must have a minimum length of 6.`, [ast]);
-    }
-    if (ast.value.length > 60) {
-      throw new error.GraphQLError(`Query error: Password is too long.`, [ast]);
-    }
-    return String(ast.value);
-  }
-});
-
-const GraphQLTitleType = new graphql.GraphQLScalarType({
-  name: 'Title',
-  serialize: value => String(value),
-  parseValue: value => String(value),
-  parseLiteral: ast => {
-    if (ast.kind !== language.Kind.STRING) {
-      throw new error.GraphQLError(`Query error: Title is not a string, it is a: ${ast.kind}`, [ast]);
-    }
-    if (ast.value.length < 1) {
-      throw new error.GraphQLError(`Query error: Title must have a minimum length of 1.`, [ast]);
-    }
-    if (ast.value.length > 30) {
-      throw new error.GraphQLError(`Query error: Title is too long.`, [ast]);
-    }
-    return String(ast.value);
-  }
-});
-
-const GraphQLURLType = new graphql.GraphQLScalarType({
-  name: 'URL',
-  serialize: value => String(value),
-  parseValue: value => String(value),
-  parseLiteral: ast => {
-    const re = /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
-    if (!re.test(ast.value)) {
-      throw new error.GraphQLError('Query error: Not a valid URL', [ast]);
-    }
-    if (ast.kind !== language.Kind.STRING) {
-      throw new error.GraphQLError(`Query error: URL is not a string, it is a: ${ast.kind}`, [ast]);
-    }
-    if (ast.value.length < 1) {
-      throw new error.GraphQLError(`Query error: URL must have a minimum length of 1.`, [ast]);
-    }
-    if (ast.value.length > 2083) {
-      throw new error.GraphQLError(`Query error: URL is too long.`, [ast]);
-    }
-    return String(ast.value);
-  }
-});
-
-const Collection$6 = 'Bets';
-//const CollectionObs = 'ChangesObserver';
-
-const addBets = (k,user) => {
-    //var admin = _Util.Hrmdb.FindIndexes(`User`,'isAdmin',true); 
-    k.user = user;    
-    var nadIng = Hrmdb.push(Collection$6,k,true);
-    /*var ctd = new Date();
-    var ctT = ctd.getTime();
-    var userList = nadIng.user;
-    const dd2 = JSON.stringify(nadIng);
-    var adIng = getJson2P(dd2);
-    for(var usr2 in userList){
-        //_Util.Hrmdb.PushDirecIndex(Collection,`user`,usr2,adIng.id); 
-        //_Util.Hrmdb.PushSortDirecIndex(Collection,`user`,usr2,'date',adIng.date,adIng.id);       
-    }
-    delete adIng[`user`]    
-    var updObs = {action:`Add`,collection:Collection,data:adIng,date:ctT};
-    for(var usr2 in userList){            
-        Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-    }*/
-    calculateIndexes$1();
-    return nadIng;
-};
-
-const updateBets = (k,q,user) => {
-    var fbI = Hrmdb.findOne(Collection$6,k);    
-    if (fbI && fbI.id === k && fbI.user && fbI.user[user] === user) {
-        const dd = JSON.stringify(fbI);
-        var kt = getJson2P$3(dd);
-        Object.keys(q).map(flk=>{
-            if(kt[flk]!==q[flk]){
-                /*Object.keys(fbI.user).map(usr2=>{
-                    _Util.Hrmdb.UpdDirectSortIndex(Collection,'user',usr2,flk,kt.id,kt[flk],q[flk]);
-                })*/
-                kt[flk]= q[flk];
-            }
-        });        
-        var adIng = Hrmdb.update(Collection$6,kt,k);
-        /*var userList = adIng.user;
-        const dd2 = JSON.stringify(adIng);
-        var CadIng = getJson2P(dd2);
-        delete CadIng[`user`]
-        var ctd = new Date();
-        var ctT = ctd.getTime();        
-        var updObs = {action:`Update`,collection:Collection,data:CadIng,date:ctT};        
-        for(var usr2 in userList){            
-            Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-        }*/
-        return adIng;
-    }
-    else{
-        return fbI;
-    }
-};
-
-
-const removeBets = (k,user) => {
-    var fbI = Hrmdb.findOne(Collection$6,k);
-    if (fbI && fbI.id === k && fbI.user && fbI.user[user] === user) {
-        var userList = fbI.user;
-        var adIng =  Hrmdb.remove(Collection$6,k);
-        /*var ctd = new Date();
-        var ctT = ctd.getTime();
-        var rmD = {id:k}
-        _Util.Hrmdb.DeleteDirecIndex(Collection,`user`,user,k);
-        var updObs = {action:`Remove`,collection:Collection,data:rmD,date:ctT};
-        for(var usr2 in userList){            
-            Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-        }*/
-        calculateIndexes$1();
-        return adIng;
-    }else{
-        return {};
-    }
-};
-
-
-
-const getBetsbyId = (k,q) => {      
-    var fbI = Hrmdb.findOne(Collection$6,k);    
-    if(fbI){
-        const dd = JSON.stringify(fbI);  
-        var mr = getJson2P$3(dd); 
-        return mr;         
-    }
-   return {};
-};
-
-
-const _getBetsbyFightId = (q) => {      
-    var h = [];
-    var fbI = Hrmdb.FindIndexes(Collection$6,'fightId',q.id,'cock',q.sortBy);
-    Object.keys(fbI).map(lgtr=>{
-        var _lg = Hrmdb.findOne(Collection$6,lgtr);
-        _lg && h.push(_lg);
-    });
-    return h;
-};
-
-function getJson2P$3(p){
-    return JSON.parse(p);
-}
-
-
-function calculateIndexes$1(){
-    _exec$$_('ls', function(fferr, istdout, istderr){	
-        Hrmdb.calcIndexes('Bets');
-        Hrmdb.calcIndexesLevel2('Bets','fightId','cock');
-    });
-    return true;
-}
-
-const FightFences = new graphql.GraphQLObjectType({
-  name: 'FightFences',
-  description: 'A Fight Fences',
-  fields: () => ({
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The FightFenceID',
-      resolve: (obj) => obj.id
-    },
-    title: {type: graphql.GraphQLString, description: 'The userId that created the '},    
-    description: {type: graphql.GraphQLString, description: ''},
-    country:{type: graphql.GraphQLString, description: ''},
-    provinceOrEstate:{type: graphql.GraphQLString, description: ''},
-    city:{type: graphql.GraphQLString, description: ''},
-    judge:{type: graphql.GraphQLID, description: ''}, 
-    owners: {
-      type: new  graphql.GraphQLList(graphql.GraphQLString),
-      description: '',
-    },
-    createdAt: {type: graphql.GraphQLFloat, description: 'The datetime the  was created'},
-    updatedAt: {type: graphql.GraphQLFloat, description: 'The datetime the  was last updated'},    
-    q:{type: FightFenceQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-
-
-const inputFields$4 = {
-    id: {type: graphql.GraphQLID, description: 'The Id'},
-    title: {type: graphql.GraphQLString, description: 'The userId that created the '},    
-    description: {type: graphql.GraphQLString, description: ''},
-    country:{type: graphql.GraphQLString, description: ''},
-    provinceOrEstate:{type: graphql.GraphQLString, description: ''},
-    city:{type: graphql.GraphQLString, description: ''},
-    judge:{type: graphql.GraphQLID, description: ''}, 
-};
-
-
-
-
-
-const UpdateFightFence = new graphql.GraphQLInputObjectType({
-  name: 'UpdateFightFence',
-  description: 'Args to update a  FightFence',
-  fields: () => makeRequired(inputFields$4, ['id'])
-});
-
-const NewFightFence = new graphql.GraphQLInputObjectType({
-  name: 'NewFightFence',
-  description: 'Args to add a  FightFence',
-  fields: () => makeRequired(inputFields$4, ['title', 'country','provinceOrEstate','city'])
-});
-
-
-
-const QueryFields$6 = {
-  id: {type: graphql.GraphQLID, description: 'The Id'},
-  limit: {type: graphql.GraphQLFloat, description: ''},
-  page: {type: graphql.GraphQLFloat, description: ''},
-  sortBy: {type: graphql.GraphQLString, description: ''}  
-};
-
-const FindbyIdFightFence = new graphql.GraphQLInputObjectType({
-  name: 'FindbyIdFightFence',
-  description: 'Args to Find by Id a  FightFence',
-  fields: () => makeRequired(QueryFields$6, ['id'])
-});
-
-const FindFightFence = new graphql.GraphQLInputObjectType({
-  name: 'FindFightFence',
-  description: 'Args to Find FightFences',
-  fields: () => makeRequired(QueryFields$6, ['limit','page','sortBy'])
-});
-
-const FightFenceQuerySquemaFields = new graphql.GraphQLObjectType({
-  name: 'FightFenceQuerySquemaFields',
-  description: 'Query Squema Fields',
-  fields: () => makeRequired(QueryFields$6, ['limit','page','sortBy'])
-});
-
-const Collection$7 = 'FightFences';
-
-const addFightFences = (k,user) => {
-    var admin = Hrmdb.FindIndexes(`User`,'isAdmin',true); 
-    for(var usr2 in admin){
-        k.user[usr2] = usr2;
-    }
-    var ctdDa = new Date(parseInt(k.date.toString()));
-    var yr = ctdDa.getFullYear();
-    var _month =  (ctdDa.getMonth()+1)+(12*yr);
-    k['year']=yr;
-    k['month']=_month;
-    var nadIng = Hrmdb.push(Collection$7,k,true);
-    /*var ctd = new Date();
-    var ctT = ctd.getTime();
-    var userList = nadIng.user;
-    const dd2 = JSON.stringify(nadIng);
-    var adIng = getJson2P(dd2);
-    for(var usr2 in userList){
-        //_Util.Hrmdb.PushDirecIndex(Collection,`user`,usr2,adIng.id); 
-        //_Util.Hrmdb.PushSortDirecIndex(Collection,`user`,usr2,'date',adIng.date,adIng.id);       
-    }
-    delete adIng[`user`]    
-    var updObs = {action:`Add`,collection:Collection,data:adIng,date:ctT};
-    for(var usr2 in userList){            
-        Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-    }*/
-    calculateBlockIndexes$1();
-    return nadIng;
-};
-
-const updateFightFences = (k,q,user) => {
-    var fbI = Hrmdb.findOne(Collection$7,k);    
-    if (fbI && fbI.id === k && fbI.user && fbI.user[user] === user) {
-        const dd = JSON.stringify(fbI);
-        var kt = getJson2P$4(dd);
-        Object.keys(q).map(flk=>{
-            if(kt[flk]!==q[flk]){
-                /*Object.keys(fbI.user).map(usr2=>{
-                    _Util.Hrmdb.UpdDirectSortIndex(Collection,'user',usr2,flk,kt.id,kt[flk],q[flk]);
-                })*/
-                kt[flk]= q[flk];
-            }
-        });        
-        var adIng = Hrmdb.update(Collection$7,kt,k);
-        /*var userList = adIng.user;
-        const dd2 = JSON.stringify(adIng);
-        var CadIng = getJson2P(dd2);
-        delete CadIng[`user`]
-        var ctd = new Date();
-        var ctT = ctd.getTime();        
-        var updObs = {action:`Update`,collection:Collection,data:CadIng,date:ctT};        
-        for(var usr2 in userList){            
-            Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-        }*/
-        return adIng;
-    }
-    else{
-        return fbI;
-    }
-};
-
-
-const removeFightFences = (k,user) => {
-    var fbI = Hrmdb.findOne(Collection$7,k);
-    if (fbI && fbI.id === k && fbI.user && fbI.user[user] === user) {
-        var userList = fbI.user;
-        var adIng =  Hrmdb.remove(Collection$7,k);
-        /*var ctd = new Date();
-        var ctT = ctd.getTime();
-        var rmD = {id:k}
-        _Util.Hrmdb.DeleteDirecIndex(Collection,`user`,user,k);
-        var updObs = {action:`Remove`,collection:Collection,data:rmD,date:ctT};
-        for(var usr2 in userList){            
-            Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-        }*/
-        calculateBlockIndexes$1();
-        return adIng;
-    }else{
-        return {};
-    }
-};
-
-
-
-const getFightFencesbyId = (k,q) => {      
-    var fbI = Hrmdb.findOne(Collection$7,k);    
-    if(fbI){
-        const dd = JSON.stringify(fbI);  
-        var mr = getJson2P$4(dd); 
-        return mr;         
-    }
-   return {};
-};
-
-
-
-const getFightFences = (q) => {    
-    var h = [],_hdt_=[];       
-    const {sortBy,limit,page} = q;
-    var orderBy = sortBy  || 'date.desc';
-    var sort  = orderBy.split('.')[0];
-    var order  = orderBy.split('.')[1] || 'desc'; 
-    //var tlt = _Util.Hrmdb.FindIndexes(Collection,'user',q.user,'year',_page);
-    var tlt = Hrmdb.findAll(Collection$7);
-    /*
-    var admin = _Util.Hrmdb.FindIndexes(`User`,'isAdmin',true);
-    var isAdmin = false;
-    if(admin[q.user]>=0){
-        isAdmin = true;
-    }
-    */   
-
-
-    if(tlt){ 
-
-        tlt.map(_lg=>{
-            //var _lg = _Util.Hrmdb.findOne(Collection,lgtr);
-            _lg && h.push(_lg);
-        });
-        
-    /*
-
-    Object.keys(tlt).map(lgtr=>{
-            var _lg = _Util.Hrmdb.findOne(Collection,lgtr);
-            _lg && h.push(_lg);
-        })
-        const start = (page-1) * limit;
-        const end = page * limit;  
-        var numRec = 0
-        var ObjList = tlt;
-        var ArrList = [];
-        for(var yId in ObjList){
-            ArrList.push(yId)
-        }
-        if(order==='desc'){  
-            for(var y = ArrList.length;y>=0;y--){  
-                var key = ArrList[y];                
-                if(key && ObjList[key]){                    
-                    var jsy55 = JSON.stringify(ObjList[key]);
-                    var _counT = ObjList[key]['count']
-                    var sortKey = getJson2P(jsy55);
-                    delete sortKey['count'];
-                    if(numRec + _counT>end){
-                        var ttEnd = numRec + _counT-end;
-                        var cntEnd = 1;
-                        for(var yId in sortKey){                            
-                            if(ttEnd<cntEnd){
-                                break
-                            }else{
-                                var yP = _Util.Hrmdb.findOne(Collection,yId)
-                                h.push(yP);
-                                cntEnd += 1;
-                            }                            
-                        }
-                        y = 0;
-                        break;
-                    }
-                    else{
-                        for(var yId in sortKey){
-                            var yP = _Util.Hrmdb.findOne(Collection,yId)
-                            h.push(yP);
-                        }
-                        numRec += _counT;                       
-                    }                    
-                    
-                }                
-                
-            }                
-        }
-        else{
-            for(var y = 0;y<=ArrList.length;y++){                                         
-                var key = ArrList[y];
-                if(key && ObjList[key]){                    
-                    var jsy55 = JSON.stringify(ObjList[key]);
-                    var _counT = ObjList[key]['count']
-                    var sortKey = getJson2P(jsy55);
-                    delete sortKey['count'];
-                    if(numRec + _counT>end){
-                        var ttEnd = numRec + _counT-end;
-                        var cntEnd = 1;
-                        for(var yId in sortKey){                            
-                            if(ttEnd<cntEnd){
-                                break
-                            }else{
-                                var yP = _Util.Hrmdb.findOne(Collection,yId)
-                                h.push(yP);
-                                cntEnd += 1;
-                            }                            
-                        }
-                        y = 0;
-                        break;
-                    }
-                    else{
-                        for(var yId in sortKey){
-                            var yP = _Util.Hrmdb.findOne(Collection,yId)
-                            h.push(yP);
-                        }
-                        numRec += _counT;                       
-                    }                    
-                    
-                }                
-                
-            } 
-        }    
-        */
-        var jsy = JSON.stringify(h);
-        getJson2P$4(jsy).map(mr=>{
-            var userDt =  [];            
-            if(mr){  
-                if(isAdmin && mr.user){               
-                    Object.keys(mr.user).map(usr=>{
-                        var UserI= Hrmdb.findOne('User',usr);                         
-                        if(UserI && UserI.email){
-                            userDt.push(UserI.email);
-                        }                                        
-                    }); 
-                }
-                mr.owners = userDt;                       
-                _hdt_.push(mr);
-            }
-        });        
-        return _hdt_;   
-    }
-    return [];
-};
-
-function getJson2P$4(p){
-    return JSON.parse(p);
-}
-
-function calculateBlockIndexes$1(){
-    _exec$$_('ls', function(fferr, istdout, istderr){	
-        Hrmdb.calcIndexes('FightFences');
-        Hrmdb.calcIndexesLevel2('FightFences','user','year');
-    });
-    return true;
-}
-
-const Fights = new graphql.GraphQLObjectType({
-  name: 'Fights',
-  description: 'A Fights',
-  fields: () => ({
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The FightID',
-      resolve: (obj) => obj.id
-    },
-    fighter1: {
-      type: Cocks,
-      description: 'The userId that created the ',
-      resolve: (obj) => getCocksbyId(obj.fighter1)   
-    },
-    fighter2: {
-      type: Cocks,
-      description: 'The userId that created the ',
-      resolve: (obj) => getCocksbyId(obj.fighter2)   
-    },
-    winner: {
-      type: Cocks,
-      description: 'The userId that created the ',
-      resolve: (obj) => getCocksbyId(obj.winner)   
-    },
-    fightFence: {
-      type: FightFences,
-      description: 'The userId that created the ',
-      resolve: (obj) => getFightFencesbyId(obj.fightFence)
-    },    
-    media: {type: graphql.GraphQLString, description: 'The Id'},
-    date: {type: graphql.GraphQLFloat, description: 'The datetime the  was created'},
-    createdAt: {type: graphql.GraphQLFloat, description: 'The datetime the  was created'},
-    updatedAt: {type: graphql.GraphQLFloat, description: 'The datetime the  was last updated'},    
-    q:{type: FightQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-
-
-const inputFields$5 = {
-    id: {type: graphql.GraphQLID, description: 'The Id'},
-    fighter1: {type: graphql.GraphQLID, description: 'The Id'},
-    fighter2: {type: graphql.GraphQLID, description: 'The Id'},
-    fightFence: {type: graphql.GraphQLID, description: 'The Id'},
-    winner: {type: graphql.GraphQLID, description: 'The Id'},
-    media: {type: graphql.GraphQLString, description: 'The Id'},
-    date: {type: graphql.GraphQLFloat, description: 'The datetime the  was created'},
-};
-
-
-
-
-
-const UpdateFight = new graphql.GraphQLInputObjectType({
-  name: 'UpdateFight',
-  description: 'Args to update a  Fight',
-  fields: () => makeRequired(inputFields$5, ['id'])
-});
-
-const NewFight = new graphql.GraphQLInputObjectType({
-  name: 'NewFight',
-  description: 'Args to add a  Fight',
-  fields: () => makeRequired(inputFields$5, ['fighter1','fighter2','date'])
-});
-
-
-
-const QueryFields$7 = {
-  id: {type: graphql.GraphQLID, description: 'The Id'},
-  limit: {type: graphql.GraphQLFloat, description: ''},
-  page: {type: graphql.GraphQLFloat, description: ''},
-  sortBy: {type: graphql.GraphQLString, description: ''}  
-};
-
-const FindbyIdFight = new graphql.GraphQLInputObjectType({
-  name: 'FindbyIdFight',
-  description: 'Args to Find by Id a  Fight',
-  fields: () => makeRequired(QueryFields$7, ['id'])
-});
-
-const FindFight = new graphql.GraphQLInputObjectType({
-  name: 'FindFight',
-  description: 'Args to Find Fights',
-  fields: () => makeRequired(QueryFields$7, ['limit','page','sortBy'])
-});
-
-const FightQuerySquemaFields = new graphql.GraphQLObjectType({
-  name: 'FightQuerySquemaFields',
-  description: 'Query Squema Fields',
-  fields: () => makeRequired(QueryFields$7, ['limit','page','sortBy'])
-});
-
-const Collection$8 = 'Fights';
-//const CollectionObs = 'ChangesObserver';
-
-const addFights = (k,user) => {
-    /*var admin =_Util.Hrmdb.FindIndexes(`User`,'isAdmin',true); 
-    for(var usr2 in admin){
-        
-    } */   
-    k.user = user;
-    var nadIng = Hrmdb.push(Collection$8,k,true);
-    /*var ctd = new Date();
-    var ctT = ctd.getTime();
-    var userList = nadIng.user;
-    const dd2 = JSON.stringify(nadIng);
-    var adIng = getJson2P(dd2);
-    for(var usr2 in userList){
-        //_Util.Hrmdb.PushDirecIndex(Collection,`user`,usr2,adIng.id); 
-        //_Util.Hrmdb.PushSortDirecIndex(Collection,`user`,usr2,'date',adIng.date,adIng.id);       
-    }
-    delete adIng[`user`]    
-    var updObs = {action:`Add`,collection:Collection,data:adIng,date:ctT};
-    for(var usr2 in userList){            
-        Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-    }*/
-    calculateIndexes$2();
-    return nadIng;
-};
-
-const updateFights = (k,q,user) => {
-    var fbI = Hrmdb.findOne(Collection$8,k);    
-    if (fbI && fbI.id === k && fbI.user && fbI.user[user] === user) {
-        const dd = JSON.stringify(fbI);
-        var kt = getJson2P$5(dd);
-        Object.keys(q).map(flk=>{
-            if(kt[flk]!==q[flk]){
-                /*Object.keys(fbI.user).map(usr2=>{
-                    _Util.Hrmdb.UpdDirectSortIndex(Collection,'user',usr2,flk,kt.id,kt[flk],q[flk]);
-                })*/
-                kt[flk]= q[flk];
-            }
-        });        
-        var adIng = Hrmdb.update(Collection$8,kt,k);
-        /*var userList = adIng.user;
-        const dd2 = JSON.stringify(adIng);
-        var CadIng = getJson2P(dd2);
-        delete CadIng[`user`]
-        var ctd = new Date();
-        var ctT = ctd.getTime();        
-        var updObs = {action:`Update`,collection:Collection,data:CadIng,date:ctT};        
-        for(var usr2 in userList){            
-            Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-        }*/
-        return adIng;
-    }
-    else{
-        return fbI;
-    }
-};
-
-
-const removeFights = (k,user) => {
-    var fbI = Hrmdb.findOne(Collection$8,k);
-    if (fbI && fbI.id === k && fbI.user && fbI.user[user] === user) {
-        var userList = fbI.user;
-        var adIng =  Hrmdb.remove(Collection$8,k);
-        /*var ctd = new Date();
-        var ctT = ctd.getTime();
-        var rmD = {id:k}
-        _Util.Hrmdb.DeleteDirecIndex(Collection,`user`,user,k);
-        var updObs = {action:`Remove`,collection:Collection,data:rmD,date:ctT};
-        for(var usr2 in userList){            
-            Util.UpdChanges(CollectionObs,updObs,ctT,usr2);      
-        }*/
-        calculateIndexes$2();
-        return adIng;
-    }else{
-        return {};
-    }
-};
-
-
-
-const getFightsbyId = (k,q) => {      
-    var fbI = Hrmdb.findOne(Collection$8,k);    
-    if(fbI){
-        const dd = JSON.stringify(fbI);  
-        var mr = getJson2P$5(dd); 
-        return mr;         
-    }
-   return {};
-};
-
-
-
-const getFights = (q) => {    
-    var h = [];       
-    const {sortBy,limit,page} = q;
-    var orderBy = sortBy  || 'date.desc';
-    var sort  = orderBy.split('.')[0];
-    var order  = orderBy.split('.')[1] || 'desc'; 
-    //var tlt = _Util.Hrmdb.FindIndexes(Collection,'user',q.user);
-    var tlt = Hrmdb.findAll(Collection$8);
-    /*
-    var admin = _Util.Hrmdb.FindIndexes(`User`,'isAdmin',true);
-    var isAdmin = false;
-    if(admin[q.user]>=0){
-        isAdmin = true;
-    }
-    */
-    if(tlt){
-        tlt.map(_lg=>{
-            //var _lg = _Util.Hrmdb.findOne(Collection,lgtr);
-            _lg && h.push(_lg);
-        });
-    /*
-        Object.keys(tlt).map(lgtr=>{
-            var _lg = _Util.Hrmdb.findOne(Collection,lgtr);
-            _lg && h.push(_lg);
-        })
-
-
-        const start = (page-1) * limit;
-        const end = page * limit;  
-        var numRec = 0
-        var ObjList = tlt;
-        var ArrList = [];
-        for(var yId in ObjList){
-            ArrList.push(yId)
-        }
-        if(order==='desc'){  
-            for(var y = ArrList.length;y>=0;y--){  
-                var key = ArrList[y];                
-                if(key && ObjList[key]){                    
-                    var jsy55 = JSON.stringify(ObjList[key]);
-                    var _counT = ObjList[key]['count']
-                    var sortKey = getJson2P(jsy55);
-                    delete sortKey['count'];
-                    if(numRec + _counT>end){
-                        var ttEnd = numRec + _counT-end;
-                        var cntEnd = 1;
-                        for(var yId in sortKey){                            
-                            if(ttEnd<cntEnd){
-                                break
-                            }else{
-                                var yP = _Util.Hrmdb.findOne(Collection,yId)
-                                h.push(yP);
-                                cntEnd += 1;
-                            }                            
-                        }
-                        y = 0;
-                        break;
-                    }
-                    else{
-                        for(var yId in sortKey){
-                            var yP = _Util.Hrmdb.findOne(Collection,yId)
-                            h.push(yP);
-                        }
-                        numRec += _counT;                       
-                    }                    
-                    
-                }                
-                
-            }                
-        }
-        else{
-            for(var y = 0;y<=ArrList.length;y++){                                         
-                var key = ArrList[y];
-                if(key && ObjList[key]){                    
-                    var jsy55 = JSON.stringify(ObjList[key]);
-                    var _counT = ObjList[key]['count']
-                    var sortKey = getJson2P(jsy55);
-                    delete sortKey['count'];
-                    if(numRec + _counT>end){
-                        var ttEnd = numRec + _counT-end;
-                        var cntEnd = 1;
-                        for(var yId in sortKey){                            
-                            if(ttEnd<cntEnd){
-                                break
-                            }else{
-                                var yP = _Util.Hrmdb.findOne(Collection,yId)
-                                h.push(yP);
-                                cntEnd += 1;
-                            }                            
-                        }
-                        y = 0;
-                        break;
-                    }
-                    else{
-                        for(var yId in sortKey){
-                            var yP = _Util.Hrmdb.findOne(Collection,yId)
-                            h.push(yP);
-                        }
-                        numRec += _counT;                       
-                    }                    
-                    
-                }                
-                
-            } 
-        }    
-        
-        var jsy = JSON.stringify(h);
-        getJson2P(jsy).map(mr=>{
-            var userDt =  [];            
-            if(mr){  
-                if(isAdmin && mr.user){               
-                    Object.keys(mr.user).map(usr=>{
-                        var UserI= _Util.Hrmdb.findOne('User',usr);                         
-                        if(UserI && UserI.email){
-                            userDt.push(UserI.email)
-                        }                                        
-                    }) 
-                }
-                mr.owners = userDt;                       
-                _hdt_.push(mr);
-            }
-        })  
-        */      
-        return h;   
-    }
-    return [];
-};
-
-function getJson2P$5(p){
-    return JSON.parse(p);
-}
-
-
-
-
-function calculateIndexes$2(){
-    _exec$$_('ls', function(fferr, istdout, istderr){	
-        Hrmdb.calcIndexes('Fights');
-        Hrmdb.calcIndexesLevel2('Fights','user','group');
-    });
-    return true;
-}
-
-const Collection$9 = 'User';
-const CollectionRoles$1 = 'ListRoles';
-
-const updateUsers$1 = (k,q,user) => {
-    var fbI = Hrmdb.findOne(Collection$9,k);
-    if (fbI && fbI.id === k) {
-        const dd = JSON.stringify(fbI);
-        var kt = getJson2P$6(dd);
-        const qArr = Object.keys(q);
-        if (qArr.length>0) {
-          qArr.map((flk) => {              
-                kt[flk] = q[flk];
-                ['Finansas','Daycare','Almacen'].map(tkind => {
-                    if(flk===tkind && kt[flk]){                        
-                        if(!kt[`roles`]){
-                            kt[`roles`] = {};
-                        }
-                        if(!kt[`roles`][tkind]){
-                            kt[`roles`][tkind] = {};
-                        }
-                        Hrmdb.findAll(CollectionRoles$1).map(rol=>{                            
-                            if(rol.group === flk){
-                                if(!kt[`roles`][tkind][rol.name]){
-                                    kt[`roles`][tkind][rol.name] = true;
-                                }
-                            }                
-                       });                
-                    }else if(flk===tkind && !kt[flk]){
-                        if(kt[`roles`][tkind]){
-                          delete kt[`roles`][tkind];
-                        }var hyt = {};
-                        ['Finansas','Daycare','Almacen'].map(tk2ind => {
-                            if(kt[`roles`][tk2ind]){
-                                hyt[tk2ind]=kt[`roles`][tk2ind];
-                            }
-                        });
-                        kt[`roles`]=hyt;                        
-                    }
-                });                       
-            });
-        }              
-        var adIng = Hrmdb.update(Collection$9,kt,k);
-        const dd2 = JSON.stringify(adIng);
-        var CadIng = getJson2P$6(dd2);
-        return CadIng;
-    }
-    else{
-        return {};
-    }
-};
- 
-
-
-const removeUsers$1 = (k,user) => {
-    var fbI = Hrmdb.findOne(Collection$9,k);    
-    if (fbI && fbI.id === k) {
-        var adIng =  Hrmdb.remove(Collection$9,k);
-        var ctd = new Date();
-        var ctT = ctd.getTime();
-        return adIng;
-    }else{
-        return {};
-    }
-};
-
-const getUsersbyId$1 = (k) => {    
-    
-    var fbI = Hrmdb.findOne(Collection$9,k);
-    if(fbI){
-        const dd = JSON.stringify(fbI);  
-        var mr = getJson2P$6(dd);
-        if(mr.roles){
-            mr.roles =  Util.Base64.encode(JSON.stringify(mr.roles));
-        }     
-        return mr;        
-    }
-   return {};
-};
-
-
-function getJson2P$6(p){
-    return JSON.parse(p);
-}
-
-
-
-
-const getUsersBalancebyId$1 = (k) => {
-    var fbI = Hrmdb.findOne(Collection$9,k);
-    if(fbI){
-        if(fbI.balance){
-            return fbI.balance; 
-        }else{
-            return {};    
-        }    
-    }
-   return {};
-};
-
-const Users$1 = new graphql.GraphQLObjectType({
-  name: 'Users',
-  description: 'A Users',
-  fields: () => ({
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The UserID',
-      resolve: (obj) => Base64$1.encode(obj.email)
-    },
-
-    firstName: {type: graphql.GraphQLString, description: 'The userId that created the video'},
-    lastName: {type: graphql.GraphQLString, description: 'The userId that created the video'},
-    email:{type: graphql.GraphQLString, description: ''}, 
-    phone:{type: graphql.GraphQLString, description: ''},
-    photoUrl:{type: graphql.GraphQLString, description: ''},    
-    balance:{
-      type: Balance$1, 
-      description: '',
-      resolve: (obj) => getUsersBalancebyId$1(obj.id)
-    },
-    createdAt: {type: graphql.GraphQLString, description: 'The datetime the video was created'},
-    updatedAt: {type: graphql.GraphQLString, description: 'The datetime the video was last updated'},    
-    q:{type: UserQuerySquemaFields$1, description: ''},
-  })
-});
-
-
-
-
-
-const inputFields$6 = {    
-    id: {type: graphql.GraphQLString, description: ''},
-    name: {type: graphql.GraphQLString, description: 'The userId that created the video'},
-    email:{type: graphql.GraphQLString, description: ''}, 
-    phone:{type: graphql.GraphQLString, description: ''},
-};
-
-
-
-
-const UpdateUser$1 = new graphql.GraphQLInputObjectType({
-  name: 'UpdateUser',
-  description: 'Args to update a  User',
-  fields: () => makeRequired(inputFields$6, ['id'])
-});
-
-const NewUser$1 = new graphql.GraphQLInputObjectType({
-  name: 'NewUser',
-  description: 'Args to add a  User',
-  fields: () => makeRequired(inputFields$6, ['name','email',`phone`])
-});
-
-
-
-const QueryFields$8 = {  
-  id: {type: graphql.GraphQLID, description: 'The videoId'},
-  limit: {type: graphql.GraphQLFloat, description: ''},
-  page: {type: graphql.GraphQLFloat, description: ''},
-  sortBy: {type: graphql.GraphQLString, description: ''}  
-};
-
-const FindbyIdUser$1 = new graphql.GraphQLInputObjectType({
-  name: 'FindbyIdUser',
-  description: 'Args to Find by Id a  User',
-  fields: () => makeRequired(QueryFields$8, ['id'])
-});
-
-
-const FindUser$1 = new graphql.GraphQLInputObjectType({
-  name: 'FindUser',
-  description: 'Args to Find Users',
-  fields: () => makeRequired(QueryFields$8, ['limit','page','sortBy'])
-});
-
-const UserQuerySquemaFields$1 = new graphql.GraphQLObjectType({
-  name: 'UserQuerySquemaFields',
-  description: 'Query Squema Fields',
-  fields: () => makeRequired(QueryFields$8, ['limit','page','sortBy'])
-});  
-
-
-
-
-
-
-
-
-const Balance$1 = new graphql.GraphQLObjectType({
-  name: 'Balance',
-  description: 'Balance',
-  fields: () => ({    
-    available: {type: graphql.GraphQLFloat, description: ''},
-    pending: {type: graphql.GraphQLFloat, description: ''}, 
-    q:{type: UserQuerySquemaFields$1, description: ''},
-  })
-});
-
-
-const inputFieldsBalance$1 = {
-  available: {type: graphql.GraphQLFloat, description: ''},
-  pending: {type: graphql.GraphQLFloat, description: ''}, 
-};
-
-
-
-const UpdateBalance$1 = new graphql.GraphQLInputObjectType({
-  name: 'UpdateBalance',
-  description: 'UpdateBalance',
-  fields: () => makeRequired(inputFieldsBalance$1, ['available','pending'])
-});
-
-const Bets = new graphql.GraphQLObjectType({
-  name: 'Bets',
-  description: 'A Bets',
-  fields: () => ({
-    id: {
-      type: new graphql.GraphQLNonNull(graphql.GraphQLID),
-      description: 'The BetID',
-      resolve: (obj) => obj.id
-    },
-    cock: {
-      type: Cocks,
-      description: 'The userId that created the ',
-      resolve: (obj) => getCocksbyId(obj.cock)   
-    },
-    user: {
-      type: Users$1, 
-      description: 'The userId that created the ',
-      resolve: (obj) => getUsersbyId$1(obj.user)         
-    },
-    fightId: {
-      type: Fights, 
-      description: 'The userId that created the ',
-      resolve: (obj) => getFightsbyId(obj.fightId)  
-    },
-    pagar: {type: graphql.GraphQLFloat, description: 'The datetime the  was created'},
-    cobrar: {type: graphql.GraphQLFloat, description: 'The datetime the  was created'},
-    status:{type: graphql.GraphQLBoolean, description: 'The datetime the  was created'},
-    createdAt: {type: graphql.GraphQLFloat, description: 'The datetime the  was created'},
-    updatedAt: {type: graphql.GraphQLFloat, description: 'The datetime the  was last updated'},    
-    q:{type: BetQuerySquemaFields, description: ''},
-  })
-});
-
-
-
-
-
-const inputFields$7 = {
-    id: {type: graphql.GraphQLID, description: 'The Id'},
-    cock: {type: graphql.GraphQLID, description: 'The Id'},
-    user: {type: graphql.GraphQLID, description: 'The Id'},
-    fightId: {type: graphql.GraphQLID, description: 'The Id'},
-    pagar: {type: graphql.GraphQLFloat, description: 'The Id'},
-    cobrar: {type: graphql.GraphQLFloat, description: 'The Id'},
-    status:{type: graphql.GraphQLBoolean, description: ''},
-};
-
-
-
-
-
-const UpdateBet = new graphql.GraphQLInputObjectType({
-  name: 'UpdateBet',
-  description: 'Args to update a  Bet',
-  fields: () => makeRequired(inputFields$7, ['id'])
-});
-
-const NewBet = new graphql.GraphQLInputObjectType({
-  name: 'NewBet',
-  description: 'Args to add a  Bet',
-  fields: () => makeRequired(inputFields$7, ['cock','fightId','pagar','cobrar'])
-});
-
-
-
-const QueryFields$9 = {
-  id: {type: graphql.GraphQLID, description: 'The Id'},
-  limit: {type: graphql.GraphQLFloat, description: ''},
-  page: {type: graphql.GraphQLFloat, description: ''},
-  sortBy: {type: graphql.GraphQLString, description: ''}  
-};
-
-const FindbyIdBet = new graphql.GraphQLInputObjectType({
-  name: 'FindbyIdBet',
-  description: 'Args to Find by Id a  Bet',
-  fields: () => makeRequired(QueryFields$9, ['id'])
-});
-
-const FindBet = new graphql.GraphQLInputObjectType({
-  name: 'FindBet',
-  description: 'Args to Find Bets',
-  fields: () => makeRequired(QueryFields$9, ['limit','page','sortBy'])
-});
-
-const BetQuerySquemaFields = new graphql.GraphQLObjectType({
-  name: 'BetQuerySquemaFields',
-  description: 'Query Squema Fields',
-  fields: () => makeRequired(QueryFields$9, ['limit','page','sortBy'])
-});
-
-var bets = {
-  getBetsbyId: {
-    type: Bets,
-    args: {
-      bet: {type: new graphql.GraphQLNonNull(FindbyIdBet)}
-    },
-    async resolve (source, {bet}, {authToken}) {      
-      const {id, ...query} = bet;
-        query.user = authToken.user;
-        const _result = await getBetsbyId(id);   
-        if (_result.errors) {
-          throw errorObj$1({_error: 'Could not find'});
-        }
-        return _result; 
-        if(authToken.user);else{
-        throw errorObj$1({_error: 'Could not find'});
-      }
-          
-    }
-  },
-  getBetsbyFightId: {
-    type: new graphql.GraphQLList(Bets),
-    args: {
-      bet: {type: new graphql.GraphQLNonNull(FindbyIdBet)}
-    },
-    async resolve (source, {bet}, {authToken}) {      
-      const {...query} = bet;
-        query.user = authToken.user;
-        const _result = await _getBetsbyFightId(query);      
-        if (_result.errors) {
-          throw errorObj$1({_error: 'Could not find'});
-        }
-        return _result; 
-        if(authToken.user);else{
-        throw errorObj$1({_error: 'Could not find'});
-      }   
-    }
-  }
-  /*,
-  getBetsAll: {
-    type: new GraphQLList(Bets),
-    args: {
-      bet: {type: new GraphQLNonNull(FindBet)}
-    },
-    async resolve(source, {bet}, {authToken}) {
-       const {...query} = bet;
-        query.user = authToken.user;
-        const _result = await getBets(query);      
-        if (_result.errors) {
-          throw errorObj({_error: 'Could not find'});
-        }      
-        return _result;
-        if(authToken.user){}else{
-        throw errorObj({_error: 'Could not find'});
-      }
-    }
-  }
-  */
-};
-
-
-
-//
-
-var fightFences = {
-  getFightFencesbyId: {
-    type: FightFences,
-    args: {
-      fightFence: {type: new graphql.GraphQLNonNull(FindbyIdFightFence)}
-    },
-    async resolve (source, {fightFence}, {authToken}) {      
-       const {id, ...query} = fightFence;
-        query.user = authToken.user;
-        const _result = await getFightFencesbyId(id);      
-        if (_result.errors) {
-          throw errorObj$1({_error: 'Could not find'});
-        }
-        return _result; 
-        if(authToken.user);else{
-        throw errorObj$1({_error: 'Could not find'});
-      }     
-    }
-  },
-  getFightFencesAll: {
-    type: new graphql.GraphQLList(FightFences),
-    args: {
-      fightFence: {type: new graphql.GraphQLNonNull(FindFightFence)}
-    },
-    async resolve(source, {fightFence}, {authToken}) {
-       const {...query} = fightFence;
-        query.user = authToken.user;
-        const _result = await getFightFences(query);      
-        if (_result.errors) {
-          throw errorObj$1({_error: 'Could not find'});
-        }      
-        return _result;
-        if(authToken.user);else{
-        throw errorObj$1({_error: 'Could not find'});
-      }
-    }
-  }
-  
-};
-
-var user$2 = {
-  getUsersbyId: {
-    type: Users$1,
-    args: {
-      user: {type: new graphql.GraphQLNonNull(FindbyIdUser$1)}
-    },
-    async resolve (source, {user}, {authToken}) {
-      if(authToken.user){             
-        const usr = await getUsersbyId$1(authToken.user);      
-        if (usr.errors) {
-          throw errorObj$1({_error: 'Could not find any user'});
-        }
-        return usr; 
-      }else{
-        throw errorObj$1({_error: 'Could not find any user'});
-      }
-          
-    }
-  }
-};
-
-var fights = {
-  getFightsbyId: {
-    type: Fights,
-    args: {
-      fight: {type: new graphql.GraphQLNonNull(FindbyIdFight)}
-    },
-    async resolve (source, {fight}, {authToken}) { 
-      
-        const {id, ...query} = fight;
-        query.user = authToken.user;
-        const _result = await getFightsbyId(id);      
-        if (_result.errors) {
-          throw errorObj$1({_error: 'Could not find'});
-        }
-        return _result; 
-      if(authToken.user);else{
-        throw errorObj$1({_error: 'Could not find'});
-      }
-          
-    }
-  },
-  getFightsAll: {
-    type: new graphql.GraphQLList(Fights),
-    args: {
-      fight: {type: new graphql.GraphQLNonNull(FindFight)}
-    },
-    async resolve(source, {fight}, {authToken}) {              
-        
-        const {...query} = fight;
-        query.user = authToken.user;
-        const _result = await getFights(query);      
-        if (_result.errors) {
-          throw errorObj$1({_error: 'Could not find'});
-        }      
-        return _result;
-        if(authToken.user);else{
-        throw errorObj$1({_error: 'Could not find'});
-      }
-    }
-  }
-  
-};
-
-
-
-//
-
-const rootFields$2 = Object.assign(cocks,fights,bets,user$2,judges,fightFences);
-
-
-var query$1 = new graphql.GraphQLObjectType({
-  name: 'RootQuery',
-  fields: () => rootFields$2
-});
-
-var cocks$1 = {
-  addCock: {
-    type: Cocks,
-    args: {
-      cock: {type: new graphql.GraphQLNonNull(NewCock)}
-    },
-    async resolve(source, {cock}, {authToken}) {
-      if(authToken.user){
-        cock.createdAt = new Date();
-        if(!cock[`user`]){
-          cock[`user`]={};
-        }
-        cock.user[authToken.user] = authToken.user;        
-        const newCock = await addCocks(cock,authToken.user);
-        if (newCock.errors) {
-          throw errorObj$1({_error: 'Could not add video'});
-        }  
-        return newCock;
-      }else{
-        return {};
-      }
-    }
-  },
-  updateCock: {
-    type: Cocks,
-    args: {
-      cock: {type: new graphql.GraphQLNonNull(UpdateCock)}
-    },
-    async resolve(source, {cock}, {authToken}) {
-      if(authToken.user){
-        cock.updatedAt = new Date();        
-        const {id, ...updates} = cock;        
-        const updCock = await updateCocks(id, updates,authToken.user);        
-        if (updCock.errors) {
-          throw errorObj$1({_error: 'Could not update video'});
-        }
-        return updCock;
-      }
-      else{
-        throw errorObj$1({_error: 'Could not update'});
-      }
-    }
-  },
-  removeCock: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      cock: {type: new graphql.GraphQLNonNull(UpdateCock)}
-    },
-    async resolve(source, {cock}, {authToken}) {
-      if(authToken.user){
-        const {id} = cock;
-        const rmCock = await removeCocks(id,authToken.user);      
-        if (rmCock.errors) {
-          throw errorObj$1({_error: 'Could not update video'});
-        }  
-        return rmCock;
-      }
-      else{
-          return false;
-      }
-    }
-  },
-};
-
-var judges$1 = {
-  addJudge: {
-    type: Judges,
-    args: {
-      judge: {type: new graphql.GraphQLNonNull(NewJudge)}
-    },
-    async resolve(source, {judge}, {authToken}) {
-      if(authToken.user){
-        judge.createdAt = new Date();
-        if(!judge[`user`]){
-          judge[`user`]={};
-        }
-        judge.user[authToken.user] = authToken.user;
-        const newJudge = await addJudges(judge);
-        if (newJudge.errors) {
-          throw errorObj$1({_error: 'Could not add video'});
-        }  
-        return newJudge;
-      }else{
-        return {};
-      }
-    }
-  },
-  updateJudge: {
-    type: Judges,
-    args: {
-      judge: {type: new graphql.GraphQLNonNull(UpdateJudge)}
-    },
-    async resolve(source, {judge}, {authToken}) {
-      
-      if(authToken.user){
-        judge.updatedAt = new Date();
-        const {id, ...updates} = judge;
-        const updJudge = await updateJudges(id, updates,authToken.user);
-        if (updJudge.errors) {
-          throw errorObj$1({_error: 'Could not update video'});
-        }  
-        return updJudge;
-      }else{
-        throw errorObj$1({_error: 'Could not update'});
-      }
-    }
-  },
-  removeJudge: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      judge: {type: new graphql.GraphQLNonNull(UpdateJudge)}
-    },
-    async resolve(source, {judge}, {authToken}) {     
-      if(authToken.user){
-        const {id} = judge;
-        const rmJudge = await removeJudges(id,authToken.user);
-        if (rmJudge.errors) {
-          throw errorObj$1({_error: 'Could not remove'});
-        }  
-        return rmJudge;
-      }else{
-        return false;
-      }      
-    }
-  },
-};
-
-var bets$1 = {
-  addBet: {
-    type: Bets,
-    args: {
-      bet: {type: new graphql.GraphQLNonNull(NewBet)}
-    },
-    async resolve(source, {bet}, {authToken}) {      
-      if(authToken.user){
-        bet.createdAt = new Date();
-        if(!bet[`user`]){
-          bet[`user`]={};
-        }
-        bet.user[authToken.user] = authToken.user;
-        const newBet = await addBets(bet,authToken.user);
-        if (newBet.errors) {
-          throw errorObj({_error: 'Could not add video'});
-        }  
-        return newBet;
-      }else{
-        return {};
-      }
-    }
-  },
-  updateBet: {
-    type: Bets,
-    args: {
-      bet: {type: new graphql.GraphQLNonNull(UpdateBet)}
-    },
-    async resolve(source, {bet}, {authToken}) {
-      const auth = isLoggedIn(authToken);
-      if(auth){
-        bet.updatedAt = new Date();
-        const {id, ...updates} = bet;
-        const updBet = await updateBets(id, updates,authToken.user);
-        if (updBet.errors) {
-          throw errorObj({_error: 'Could not update video'});
-        }  
-        return updBet;
-      }else{
-        throw errorObj({_error: 'Could not update'});
-      }
-    }
-  },
-  removeBet: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      bet: {type: new graphql.GraphQLNonNull(UpdateBet)}
-    },
-    async resolve(source, {bet}, {authToken}) {     
-      const auth = isLoggedIn(authToken);
-      if(auth){
-        const {id} = bet;
-        const rmBet = await removeBets(id,authToken.user);
-        if (rmBet.errors) {
-          throw errorObj({_error: 'Could not remove'});
-        }  
-        return true;
-      }else{
-        return false;
-      }      
-    }
-  },
-};
-
-var fightFences$1 = {
-  addFightFence: {
-    type: FightFences,
-    args: {
-      fightFence: {type: new graphql.GraphQLNonNull(NewFightFence)}
-    },
-    async resolve(source, {fightFence}, {authToken}) {
-      if(authToken.user){
-        fightFence.createdAt = new Date();
-        if(!fightFence[`user`]){
-          fightFence[`user`]={};
-        }
-        fightFence.user[authToken.user] = authToken.user;
-        const newFightFence = await addFightFences(fightFence);
-        if (newFightFence.errors) {
-          throw errorObj$1({_error: 'Could not add video'});
-        }  
-        return newFightFence;
-      }else{
-        return {};
-      }
-    }
-  },
-  updateFightFence: {
-    type: FightFences,
-    args: {
-      fightFence: {type: new graphql.GraphQLNonNull(UpdateFightFence)}
-    },
-    async resolve(source, {fightFence}, {authToken}) {   
-      if(authToken.user){
-        fightFence.updatedAt = new Date();        
-        const {id, ...updates} = fightFence;
-        const upd = await updateFightFences(id, updates,authToken.user);        
-        if (upd.errors) {
-          throw errorObj$1({_error: 'Could not update video'});
-        }
-        return upd;
-      }
-      else{
-        throw errorObj$1({_error: 'Could not update'});
-      }
-    }
-  },
-  removeFightFence: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      fightFence: {type: new graphql.GraphQLNonNull(UpdateFightFence)}
-    },
-    async resolve(source, {fightFence}, {authToken}) {     
-      if(authToken.user){
-        const {id} = fightFence;
-        const rmFightFence = await removeFightFences(id,authToken.user);
-        if (rmFightFence.errors) {
-          throw errorObj$1({_error: 'Could not remove'});
-        }  
-        return rmFightFence;
-      }else{
-        return false;
-      }      
-    }
-  },
-};
-
-var user$3 = {  
-  updateUser: {
-    type: Users$1,
-    args: {
-      user: {type: new graphql.GraphQLNonNull(UpdateUser$1)}
-    },
-    async resolve(source, {user}, {authToken}) {      
-      if(authToken.user){
-        user.updatedAt = new Date();
-        const { ...updates} = user;
-        const updUser = await updateUsers$1(authToken.user, updates);
-        if (updUser.errors) {
-          throw errorObj$1({_error: 'Could not update video'});
-        }  
-        return updUser;
-      }else{
-        throw errorObj$1({_error: 'Could not update'});
-      }
-    }
-  },
-  removeUser: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      user: {type: new graphql.GraphQLNonNull(UpdateUser$1)}
-    },
-    async resolve(source, {user}, {authToken}) {     
-      if(authToken.user){
-        const rmUser = await removeUsers$1(authToken.user);
-        if (rmUser.errors) {
-          throw errorObj$1({_error: 'Could not remove'});
-        }  
-        return rmUser;
-      }else{
-        return false;
-      }      
-    }
-  },
-};
-
-var fights$1 = {
-  addFight: {
-    type: Fights,
-    args: {
-      fight: {type: new graphql.GraphQLNonNull(NewFight)}
-    },
-    async resolve(source, {fight}, {authToken}) {
-      if(authToken.user){
-        fight.createdAt = new Date();
-        if(!fight[`user`]){
-          fight[`user`]={};
-        }
-        fight.user[authToken.user] = authToken.user;
-        const newFight = await addFights(fight,authToken.user);
-        if (newFight.errors) {
-          throw errorObj$1({_error: 'Could not add video'});
-        }  
-        return newFight;
-      }else{
-        return {};
-      }
-    }
-  },
-  updateFight: {
-    type: Fights,
-    args: {
-      fight: {type: new graphql.GraphQLNonNull(UpdateFight)}
-    },
-    async resolve(source, {fight}, {authToken}) {
-            
-      if(authToken.user){
-        fight.updatedAt = new Date();
-        const {id, ...updates} = fight;
-        const updFight = await updateFights(id, updates,authToken.user);
-        if (updFight.errors) {
-          throw errorObj$1({_error: 'Could not update video'});
-        }  
-        return updFight;
-      }else{
-        throw errorObj$1({_error: 'Could not update'});
-      }
-    }
-  },
-  removeFight: {
-    type: graphql.GraphQLBoolean,
-    args: {
-      fight: {type: new graphql.GraphQLNonNull(UpdateFight)}
-    },
-    async resolve(source, {fight}, {authToken}) { 
-      if(authToken.user){
-        const {id} = fight;
-        const rmFight = await removeFights(id,authToken.user);
-        if (rmFight.errors) {
-          throw errorObj$1({_error: 'Could not remove'});
-        }  
-        return true;
-      }else{
-        return false;
-      }      
-    }
-  },
-};
-
-const rootFields$3 = Object.assign(cocks$1,fights$1,bets$1,user$3,judges$1,fightFences$1);
-
-var mutation$1 = new graphql.GraphQLObjectType({
-  name: 'Mutation',
-  fields: () => rootFields$3
-});
-
-var Schema$1 = new graphql.GraphQLSchema({query: query$1, mutation: mutation$1});
-
-var httpGraphQLHandlerGallos = async (req, res) => {  
-  const {q,k} =  req.body;  
-  const fp = req.headers.authorization.split(`:`)[1];
-  const authToken = decryptToken(req.headers.authorization.split(`:`)[0] ,true,fp) || {}; 
-  var bytes = null;
-  var basD = null;
-  var NewBody =null;
-  var rslt = '';
-  if(fp){
-    var kpass = CryptoJS.AES.decrypt(Base64$1.decode(k), fp).toString(CryptoJS.enc.Utf8);
-    bytes = CryptoJS.AES.decrypt(Base64$1.decode(q), kpass);
-    basD = bytes.toString(CryptoJS.enc.Utf8);    
-  }
-  if(basD && isJson$2(basD)){
-    NewBody = JSON.parse(basD);
-    const {query, variables, ...newContext} = NewBody;  
-    
-    const context = {authToken, ...newContext};  
-    const result = await graphql.graphql(Schema$1, query, null, context, variables);
-    if (result.errors) {
-      console.log('DEBUG GraphQL Error:', result.errors);
-      rslt = Base64$1.encode(JSON.stringify({status:500,errors: result.errors}).toString());
-    }else{
-      var pscd = genId$1();
-      var _2sen = JSON.stringify(result);
-      var rs = CryptoJS.AES.encrypt(_2sen, pscd).toString();
-      var ky = CryptoJS.AES.encrypt(pscd, fp).toString();
-      rslt = Base64$1.encode(JSON.stringify({status:200,r:rs,k:ky}).toString());     
-    }    
-  }else{
-    rslt = Base64$1.encode(JSON.stringify({status:500,errors:'errors'}).toString());
-  }
-  res.send(rslt);
 };
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const _params = new Params();
 
+
+const getHashCodeBtc = () => {
+   return {}
+};
+
+
+
+const GetScheduleAndEarningsByUser = (bdy, auth) => {
+   let _id = auth.user;
+   _params.GetScheduleAndEarningsByUser(_id);
+   return {status:`ok`};
+};
+
+
+const checkForNewUser = (bdy, auth) => {
+   if(auth && auth.isAdmin){
+      _params.checkForNewUser();
+   }
+   return {status:`ok`};
+};
+
+
+
+
+const addBlockByUser = (bdy, auth) => {
+   let MCollection = "Blocks";
+   let _ddt = null;
+   let f2S = {};
+   let _form = bdy["form"];
+   let params = bdy["params"];
+   let fields = bdy["fields"];
+   console.log(bdy)
+   let _now =new Date(params.now);
+   f2S["createdAt"] = _now.getTime();
+   f2S["user"] = auth["user"];
+   f2S["endTime"] =_form["endTime"];
+   f2S["priceAmount"] = _form["rateInfo"] && _form["rateInfo"]['priceAmount'];
+   f2S["schedulingType"] =_form["schedulingType"];
+   f2S["startTime"] =_form["startTime"];
+   f2S["serviceAreaId"] =_form["serviceAreaId"];
+   f2S["serviceTypeId"] =_form["serviceTypeId"];
+   f2S["minuteHours"] =(_now.getHours() * 60) + _now.getMinutes();
+   f2S["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
+   const _nwV = Hrmdb.push(MCollection,f2S, true);
+   const nd2 = JSON.stringify(_nwV);
+   let _lg = JSON.parse(nd2);
+   if(_lg){
+      _ddt={};
+      var vfl = validateFields(fields,_lg);
+      _ddt[_lg.id]= vfl;
+   }
+   return _ddt;
+};
+
+class GraphQuery {
+    
+    constructor() {
+        get_exec$$_()('ls', function(err, istdout, istderr){
+            Hrmdb.getCollection('Blocks');
+            Hrmdb.getCollection('Cda');
+            Hrmdb.getCollection('Logs');
+            Hrmdb.getCollection('Regions');
+            Hrmdb.getCollection('Logins');  
+            
+            
+
+            Hrmdb.createIndexes('Logins','user');
+            Hrmdb.createIndexes('Cda','email');
+
+            Hrmdb.createIndexes('Blocks','day');           
+            Hrmdb.createIndexes('Blocks','user');
+            Hrmdb.createIndexes('Blocks','user','day','serviceAreaId');
+            Hrmdb.createIndexes('Blocks','user','day');
+            Hrmdb.createIndexes('Blocks','user','minuteHours');
+            Hrmdb.createIndexes('Blocks','user','serviceAreaId');
+            Hrmdb.createIndexes('Blocks','minuteHours','serviceAreaId');
+            Hrmdb.createIndexes('Blocks','serviceAreaId','minuteHours');
+            Hrmdb.createIndexes('Blocks','user','minuteHours','serviceAreaId');
+            Hrmdb.createIndexes('Blocks','user','serviceAreaId','minuteHours');
+
+            
+            Hrmdb.calcIndexesAll('Cda');
+            Hrmdb.calcIndexesAll('Blocks');
+            Hrmdb.calcIndexesAll('Logins'); 
+            Hrmdb.calcIndexesAll('Logs');
+
+
+
+            Hrmdb.getCollection('ServiceEarnings');  
+            Hrmdb.getCollection('DepositedEarnings');  
+            Hrmdb.getCollection('ScheduledAssignments');
+
+            Hrmdb.createIndexes('ServiceEarnings','user');
+            Hrmdb.createIndexes('DepositedEarnings','user');
+
+            
+
+            Hrmdb.createIndexes('ScheduledAssignments','user');
+            Hrmdb.createIndexes('ScheduledAssignments','user','day');
+
+
+            Hrmdb.calcIndexesAll('ServiceEarnings');
+            Hrmdb.calcIndexesAll('DepositedEarnings');            
+            Hrmdb.calcIndexesAll('ScheduledAssignments');           
+            
+
+
+            Hrmdb.getCollection('User');           
+            Hrmdb.createIndexes('User','email');
+            Hrmdb.createIndexes('User','isAdmin'); 
+            Hrmdb.calcIndexesAll('User'); 
+            
+
+            
+
+            updQueryStore("generateToken", generateToken);
+            updQueryStore("verifyToken", verifyToken);
+            updQueryStore("findUserbyId", findUserbyId);            
+            updQueryStore("findbyIdCda", findbyIdCda);
+            updQueryStore("usersList", usersList);
+
+
+            updQueryStore("getHashCodeBtc", getHashCodeBtc);
+            updQueryStore("GetScheduleAndEarningsByUser", GetScheduleAndEarningsByUser);
+            updQueryStore("checkForNewUser", checkForNewUser);
+            updQueryStore("addBlockByUser", addBlockByUser);
+
+
+
+
+        });
+    }
+
+    getMoviesbyCollection(bdy,auth) {
+        let r = null;
+        let _q = bdy["query"];
+        if(getQueryStore(_q)){
+            r = getQueryStore(_q)(bdy,auth);
+        }
+        return r;
+    }
+
+    dataHandler(req, res, next) {
+        let {q,k, auth} =  req.body;
+        const fp = req.headers.authorization && req.headers.authorization.split(`:`)[1];      
+        let result = {};
+        if(auth && auth.authCode==="850217"){
+            let bdy = req.body;
+            let _ddt = this.getMoviesbyCollection(bdy,auth);
+            if(_ddt){
+                result = {data:_ddt};
+            }
+            else {
+                result = {err:"no body present"};
+            }
+        }else {
+            const authorization = req.headers.authorization && req.headers.authorization.split(`:`)[0];
+            const authToken = authorization && decryptTokenfromLoginId(authorization ,"Cda",fp) || {};           
+            if(authToken && authToken["exp"] && (new Date()).getTime()< authToken["exp"]){
+                auth = authToken;
+            }        
+            let basD = decryptBody(fp,k,q);           
+            if(basD && isJson(basD)){
+                let bdy = JSON.parse(basD);  
+                let _ddt = this.getMoviesbyCollection(bdy,auth);
+                if(_ddt){
+                    result = encryptBody(fp,{data:_ddt});
+                }
+                else {
+                    result = encryptBody(fp,{err:"no body present"});
+                }
+            }else {
+                result = encryptBody(fp,{err:"no body present"});
+            }
+        }
+        resJsonFunc(res,200,result);
+    }
+}
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const _GraphQuery = new GraphQuery();
+const _params$1 = new Params();
 
 
 
@@ -6602,70 +5081,19 @@ class IndexRoute extends BaseRoute {
     
     create(router) {        
         
+        router.post("/streamdata", (req, res, next) => {
+            _GraphQuery.dataHandler(req, res, next);
+        });
+
         router.get("/getStatic/:id", (req, res, next) => {
-            _params.getStatic(req, res, next);
+            _params$1.getStatic(req, res, next);
         });
 
-        router.post("/verifyToken", (req, res, next) => {
-            _params.verifyToken(req, res, next);
-        });
-
-        router.post("/getDataById", (req, res, next) => {
-          _params.getDataById(req, res, next);
-      });
-        
         router.post("/loginWithGoogle", (req, res, next) => {
-            _params.loginWithGoogle(req, res, next);
+            _params$1.loginWithGoogle(req, res, next);
         });
-
-        
-        router.post("/generateToken", (req, res, next) => {
-            _params.generateToken(req, res, next);
-        });   
-       
-        router.post("/GetUserRequest", (req, res, next) => {
-          _params.GetUserRequest(req, res, next);
-        });
-
-        router.post("/GetScheduleAndEarningsByUser", (req, res, next) => {
-            _params.GetScheduleAndEarningsByUser(req, res, next);
-        });
-        
-        router.post("/checkForNewUser", (req, res, next) => {
-            _params.checkForNewUser(req, res, next);
-        });
-        
-     
-
-        router.post("/streamdata", httpGraphQLHandler);
-
-        router.post("/streamgallosfair", httpGraphQLHandlerGallos);
     }
 }
-
-
-
-/*
-
-import multipart from 'connect-multiparty';  
-const multipartMiddleware = multipart();
-import grabber_lib from "./Grabber";
-const grabber = new grabber_lib();
-
-import AmazonTokenStrategy from './lwa'; 
-import passport from 'passport'; 
-
-var LWA = JSON.parse(_Cnst.Base64.decode(_Cnst.clv.LWA));
-passport.use(new AmazonTokenStrategy({
-    clientID: LWA.clientID,
-    clientSecret: LWA.clientSecret,
-    passReqToCallback: true
-  }), function(req, accessToken, refreshToken, profile, next) {
-    console.log(accessToken, refreshToken);  
-    next();  
- })
-
-*/
 
 function SSE (req, res, next) {
 	res.sseSetup = function() {
@@ -6690,20 +5118,12 @@ function SSE (req, res, next) {
 
 const _IndexRoute = new IndexRoute();
 
-// npm install path express cors body-parser method-override
-
-
-
-
 
 const app = express();
+const _port_ = get_portNew_() ;
 
 
-app.use(express.static(path.join(_root$$_, 'App', "public")));
-app.get('/', (req, res) => {                   
-  const tt = path.join(_root$$_, 'App','index.html');
-  res.sendFile(tt);
-}); 
+app.use(express.static(path.join(get_root$$_(), 'App', "public")));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -6720,13 +5140,12 @@ app.use(function (err, req, res, next) {
 //app.use(cookieParser())        
 app.use(SSE);
 
-app.get("/date", async (req, res) => {  
-  res.json({data:"fsd"});
-});
+// _Cnst.getKey("To be filled by O.E.M.")
 
 let router;
 router = express.Router();
 _IndexRoute.create(router);
+
 app.use(router);
 
-app.listen(7258, () => console.log("running on 7258"));
+app.listen(_port_, get_Host_(), () => console.log(`running on ${get_Host_()}:${_port_}`));
