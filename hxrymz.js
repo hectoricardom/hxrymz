@@ -18,7 +18,7 @@ var request = _interopDefault(require('request'));
 // const _config = require('./config.json');
 
 var _root$$_ = "E:/newProject/Monorepo/AmzFlx/server/";
-// _root$$_ = "/home/ubuntu/hxrymz/";
+_root$$_ = "/home/ubuntu/hxrymz/";
 
 var _portNew_ = 7258;
 var _host_ = "localhost";
