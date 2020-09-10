@@ -4954,7 +4954,7 @@ const getBlockByServiceArea = (bdy, auth) => {
       let _list2Rend =  tlt && Object.keys(tlt);
       _list2Rend && _list2Rend.map((_itm,_inD)=>{
          let _lg = Hrmdb.findOne(MCollection,_itm);
-         var vfl = validateFileds(fields,_lg,params);
+         var vfl = validateFields(fields,_lg,params);
          _ddt[_itm]= vfl;
       });
    }
@@ -4972,7 +4972,7 @@ const getBlockByUserServiceArea = (bdy, auth) => {
       let _list2Rend =  tlt && Object.keys(tlt);
       _list2Rend && _list2Rend.map((_itm,_inD)=>{
          let _lg = Hrmdb.findOne(MCollection,_itm);
-         var vfl = validateFileds(fields,_lg,params);
+         var vfl = validateFields(fields,_lg,params);
          _ddt[_itm]= vfl;
       });
    }
@@ -4990,7 +4990,7 @@ const getScheduleByUser = (bdy, auth) => {
       let _list2Rend =  tlt && Object.keys(tlt);
       _list2Rend && _list2Rend.map((_itm,_inD)=>{
          let _lg = Hrmdb.findOne(MCollection,_itm);
-         var vfl = validateFileds(fields,_lg,params);
+         var vfl = validateFields(fields,_lg,params);
          _ddt[_itm]= vfl;
       });
    }
@@ -5013,7 +5013,7 @@ const getScheduleByUser = (bdy, auth) => {
    let _list2Rend =  tlt && Object.keys(tlt);
    _list2Rend && _list2Rend.map((_itm,_inD)=>{
       let _lg = Hrmdb.findOne(MCollection,_itm);
-      var vfl = validateFileds(fields,_lg,params);
+      var vfl = validateFields(fields,_lg,params);
       _ddt[_itm]= vfl;
    });
    return _ddt;
