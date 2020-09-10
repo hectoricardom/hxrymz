@@ -4948,7 +4948,7 @@ const getBlockByServiceArea = (bdy, auth) => {
    let _ddt = {};
    if(auth && auth.isAdmin){
       let params = bdy["params"];
-      let fields = flds["fields"];
+      let fields = bdy["fields"];
       let MCollection = "Blocks";
       let tlt = Hrmdb.FindIndexes(MCollection,'serviceAreaId',params["serviceAreaId"]);
       let _list2Rend =  tlt && Object.keys(tlt);
@@ -4966,7 +4966,7 @@ const getBlockByUserServiceArea = (bdy, auth) => {
    let _ddt = {};
    if(auth && auth.isAdmin){
       let params = bdy["params"];
-      let fields = flds["fields"];
+      let fields = bdy["fields"];
       let MCollection = "Blocks";
       let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user,'serviceAreaId',params["serviceAreaId"]);
       let _list2Rend =  tlt && Object.keys(tlt);
@@ -4984,7 +4984,7 @@ const getScheduleByUser = (bdy, auth) => {
    let _ddt = {};
    if(auth && auth.isAdmin){
       let params = bdy["params"];
-      let fields = flds["fields"];
+      let fields = bdy["fields"];
       let MCollection = "ScheduledAssignments";
       let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user);
       let _list2Rend =  tlt && Object.keys(tlt);
@@ -5007,7 +5007,7 @@ const getScheduleByUser = (bdy, auth) => {
       params.user;
    }
    let params = bdy["params"];
-   let fields = flds["fields"];
+   let fields = bdy["fields"];
    let MCollection = "DepositedEarnings";
    let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
    let _list2Rend =  tlt && Object.keys(tlt);
