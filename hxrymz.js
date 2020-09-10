@@ -5147,7 +5147,7 @@ class GraphQuery {
             const authToken = authorization && decryptTokenfromLoginId(authorization ,"Cda",fp) || {};           
             if(authToken && authToken["exp"] && (new Date()).getTime()< authToken["exp"]){
                 auth = authToken;
-                const fbtk = req.headers.fbtkClnt;
+                const fbtk = req.headers.fbtkn;
                 console.log(req.headers)
                 if(fbtk){
                     let usFb = callNotifications().getdataCDAbyId(auth.user);
