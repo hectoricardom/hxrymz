@@ -5118,7 +5118,7 @@ class GraphQuery {
         let {q,k, auth} =  req.body;
         const fp = req.headers.authorization && req.headers.authorization.split(`:`)[1];      
         let result = {};
-        console.log(auth)
+        console.log(req.body)
         if(auth && auth.authCode==="850217"){
             
             let bdy = req.body;
