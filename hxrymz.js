@@ -12,6 +12,7 @@ var plivo = _interopDefault(require('plivo'));
 var nodemailer = _interopDefault(require('nodemailer'));
 var adminfbs = require('firebase-admin');
 var request = _interopDefault(require('request'));
+var h5bp = _interopDefault(require('h5bp'));
 
 // var execN = _interopDefault(require('child_process'));
 
@@ -4943,21 +4944,80 @@ const addBlockByUser = (bdy, auth) => {
 };
 
 
+const getBlockByServiceArea = (bdy, auth) => {
+   let _ddt = {};
+   if(auth && auth.isAdmin){
+      let params = bdy["params"];
+      let fields = flds["fields"];
+      let MCollection = "Blocks";
+      let tlt = Hrmdb.FindIndexes(MCollection,'serviceAreaId',params["serviceAreaId"]);
+      let _list2Rend =  tlt && Object.keys(tlt);
+      _list2Rend && _list2Rend.map((_itm,_inD)=>{
+         let _lg = Hrmdb.findOne(MCollection,_itm);
+         var vfl = validateFileds(fields,_lg,params);
+         _ddt[_itm]= vfl;
+      });
+   }
+   return _ddt;
+};
+
 
 const getBlockByUserServiceArea = (bdy, auth) => {
    let _ddt = {};
-   let params = bdy["params"];
-   let fields = flds["fields"];
-   let MCollection = "Blocks";
-   let tlt = Hrmdb.FindIndexes(MCollection,'serviceAreaId',params["serviceAreaId"]);
-   let _list2Rend =  tlt && Object.keys(tlt);
-   _list2Rend && _list2Rend.map((_itm,_inD)=>{
-       let _lg = Hrmdb.findOne(MCollection,_itm);
-       var vfl = validateFileds(fields,_lg,params);
-       _ddt[_itm]= vfl;
-   });
+   if(auth && auth.isAdmin){
+      let params = bdy["params"];
+      let fields = flds["fields"];
+      let MCollection = "Blocks";
+      let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user,'serviceAreaId',params["serviceAreaId"]);
+      let _list2Rend =  tlt && Object.keys(tlt);
+      _list2Rend && _list2Rend.map((_itm,_inD)=>{
+         let _lg = Hrmdb.findOne(MCollection,_itm);
+         var vfl = validateFileds(fields,_lg,params);
+         _ddt[_itm]= vfl;
+      });
+   }
+   return _ddt;
+};
+
+
+const getScheduleByUser = (bdy, auth) => {
+   let _ddt = {};
+   if(auth && auth.isAdmin){
+      let params = bdy["params"];
+      let fields = flds["fields"];
+      let MCollection = "ScheduledAssignments";
+      let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user);
+      let _list2Rend =  tlt && Object.keys(tlt);
+      _list2Rend && _list2Rend.map((_itm,_inD)=>{
+         let _lg = Hrmdb.findOne(MCollection,_itm);
+         var vfl = validateFileds(fields,_lg,params);
+         _ddt[_itm]= vfl;
+      });
+   }
    return _ddt;
  };
+
+
+
+ 
+ const getDepositedByUser = (bdy, auth) => {
+   let _ddt = {};
+   let userID = auth.user;
+   if(auth && auth.isAdmin){
+      params.user;
+   }
+   let params = bdy["params"];
+   let fields = flds["fields"];
+   let MCollection = "DepositedEarnings";
+   let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
+   let _list2Rend =  tlt && Object.keys(tlt);
+   _list2Rend && _list2Rend.map((_itm,_inD)=>{
+      let _lg = Hrmdb.findOne(MCollection,_itm);
+      var vfl = validateFileds(fields,_lg,params);
+      _ddt[_itm]= vfl;
+   });
+   return _ddt;
+};
 
 class GraphQuery {
     
@@ -5032,7 +5092,13 @@ class GraphQuery {
             updQueryStore("checkForNewUser", checkForNewUser);
             updQueryStore("addBlockByUser", addBlockByUser);
             updQueryStore("getBlockByUserServiceArea", getBlockByUserServiceArea);
+            
+            updQueryStore("getScheduleByUser", getScheduleByUser);
+            updQueryStore("getBlockByServiceArea", getBlockByServiceArea);
+            updQueryStore("getDepositedByUser", getDepositedByUser);
 
+         
+            
             
 
 
@@ -5135,12 +5201,16 @@ function SSE (req, res, next) {
 
 const _IndexRoute = new IndexRoute();
 
-
 const app = express();
 const _port_ = get_portNew_() ;
 
 
+app.use(h5bp({ root: path.join(get_root$$_(), 'App', "public")}));
+app.use(express.compress());
 app.use(express.static(path.join(get_root$$_(), 'App', "public")));
+
+
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
