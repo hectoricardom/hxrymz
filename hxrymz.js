@@ -5147,8 +5147,8 @@ class GraphQuery {
             const authToken = authorization && decryptTokenfromLoginId(authorization ,"Cda",fp) || {};           
             if(authToken && authToken["exp"] && (new Date()).getTime()< authToken["exp"]){
                 auth = authToken;
-                const fbtk = req.headers.authorization && req.headers.authorization.split(`:`)[2]; 
-                if(fbtk ){
+                const fbtk = req.headers.fbtkClnt;
+                if(fbtk){
                     let usFb = callNotifications().getdataCDAbyId(auth.user);
                     if(usFb && usFb["frBsToken"]!== fbtk){
                         callNotifications().updFireMessageToken(auth.user,fbtk );
