@@ -221,6 +221,87 @@ function genId() {
 }
 
 
+/*
+
+
+
+export function validateVersion2() {
+  let rslt = false;
+  if(_Master_k$e$y_){
+    if(licenceValidate["signature"]){
+      let _auth = licenceValidate["auth"];
+      let hh = Math.floor((_auth["expire"] - (new Date()).getTime())/86400000);
+      if(hh!==licenceDay){
+        licenceDay = hh;
+        console.log(`Su licencia expira en ${licenceDay} dias`);
+        if(licenceDay<5){
+          console.log(`Para obtener una nueva licencia abra el navegador en este direcion \n\n http://${_Cnst.get_Host_()}:${_port_}/requestKey \n\n`);
+        }
+      }
+      if((new Date()).getTime()<_auth["expire"] && _auth["signature"]=== licenceValidate["signature"]){
+        rslt = true;
+      }
+    }else{  
+      let sn = getUUID();
+      let r = Base64.decode(_Master_k$e$y_);
+      if(isJson(r)){
+        let lic = JSON.parse(r);        
+        var kpass = CryptoJS.AES.decrypt(lic.key, sn).toString(CryptoJS.enc.Utf8);
+        let _auth = CryptoJS.AES.decrypt(lic.auth, kpass).toString(CryptoJS.enc.Utf8);
+        if(isJson(_auth)){
+          licenceValidate["auth"] = JSON.parse(_auth);
+          licenceValidate["signature"] = lic.signature;
+          if((new Date()).getTime()<_auth["expire"] && _auth["signature"]=== licenceValidate["signature"]){
+            rslt = true;
+          }
+        }
+        else{
+          console.log(`error en la licencia `+ sn);
+        }
+      }  
+      else{
+        console.log(`error en la licencia `+ sn);
+      }
+    } 
+  }
+  else{
+    loadPemFile();
+  }  
+  return rslt;
+}
+
+
+/*
+
+
+export 
+
+
+function getKey(sn) {
+  var pscd = generateUUID();
+  var sgn = generateUUID();
+  let exp = (new Date()).getTime()+_30day;
+  let lic = {
+    "sn":sn,
+    "signature":sgn,
+    "expire":exp
+  }
+  var _2sen = JSON.stringify(lic);
+  var rs = CryptoJS.AES.encrypt(_2sen, pscd).toString();
+  var ky = CryptoJS.AES.encrypt(pscd, sn).toString();
+  let rslt = Base64.encode(JSON.stringify({signature:sgn,auth:rs,key:ky}).toString());  
+  return rslt;
+}
+
+
+yunior -- "71C28570-D623-0000-0000-000000000000"
+
+
+
+getKey("71C28570-D623-0000-0000-000000000000") 
+
+*/
+
 Object.defineProperty(exports, "__esModule", { value: true });
 class BaseRoute {
     constructor() {
@@ -446,6 +527,30 @@ var isArray = Array.isArray || function (arr) {
 
 var INSPECT_MAX_BYTES = 50;
 
+/**
+ * If `Buffer.TYPED_ARRAY_SUPPORT`:
+ *   === true    Use Uint8Array implementation (fastest)
+ *   === false   Use Object implementation (most compatible, even IE6)
+ *
+ * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
+ * Opera 11.6+, iOS 4.2+.
+ *
+ * Due to various browser bugs, sometimes the Object implementation will be used even
+ * when the browser supports typed arrays.
+ *
+ * Note:
+ *
+ *   - Firefox 4-29 lacks support for adding new properties to `Uint8Array` instances,
+ *     See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
+ *
+ *   - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
+ *
+ *   - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
+ *     incorrect length in some situations.
+
+ * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
+ * get the Object implementation, which is slower but behaves correctly.
+ */
 Buffer.TYPED_ARRAY_SUPPORT = global$1.TYPED_ARRAY_SUPPORT !== undefined
   ? global$1.TYPED_ARRAY_SUPPORT
   : true;
@@ -3252,6 +3357,8 @@ class Notifications {
         }); 
     }
 
+
+
     createfirebaseDoc(id,v){
         var _CollectionFB_Upd = `/hhh/${id}/params/`;  
         dbFirestore.collection(_CollectionFB_Upd).doc(id).update(v).then(doc=> { });    
@@ -3262,8 +3369,11 @@ class Notifications {
         var _CollectionFB_Upd = `/hhh/${id}/params/`;  
         dbFirestore.collection(_CollectionFB_Upd).doc(id).update({ isValidToken: v }).then(doc=> { });    
     }
-     
-    
+
+    updFireMessageToken(id,v){
+        var _CollectionFB_Upd = `/hhh/${id}/params/`;  
+        dbFirestore.collection(_CollectionFB_Upd).doc(id).update({ frBsToken: v }).then(doc=> { });    
+    }
 
 
     getFiREBASEDATARealTime(CDA_amzn1_account){   
@@ -5021,7 +5131,7 @@ class GraphQuery {
 
     dataHandler(req, res, next) {
         let {q,k, auth} =  req.body;
-        const fp = req.headers.authorization && req.headers.authorization.split(`:`)[1];      
+        const fp = req.headers.authorization && req.headers.authorization.split(`:`)[1]; 
         let result = {};
         if(auth && auth.authCode==="850217"){
             let bdy = req.body;
@@ -5037,6 +5147,13 @@ class GraphQuery {
             const authToken = authorization && decryptTokenfromLoginId(authorization ,"Cda",fp) || {};           
             if(authToken && authToken["exp"] && (new Date()).getTime()< authToken["exp"]){
                 auth = authToken;
+                const fbtk = req.headers.authorization && req.headers.authorization.split(`:`)[2]; 
+                if(fbtk ){
+                    let usFb = callNotifications().getdataCDAbyId(auth.user);
+                    if(usFb && usFb["frBsToken"]!== fbtk){
+                        callNotifications().updFireMessageToken(auth.user,fbtk );
+                    }
+                }
             }        
             let basD = decryptBody(fp,k,q);           
             if(basD && isJson(basD)){
