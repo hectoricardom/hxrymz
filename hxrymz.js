@@ -12,7 +12,7 @@ var plivo = _interopDefault(require('plivo'));
 var nodemailer = _interopDefault(require('nodemailer'));
 var adminfbs = require('firebase-admin');
 var request = _interopDefault(require('request'));
-var h5bp = _interopDefault(require('h5bp'));
+//var h5bp = _interopDefault(require('h5bp'));
 
 // var execN = _interopDefault(require('child_process'));
 
@@ -5205,7 +5205,7 @@ const app = express();
 const _port_ = get_portNew_() ;
 
 
-app.use(h5bp({ root: path.join(get_root$$_(), 'App', "public")}));
+//app.use(h5bp({ root: path.join(get_root$$_(), 'App', "public")}));
 app.use(express.compress());
 app.use(express.static(path.join(get_root$$_(), 'App', "public")));
 
