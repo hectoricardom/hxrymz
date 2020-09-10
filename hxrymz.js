@@ -12,7 +12,6 @@ var plivo = _interopDefault(require('plivo'));
 var nodemailer = _interopDefault(require('nodemailer'));
 var adminfbs = require('firebase-admin');
 var request = _interopDefault(require('request'));
-//var h5bp = _interopDefault(require('h5bp'));
 
 // var execN = _interopDefault(require('child_process'));
 
@@ -3766,8 +3765,9 @@ const generateToken = (bdy) => {
     var tlt =Hrmdb.FindIndexes(CollName,'email',_email);
     let t = tlt && Object.keys(tlt);
     if(t && t[0]){
-        if(callNotifications().getdataCDAbyId(t[0])){
-            var id = t[0];
+        var id = t[0];
+        let Cda =Hrmdb.findOne(CollName,id);
+        if(callNotifications().getdataCDAbyId(t[0]) && Cda["id"]){
             var tkCode = gen6CodeId();        
             var time2expire = 30*24*3600000;
             var exp = (new Date()).getTime()+time2expire;
@@ -3778,7 +3778,7 @@ const generateToken = (bdy) => {
                 code_token[tkCode]['id']=k.id;
                 code_token[tkCode]['exp']=(new Date()).getTime()+(15*60000);
             }
-            var phone_ = t[0].phoneNumber;
+            var phone_ = Cda.phoneNumber;
             var msg = `${tkCode} is your verification code.`;
             if(phone_){
                 callNotifications().sendSMS(phone_,msg);
@@ -5118,11 +5118,8 @@ class GraphQuery {
         let {q,k, auth} =  req.body;
         const fp = req.headers.authorization && req.headers.authorization.split(`:`)[1];      
         let result = {};
-        //console.log(req.body)
         if(auth && auth.authCode==="850217"){
-            
             let bdy = req.body;
-            //console.log(bdy)
             let _ddt = this.getMoviesbyCollection(bdy,auth);
             if(_ddt){
                 result = {data:_ddt};
@@ -5202,14 +5199,19 @@ function SSE (req, res, next) {
 }
 // hectoricardom@yahoo.com
 
+// import h5bp from "h5bp";
+
+
+
 const _IndexRoute = new IndexRoute();
 
 const app = express();
 const _port_ = get_portNew_() ;
 
-
-//app.use(h5bp({ root: path.join(get_root$$_(), 'App', "public")}));
-// app.use(express.compress());
+/*
+app.use(h5bp({ root: path.join(_Cnst.get_root$$_(), 'App', "public")}));
+app.use(express.compress());
+*/
 app.use(express.static(path.join(get_root$$_(), 'App', "public")));
 
 
