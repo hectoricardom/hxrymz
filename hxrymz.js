@@ -18,7 +18,7 @@ var request = _interopDefault(require('request'));
 // const _config = require('./config.json');
 
 var _root$$_ = "E:/newProject/Monorepo/AmzFlx/server/";
-_root$$_ = "/home/ubuntu/hxrymz/";
+// _root$$_ = "/home/ubuntu/hxrymz/";
 
 var _portNew_ = 7258;
 var _host_ = "localhost";
@@ -220,87 +220,6 @@ function genId() {
   return rtn;
 }
 
-
-/*
-
-
-
-export function validateVersion2() {
-  let rslt = false;
-  if(_Master_k$e$y_){
-    if(licenceValidate["signature"]){
-      let _auth = licenceValidate["auth"];
-      let hh = Math.floor((_auth["expire"] - (new Date()).getTime())/86400000);
-      if(hh!==licenceDay){
-        licenceDay = hh;
-        console.log(`Su licencia expira en ${licenceDay} dias`);
-        if(licenceDay<5){
-          console.log(`Para obtener una nueva licencia abra el navegador en este direcion \n\n http://${_Cnst.get_Host_()}:${_port_}/requestKey \n\n`);
-        }
-      }
-      if((new Date()).getTime()<_auth["expire"] && _auth["signature"]=== licenceValidate["signature"]){
-        rslt = true;
-      }
-    }else{  
-      let sn = getUUID();
-      let r = Base64.decode(_Master_k$e$y_);
-      if(isJson(r)){
-        let lic = JSON.parse(r);        
-        var kpass = CryptoJS.AES.decrypt(lic.key, sn).toString(CryptoJS.enc.Utf8);
-        let _auth = CryptoJS.AES.decrypt(lic.auth, kpass).toString(CryptoJS.enc.Utf8);
-        if(isJson(_auth)){
-          licenceValidate["auth"] = JSON.parse(_auth);
-          licenceValidate["signature"] = lic.signature;
-          if((new Date()).getTime()<_auth["expire"] && _auth["signature"]=== licenceValidate["signature"]){
-            rslt = true;
-          }
-        }
-        else{
-          console.log(`error en la licencia `+ sn);
-        }
-      }  
-      else{
-        console.log(`error en la licencia `+ sn);
-      }
-    } 
-  }
-  else{
-    loadPemFile();
-  }  
-  return rslt;
-}
-
-
-/*
-
-
-export 
-
-
-function getKey(sn) {
-  var pscd = generateUUID();
-  var sgn = generateUUID();
-  let exp = (new Date()).getTime()+_30day;
-  let lic = {
-    "sn":sn,
-    "signature":sgn,
-    "expire":exp
-  }
-  var _2sen = JSON.stringify(lic);
-  var rs = CryptoJS.AES.encrypt(_2sen, pscd).toString();
-  var ky = CryptoJS.AES.encrypt(pscd, sn).toString();
-  let rslt = Base64.encode(JSON.stringify({signature:sgn,auth:rs,key:ky}).toString());  
-  return rslt;
-}
-
-
-yunior -- "71C28570-D623-0000-0000-000000000000"
-
-
-
-getKey("71C28570-D623-0000-0000-000000000000") 
-
-*/
 
 Object.defineProperty(exports, "__esModule", { value: true });
 class BaseRoute {
@@ -527,30 +446,6 @@ var isArray = Array.isArray || function (arr) {
 
 var INSPECT_MAX_BYTES = 50;
 
-/**
- * If `Buffer.TYPED_ARRAY_SUPPORT`:
- *   === true    Use Uint8Array implementation (fastest)
- *   === false   Use Object implementation (most compatible, even IE6)
- *
- * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
- * Opera 11.6+, iOS 4.2+.
- *
- * Due to various browser bugs, sometimes the Object implementation will be used even
- * when the browser supports typed arrays.
- *
- * Note:
- *
- *   - Firefox 4-29 lacks support for adding new properties to `Uint8Array` instances,
- *     See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
- *
- *   - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
- *
- *   - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
- *     incorrect length in some situations.
-
- * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
- * get the Object implementation, which is slower but behaves correctly.
- */
 Buffer.TYPED_ARRAY_SUPPORT = global$1.TYPED_ARRAY_SUPPORT !== undefined
   ? global$1.TYPED_ARRAY_SUPPORT
   : true;
@@ -4448,66 +4343,6 @@ class Params {
         }
     }
     
-    
-/*
-
-
-    generateToken(req, res){
-        var _th = this;	
-        var _email = req.query.email;
-        var tlt =_Util.Hrmdb.FindIndexes('Cda','email',_email);
-        let t = tlt && Object.keys(tlt)
-        if(t && t[0]){            
-            if(_th.get_IsActive_(t[0])){
-                var id = t[0];
-                var tkCode = _Util.gen6CodeId();        
-                var time2expire = 30*24*3600000;
-                var exp = (new Date()).getTime()+time2expire;
-                var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode};
-                var k = _Util.Hrmdb.push(`Logins`,tk);
-                if(!code_token[tkCode]){
-                    code_token[tkCode]={};
-                    code_token[tkCode]['id']=k.id;
-                    code_token[tkCode]['exp']=(new Date()).getTime()+(15*60000);
-                }             
-                var phone_ = t[0].phoneNumber;
-                var msg = `${tkCode} is your verification code.`;
-                if(phone_){
-                    _Notifications.sendSMS(phone_,msg);
-                }
-                if(_email){
-                    let msgEmail = {
-                        to: _email,
-                        from: 'hxrymz@gmail.com',
-                        subject: 'verification code',           
-                        text: msg
-                    };            
-                    _Notifications.sendEmail(msgEmail);  
-                    let msgEmail2Admin = {
-                        to: 'hectoricardom@gmail.com',
-                        from: 'hxrymz@gmail.com',
-                        subject: `verification code ${_email}`,              
-                        text: msg
-                    };            
-                    _Notifications.sendEmail(msgEmail2Admin);
-                }
-
-                let l4phone = phone_ && phone_.substring(phone_.length-4, phone_.length)
-                _th.sendNotificationtoToken({"title": "VerificationCode", "body": `${msg} for ${_email}`});
-                _th.resJsonFunc(res,200,{status:200,msg:`token sent`,phone:l4phone || ""});
-            }else{                
-                _Notifications.createfirebaseDoc(id,{isActive:false});
-                _th.resJsonFunc(res,403,{status:505,err:`Access was denied -- Account Expired`});
-            }
-        }else{
-            _th.resJsonFunc(res,403,{status:502,err:`Access was denied -- Email not found`}); 
-        }           
-    }
-
-
-
-*/
-
 
 
 
@@ -4521,40 +4356,18 @@ class Params {
 /*****************************************************************************************************************************************************/
 
     
-
-/*
-
-    verifyToken(req, res){
-        var _th = this;
-        var tkCode = req.query.code;
-        var lg_id = code_token[tkCode]; 
-        if(lg_id && lg_id.exp && lg_id.exp>(new Date()).getTime()){
-            var k =_Util.Hrmdb.findOne('Logins',lg_id.id);
-            if(k && k.id){
-                // var ciphertext = _Util.Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
-                delete code_token[tkCode];
-                _th.resJsonFunc(res,200,{token:k.id});
-            }else{
-                _th.resJsonFunc(res,403,{err:`Access was denied -- Code Failed`});                
-            }
-        }else{
-            _th.resJsonFunc(res,403,{err:`Access was denied -- Code Failed`});
-        }      
-        
-    }
 
 
 
     checkForNewUser() {
-        var _th = this; 
-        let _uri = _Util.Base64.decode('aHR0cDovLzMuMTM2LjU0LjE1Nzo3MjU4L3JlZnJlc2hUb2tlbk1zZz9jb2RlPTg1MDIxNw==');    
+        let _uri = Base64$1.decode('aHR0cDovLzMuMTM2LjU0LjE1Nzo3MjU4L3JlZnJlc2hUb2tlbk1zZz9jb2RlPTg1MDIxNw==');    
         _uri && request({
             uri: _uri,	 
             method: 'POST'
             }, 
             function (err, res2, body) {
                 var g = body;
-                if(_Util.isJson(body)){
+                if(isJson$1(body)){
                     g = JSON.parse(body);
                 }
                 if(g){
@@ -4563,28 +4376,20 @@ class Params {
                             CDA_amzn1_account[cda] = g[cda];
                             Upd_CDA_amzn1_account_file(); 
                         }
-                    })
+                    });
                 }
                 //_th.resJsonFunc(res,200,{status:`ok`});
             }
-        )
+        );
     }
 
 
 
-
-
-   GetScheduleAndEarningsByUser(usr) {
+    GetScheduleAndEarningsByUser(usr) {
         var _th = this;  
         usr && _th.GetSchedule(usr);
         usr && _th.GetEarnings(usr);
     }
-
-
-*/
-
-
-
 
 
 
