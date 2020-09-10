@@ -4040,9 +4040,6 @@ var MC_Fld_Static = MC_Fld_Data+'/static';
 var CDA_amzn1_account = {};
 
 var CDA_amzn1_account_file = MC_Fld_Data+`/cda.json`;
-
- 
-var code_token$1 ={};  
 var CDA_operation ={};
 
 var Interval_operation ={};
@@ -4452,31 +4449,31 @@ class Params {
     }
     
     
-
+/*
 
 
     generateToken(req, res){
         var _th = this;	
         var _email = req.query.email;
-        var tlt =Hrmdb.FindIndexes('Cda','email',_email);
-        let t = tlt && Object.keys(tlt);
+        var tlt =_Util.Hrmdb.FindIndexes('Cda','email',_email);
+        let t = tlt && Object.keys(tlt)
         if(t && t[0]){            
             if(_th.get_IsActive_(t[0])){
                 var id = t[0];
-                var tkCode = gen6CodeId();        
+                var tkCode = _Util.gen6CodeId();        
                 var time2expire = 30*24*3600000;
                 var exp = (new Date()).getTime()+time2expire;
                 var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode};
-                var k = Hrmdb.push(`Logins`,tk);
-                if(!code_token$1[tkCode]){
-                    code_token$1[tkCode]={};
-                    code_token$1[tkCode]['id']=k.id;
-                    code_token$1[tkCode]['exp']=(new Date()).getTime()+(15*60000);
+                var k = _Util.Hrmdb.push(`Logins`,tk);
+                if(!code_token[tkCode]){
+                    code_token[tkCode]={};
+                    code_token[tkCode]['id']=k.id;
+                    code_token[tkCode]['exp']=(new Date()).getTime()+(15*60000);
                 }             
                 var phone_ = t[0].phoneNumber;
                 var msg = `${tkCode} is your verification code.`;
                 if(phone_){
-                    _Notifications$1.sendSMS(phone_,msg);
+                    _Notifications.sendSMS(phone_,msg);
                 }
                 if(_email){
                     let msgEmail = {
@@ -4485,31 +4482,31 @@ class Params {
                         subject: 'verification code',           
                         text: msg
                     };            
-                    _Notifications$1.sendEmail(msgEmail);  
+                    _Notifications.sendEmail(msgEmail);  
                     let msgEmail2Admin = {
                         to: 'hectoricardom@gmail.com',
                         from: 'hxrymz@gmail.com',
                         subject: `verification code ${_email}`,              
                         text: msg
                     };            
-                    _Notifications$1.sendEmail(msgEmail2Admin);
+                    _Notifications.sendEmail(msgEmail2Admin);
                 }
 
-                let l4phone = phone_ && phone_.substring(phone_.length-4, phone_.length);
+                let l4phone = phone_ && phone_.substring(phone_.length-4, phone_.length)
                 _th.sendNotificationtoToken({"title": "VerificationCode", "body": `${msg} for ${_email}`});
                 _th.resJsonFunc(res,200,{status:200,msg:`token sent`,phone:l4phone || ""});
-            }else {                
-                _Notifications$1.createfirebaseDoc(id,{isActive:false});
+            }else{                
+                _Notifications.createfirebaseDoc(id,{isActive:false});
                 _th.resJsonFunc(res,403,{status:505,err:`Access was denied -- Account Expired`});
             }
-        }else {
+        }else{
             _th.resJsonFunc(res,403,{status:502,err:`Access was denied -- Email not found`}); 
         }           
     }
 
 
 
-
+*/
 
 
 
@@ -4524,6 +4521,72 @@ class Params {
 /*****************************************************************************************************************************************************/
 
     
+
+/*
+
+    verifyToken(req, res){
+        var _th = this;
+        var tkCode = req.query.code;
+        var lg_id = code_token[tkCode]; 
+        if(lg_id && lg_id.exp && lg_id.exp>(new Date()).getTime()){
+            var k =_Util.Hrmdb.findOne('Logins',lg_id.id);
+            if(k && k.id){
+                // var ciphertext = _Util.Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
+                delete code_token[tkCode];
+                _th.resJsonFunc(res,200,{token:k.id});
+            }else{
+                _th.resJsonFunc(res,403,{err:`Access was denied -- Code Failed`});                
+            }
+        }else{
+            _th.resJsonFunc(res,403,{err:`Access was denied -- Code Failed`});
+        }      
+        
+    }
+
+
+
+    checkForNewUser() {
+        var _th = this; 
+        let _uri = _Util.Base64.decode('aHR0cDovLzMuMTM2LjU0LjE1Nzo3MjU4L3JlZnJlc2hUb2tlbk1zZz9jb2RlPTg1MDIxNw==');    
+        _uri && request({
+            uri: _uri,	 
+            method: 'POST'
+            }, 
+            function (err, res2, body) {
+                var g = body;
+                if(_Util.isJson(body)){
+                    g = JSON.parse(body);
+                }
+                if(g){
+                    Object.keys(g).map(cda=>{
+                        if(!CDA_amzn1_account[cda]){
+                            CDA_amzn1_account[cda] = g[cda];
+                            Upd_CDA_amzn1_account_file(); 
+                        }
+                    })
+                }
+                //_th.resJsonFunc(res,200,{status:`ok`});
+            }
+        )
+    }
+
+
+
+
+
+   GetScheduleAndEarningsByUser(usr) {
+        var _th = this;  
+        usr && _th.GetSchedule(usr);
+        usr && _th.GetEarnings(usr);
+    }
+
+
+*/
+
+
+
+
+
 
     getStatic(req, res, next) { 
         var id = req.params.id;
@@ -4541,62 +4604,6 @@ class Params {
                 res.finished = true;
             }
         }
-    }
-
-
-    verifyToken(req, res){
-        var _th = this;
-        var tkCode = req.query.code;
-        var lg_id = code_token$1[tkCode]; 
-        if(lg_id && lg_id.exp && lg_id.exp>(new Date()).getTime()){
-            var k =Hrmdb.findOne('Logins',lg_id.id);
-            if(k && k.id){
-                // var ciphertext = _Util.Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
-                delete code_token$1[tkCode];
-                _th.resJsonFunc(res,200,{token:k.id});
-            }else {
-                _th.resJsonFunc(res,403,{err:`Access was denied -- Code Failed`});                
-            }
-        }else {
-            _th.resJsonFunc(res,403,{err:`Access was denied -- Code Failed`});
-        }      
-        
-    }
-
-
-
-    checkForNewUser() {
-        let _uri = Base64$1.decode('aHR0cDovLzMuMTM2LjU0LjE1Nzo3MjU4L3JlZnJlc2hUb2tlbk1zZz9jb2RlPTg1MDIxNw==');    
-        _uri && request({
-            uri: _uri,	 
-            method: 'POST'
-            }, 
-            function (err, res2, body) {
-                var g = body;
-                if(isJson$1(body)){
-                    g = JSON.parse(body);
-                }
-                if(g){
-                    Object.keys(g).map(cda=>{
-                        if(!CDA_amzn1_account[cda]){
-                            CDA_amzn1_account[cda] = g[cda];
-                            Upd_CDA_amzn1_account_file(); 
-                        }
-                    });
-                }
-                //_th.resJsonFunc(res,200,{status:`ok`});
-            }
-        );
-    }
-
-
-
-
-
-   GetScheduleAndEarningsByUser(usr) {
-        var _th = this;  
-        usr && _th.GetSchedule(usr);
-        usr && _th.GetEarnings(usr);
     }
 
 
@@ -4931,6 +4938,7 @@ const addBlockByUser = (bdy, auth) => {
    f2S["endTime"] =_form["endTime"];
    f2S["priceAmount"] = _form["rateInfo"] && _form["rateInfo"]['priceAmount'];
    f2S["schedulingType"] =_form["schedulingType"];
+   f2S["offerType"] =_form["offerType"];
    f2S["startTime"] =_form["startTime"];
    f2S["serviceAreaId"] =_form["serviceAreaId"];
    f2S["serviceTypeId"] =_form["serviceTypeId"];
@@ -5006,9 +5014,9 @@ const getScheduleByUser = (bdy, auth) => {
  
  const getDepositedByUser = (bdy, auth) => {
    let _ddt = {};
-   let userID = auth.user;
    let params = bdy["params"];
    let fields = bdy["fields"];
+   let userID = auth.user;
    if(auth && auth.isAdmin){
       userID = params.user;
    }
@@ -5023,6 +5031,68 @@ const getScheduleByUser = (bdy, auth) => {
    return _ddt;
 };
 
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+const buyBitcoin = (bdy,auth) => {
+   let _form = bdy["form"];
+   let params = bdy["params"];
+   let fields = bdy["fields"];
+   let _now =new Date();
+   _form["createdAt"] = _now.getTime();
+   let Collection = "BuyBitcoin";
+   const _nwV = Hrmdb.push(Collection,_form, true);
+   const nd2 = JSON.stringify(_nwV);
+   let _lg = JSON.parse(nd2);
+   if(_form.email){
+      var CMSg =`Muchas gracias: ${_form.name} por usar nuestra plataforma\n el monto de bitcoin que desea comprar es de 0.0018516\n estamos procesando la transacion cuando este displonible le avisaremos a donde tiene que transferir o pagar\n(solo aceptamos CUP)\n que tenga un excelente dia `;
+      let msgEmail = {
+         to: _form.email,
+         from: 'hxrymz@gmail.com',
+         subject: 'compra de bitcoin',           
+         text: CMSg
+      };            
+      callNotifications().sendEmail(msgEmail); 
+   }
+   if(_lg){
+      _ddt={};
+      var vfl = validateFields(fields,_lg);
+      _ddt[_lg.id]= vfl;
+   }
+   return _ddt;
+};
+
+
+const addRemesa = (bdy,auth) => {
+
+   let _form = bdy["form"];
+   let params = bdy["params"];
+   let fields = bdy["fields"];
+   let _now =new Date();
+   _form["createdAt"] = _now.getTime();
+   let Collection = "Remesas";
+   const _nwV = Hrmdb.push(Collection,_form, true);
+   const nd2 = JSON.stringify(_nwV);
+   let _lg = JSON.parse(nd2);
+   let topay = _form.currency=== "CUC"?_form.amount*1.05: _form.currency=== "MLC"?_form.amount*1.4:_form.amount;
+   if(_form.email){
+      var CMSg =`Muchas gracias: ${_form.name} por usar nuestra plataforma\n usted escogio pagar a travez de ${_form.paymentMethod} puede transferir la cantidad de ${topay}USD al 5028875695 \n una vez recibamos su pago el dinero estara disponible para entregar en 6 horas \n que tenga un excelente dia `;
+      let msgEmail = {
+         to: _form.email,
+         from: 'hxrymz@gmail.com',
+         subject: 'Envio de Remesa',           
+         text: CMSg
+      };            
+      callNotifications().sendEmail(msgEmail); 
+   }
+   if(_lg){
+      _ddt={};
+      var vfl = validateFields(fields,_lg);
+      _ddt[_lg.id]= vfl;
+   }
+   return _ddt;
+};
+
 class GraphQuery {
     
     constructor() {
@@ -5032,6 +5102,8 @@ class GraphQuery {
             Hrmdb.getCollection('Logs');
             Hrmdb.getCollection('Regions');
             Hrmdb.getCollection('Logins');  
+
+           
             
             
 
@@ -5082,6 +5154,8 @@ class GraphQuery {
             Hrmdb.calcIndexesAll('User'); 
             
 
+
+
             
 
             updQueryStore("generateToken", generateToken);
@@ -5102,8 +5176,28 @@ class GraphQuery {
             updQueryStore("getDepositedByUser", getDepositedByUser);
 
          
+
+
+
+            /***************************************************** */
+
+
+
+
+            Hrmdb.getCollection('Remesas');
+            Hrmdb.getCollection('BuyBitcoin');
+
+            Hrmdb.createIndexes('Remesas','email');
+            Hrmdb.createIndexes('Remesas','phoneNumber');
+            Hrmdb.createIndexes('Remesas','currency');
+            Hrmdb.createIndexes('BuyBitcoin','email');
+            Hrmdb.createIndexes('BuyBitcoin','phoneNumber');
+
+            Hrmdb.calcIndexesAll('Remesas');
+            Hrmdb.calcIndexesAll('BuyBitcoin');
             
-            
+            updQueryStore("buyBitcoin", buyBitcoin);
+            updQueryStore("addRemesa", addRemesa);
 
 
         });
