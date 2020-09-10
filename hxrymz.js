@@ -5206,7 +5206,7 @@ const _port_ = get_portNew_() ;
 
 
 //app.use(h5bp({ root: path.join(get_root$$_(), 'App', "public")}));
-app.use(express.compress());
+// app.use(express.compress());
 app.use(express.static(path.join(get_root$$_(), 'App', "public")));
 
 
