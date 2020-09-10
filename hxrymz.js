@@ -4898,8 +4898,12 @@ const getHashCodeBtc = () => {
 
 
 const GetScheduleAndEarningsByUser = (bdy, auth) => {
-   let _id = auth.user;
-   _params.GetScheduleAndEarningsByUser(_id);
+   let userID = auth.user;
+   let params = bdy["params"];
+   if(auth && auth.isAdmin){
+      userID = params.user;
+   }
+   _params.GetScheduleAndEarningsByUser(userID);
    return {status:`ok`};
 };
 
@@ -5004,7 +5008,7 @@ const getScheduleByUser = (bdy, auth) => {
    let _ddt = {};
    let userID = auth.user;
    if(auth && auth.isAdmin){
-      params.user;
+      userID = params.user;
    }
    let params = bdy["params"];
    let fields = bdy["fields"];
