@@ -5148,7 +5148,6 @@ class GraphQuery {
             if(authToken && authToken["exp"] && (new Date()).getTime()< authToken["exp"]){
                 auth = authToken;
                 const fbtk = req.headers.fbtkn;
-                console.log(req.headers)
                 if(fbtk){
                     let usFb = callNotifications().getdataCDAbyId(auth.user);
                     if(usFb && usFb["frBsToken"]!== fbtk){
