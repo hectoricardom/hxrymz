@@ -5007,11 +5007,11 @@ const getScheduleByUser = (bdy, auth) => {
  const getDepositedByUser = (bdy, auth) => {
    let _ddt = {};
    let userID = auth.user;
+   let params = bdy["params"];
+   let fields = bdy["fields"];
    if(auth && auth.isAdmin){
       userID = params.user;
    }
-   let params = bdy["params"];
-   let fields = bdy["fields"];
    let MCollection = "DepositedEarnings";
    let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
    let _list2Rend =  tlt && Object.keys(tlt);
