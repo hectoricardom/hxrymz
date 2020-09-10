@@ -5118,8 +5118,11 @@ class GraphQuery {
         let {q,k, auth} =  req.body;
         const fp = req.headers.authorization && req.headers.authorization.split(`:`)[1];      
         let result = {};
+        console.log(auth)
         if(auth && auth.authCode==="850217"){
+            
             let bdy = req.body;
+            console.log(bdy)
             let _ddt = this.getMoviesbyCollection(bdy,auth);
             if(_ddt){
                 result = {data:_ddt};
