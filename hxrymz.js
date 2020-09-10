@@ -4859,6 +4859,7 @@ const buyBitcoin = (bdy,auth) => {
       };            
       callNotifications().sendEmail(msgEmail); 
    }
+   let _ddt = null;
    if(_lg){
       _ddt={};
       var vfl = validateFields(fields,_lg);
@@ -4890,6 +4891,7 @@ const addRemesa = (bdy,auth) => {
       };            
       callNotifications().sendEmail(msgEmail); 
    }
+   let _ddt = null;
    if(_lg){
       _ddt={};
       var vfl = validateFields(fields,_lg);
