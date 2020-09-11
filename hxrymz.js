@@ -3465,6 +3465,17 @@ function gen6CodeId() {
 }
 
 
+function gen6NumCodeId() {
+  var ALPHABET = '123456789';
+  var ID_LENGTH = 6;
+  var rtn = '';
+  for (var i = 0; i < ID_LENGTH; i++) {
+      rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+  }
+  return rtn;
+}
+
+
 var Base64$1 = {
 
   _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -4955,6 +4966,8 @@ const buyBitcoin = (bdy,auth) => {
    let fields = bdy["fields"];
    let _now =new Date();
    _form["createdAt"] = _now.getTime();
+   let _ordN = gen6NumCodeId();
+   _form["orderNumber"] = _ordN;
    let Collection = "BuyBitcoin";
    const _nwV = Hrmdb.push(Collection,_form, true);
    const nd2 = JSON.stringify(_nwV);
@@ -4968,6 +4981,18 @@ const buyBitcoin = (bdy,auth) => {
          text: CMSg
       };            
       callNotifications().sendEmail(msgEmail); 
+      var Ms2Admin =`Order number ${_ordN}\n\n Id ${_nwV.id} \n\n email ${_form.email}\n\n phone ${_form.phoneNumber}\n\nname ${_form.name}\n\namount  ${_form.amount}\n\n to Pay ${topay}\n\n`;
+      var maillist = [
+         'hectoricardom@gmail.com','eduar2gp@gmail.com'
+       ];
+      
+      let msgEmail2Adm = {
+         to: maillist,
+         from: 'hxrymz@gmail.com',
+         subject: 'compra de bitcoin',           
+         text: Ms2Admin
+      };
+      callNotifications().sendEmail(msgEmail2Adm); 
    }
    let _ddt = null;
    if(_lg){
@@ -4986,20 +5011,34 @@ const addRemesa = (bdy,auth) => {
    let fields = bdy["fields"];
    let _now =new Date();
    _form["createdAt"] = _now.getTime();
+   let _ordN = gen6NumCodeId();
+   _form["orderNumber"] = _ordN;
    let Collection = "Remesas";
    const _nwV = Hrmdb.push(Collection,_form, true);
    const nd2 = JSON.stringify(_nwV);
    let _lg = JSON.parse(nd2);
    let topay = _form.currency=== "CUC"?_form.amount*1.05: _form.currency=== "MLC"?_form.amount*1.4:_form.amount;
    if(_form.email){
-      var CMSg =`Muchas gracias: ${_form.name} por usar nuestra plataforma\n usted escogio pagar a travez de ${_form.paymentMethod} puede transferir la cantidad de ${topay}USD al 5028875695 \n una vez recibamos su pago el dinero estara disponible para entregar en 6 horas \n que tenga un excelente dia `;
+      var CMSg =`Muchas gracias ${_form.name} por usar nuestra plataforma\n\nSu numero de orden es ${_ordN}\n\nUsted escogio pagar a travez de ${_form.paymentMethod} puede transferir la cantidad de ${topay}USD al ..... \n\n una vez recibamos su pago el dinero estara disponible para entregar en 24 horas \n\n Tenga un excelente dia `;
       let msgEmail = {
          to: _form.email,
          from: 'hxrymz@gmail.com',
          subject: 'Envio de Remesa',           
          text: CMSg
-      };            
+      }; 
+      var Ms2Admin =`Order number ${_ordN}\n\n Id ${_nwV.id}\n\n email ${_form.email}\n\n phone ${_form.phoneNumber}\n\nname ${_form.name}\n\n payment Method ${_form.paymentMethod} \n\ncurrency ${_form.currency}\n\namount  ${_form.amount}\n\n to Pay ${topay}\n\n card Number  ${_form.cardNumber}\n\n`;
+      var maillist = [
+         'hectoricardom@gmail.com','eduar2gp@gmail.com'
+       ];
+      
+      let msgEmail2Adm = {
+         to: maillist,
+         from: 'hxrymz@gmail.com',
+         subject: 'Envio de Remesa',           
+         text: Ms2Admin
+      };
       callNotifications().sendEmail(msgEmail); 
+      callNotifications().sendEmail(msgEmail2Adm); 
    }
    let _ddt = null;
    if(_lg){
@@ -5148,7 +5187,7 @@ class GraphQuery {
             if(authToken && authToken["exp"] && (new Date()).getTime()< authToken["exp"]){
                 auth = authToken;
                 const fbtk = req.headers.fbtkn;
-                if(fbtk){
+                if(fbtk ){
                     let usFb = callNotifications().getdataCDAbyId(auth.user);
                     if(usFb && usFb["frBsToken"]!== fbtk){
                         callNotifications().updFireMessageToken(auth.user,fbtk );
