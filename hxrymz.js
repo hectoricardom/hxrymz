@@ -5070,7 +5070,7 @@ const addRemesa = (bdy,auth) => {
          from: 'hxrymz@gmail.com',
          subject: 'Envio de Remesa',           
          text: Ms2Admin,
-         html:  html
+         // html:  html
       };
       callNotifications().sendEmail(msgEmail2Adm); 
    }
