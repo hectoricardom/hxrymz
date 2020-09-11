@@ -4978,7 +4978,7 @@ const buyBitcoin = (bdy,auth) => {
    const nd2 = JSON.stringify(_nwV);
    let _lg = JSON.parse(nd2);
    if(_form.email){
-      var template3 = get_fs$$_().readFileSync(emailView_Fld+'/bitcoin.hjs','utf-8');
+      var template3 = get_fs$$_$1().readFileSync(emailView_Fld+'/bitcoin.hjs','utf-8');
       var html3 = ejs.render(template3,{
          name:_form.name, 
          hello:"Hemos recivido su solicitud para comprar bitcoins", 
@@ -5037,7 +5037,7 @@ const addRemesa = (bdy,auth) => {
 
    if(_form.email){
       //var CMSg =`una vez recibamos su pago el dinero estara disponible para entregar en 24 horas \n\n Tenga un excelente dia `;
-      var template3 = get_fs$$_().readFileSync(emailView_Fld+'/remesa.hjs','utf-8');
+      var template3 = get_fs$$_$1().readFileSync(emailView_Fld+'/remesa.hjs','utf-8');
       var html3 = ejs.render(template3,{
          name:_form.name, 
          email:_form.email, 
