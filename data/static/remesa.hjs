@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">   
+     </head>   
+
+    <style type="text/css">
+      body,
+      html,
+      .body {
+        background: #f3f3f3 !important;
+      }
+      
+      .header {
+        background: #f3f3f3;
+      }
+    </style>
+
+  <body ng-app="app">
+    <!-- <style> -->
+      <div style="font-size:16px;background-color:#fdfdfd;margin:0;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;line-height:1.5;height:100%!important;width:100%!important">
+
+        <table bgcolor="#fdfdfd" class="m_-1089486039288518622body" style="box-sizing:border-box;border-spacing:0;width:100%;background-color:#fdfdfd;border-collapse:separate!important" width="100%">
+        
+          <tbody>
+        
+            <tr>
+        
+              <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">&nbsp;</td>
+        
+              <td class="m_-1089486039288518622container" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;display:block;width:600px;max-width:600px;margin:0 auto!important" valign="top" width="600">
+        
+              <div class="m_-1089486039288518622content" style="box-sizing:border-box;display:block;max-width:600px;margin:0 auto;padding:10px"><span class="m_-1089486039288518622preheader" style="color:#fff;display:none;height:60px;opacity:1;overflow:hidden;width:600px;background-color:rgb(94, 53, 177);"></span>
+        
+              <div class="m_-1089486039288518622header" style="box-sizing:border-box;width:100%;margin-bottom:30px;margin-top:15px">
+        
+              <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+        
+                <tbody>
+        
+                  <tr>
+        
+                    <td align="left" class="m_-1089486039288518622align-left" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;text-align:left" valign="top">
+                      <span class="m_-1089486039288518622sg-image">
+                        <a  style="box-sizing:border-box;color:#348eda;font-weight:400;text-decoration:none" target="_blank">
+                        </a>
+                      </span>
+                    </td>
+        
+                  </tr>
+        
+                </tbody>
+        
+              </table>
+        
+              </div>
+        
+        
+        
+              <div class="m_-1089486039288518622block" style="box-sizing:border-box;width:100%;margin-bottom:30px;background:#ffffff;border:1px solid #f0f0f0">
+        
+              <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+        
+                <tbody>
+        
+                  <tr>
+        
+                    <td class="m_-1089486039288518622wrapper" style="box-sizing:border-box;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding:30px" valign="top">
+        
+                    <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+        
+                      <tbody>
+        
+                        <tr>
+                          <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+        
+                            <h2 style="margin:0;margin-bottom:7px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:600;line-height:1.5;font-size:28px;color:rgb(94, 53, 177)!important">Gracias por usar nuestar plataforma.</h2>
+                            <p style="margin:0;margin-bottom:5px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:22px;font-weight:300"><strong><%= name %></strong>
+                            </p>
+                            <p  style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:17px;font-weight:300"> Su numero de Orden es <strong><%= ftr %></strong></p>
+          
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+        
+                            <p style="margin:0;margin-bottom:5px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300">Hemos recibido su solicitud para un envio de <strong>$<%= amount %></strong> en <strong><%= currency %></strong> </p>
+                            <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300">Usted eligio pagar con <strong> <%= paymentMethod %> </strong> puede transferir la cantidad de <strong> $<%= topay %>  </strong> a la cuenta <strong> <%= acount %>  </strong> </p>
+          
+                          </td>
+                        </tr>
+        
+                        <tr>
+        
+                          <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+        
+                          <table cellpadding="0" cellspacing="0" class="m_-1089486039288518622btn m_-1089486039288518622btn-primary" style="box-sizing:border-box;border-spacing:0;width:100%;border-collapse:separate!important" width="100%">
+        
+                            <tbody>
+        
+                              <tr>
+        
+                                <td align="center" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding-bottom:15px" valign="top">
+        
+                                <table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:auto;border-collapse:separate!important">
+        
+                                  <tbody>
+        
+                                    <tr>
+        
+                                      <td align="center" bgcolor="#348eda" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;background-color:transparent;border-radius:2px;text-align:center" valign="top">
+                                        <img height="180" width="520" src="https://firebasestorage.googleapis.com/v0/b/hrm-1128.appspot.com/o/images%2Fremesa_track.png?alt=media&token=d6542542-ef7a-46f8-955e-2471c70659bf"/>
+                                      </td>
+        
+                                    </tr>
+        
+                                  </tbody>
+        
+                                </table>
+        
+                                </td>
+        
+                              </tr>
+        
+                            </tbody>
+        
+                          </table>
+        
+                          </td>
+        
+                        </tr>
+        
+                        <tr>
+        
+                          <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+        
+                            
+                          <p style="margin:0;margin-bottom:10px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300">&nbsp;<br>
+                            Una vez recibamos su pago el dinero estara disponible para entregar en su tarjeta <strong> #<%= cardNumber %></strong> en 72 horas
+                          </p>
+                          <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300">&nbsp;<br>
+        
+                          le enviaremos un correo a <a style="margin:0;text-decoration: none;color:#294661;font-weight:600;" href="mailto:<%= email %>" target="_blank"><%= email %></a> con los detalles del pago </p>
+        
+        
+                          <p style="margin:0;margin-bottom:1px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300">gracias por elegirnos, cualquier duda contactenos en<br>        
+                          </p>
+                          <a  style="margin:0;text-decoration: none;color:rgb(94, 53, 177);" href="mailto:qvaremesas@gmail.com" target="_blank">qvaremesa@gmail.com</a>
+                         </td>
+        
+                        </tr>
+        
+                      </tbody>
+        
+                    </table>
+        
+                    </td>
+        
+                  </tr>
+        
+                </tbody>
+        
+              </table>
+        
+              </div>
+               
+        
+        
+              </div>
+        
+              </td>
+        
+              <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">&nbsp;</td>
+        
+            </tr>
+        
+          </tbody>
+        
+        </table>
+        
+        
+        </div>
+  </body>
+
+</html>

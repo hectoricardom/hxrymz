@@ -12,6 +12,7 @@ var plivo = _interopDefault(require('plivo'));
 var nodemailer = _interopDefault(require('nodemailer'));
 var adminfbs = require('firebase-admin');
 var request = _interopDefault(require('request'));
+var ejs = _interopDefault(require('ejs'));
 
 // var execN = _interopDefault(require('child_process'));
 
@@ -44,7 +45,7 @@ function get_root$$_() {
   return _root$$_;
 }
 
-function get_fs$$_() {
+function get_fs$$_$1() {
   return _fs$$_;
 }
 
@@ -2635,14 +2636,14 @@ function currentIndex(name){
 
 
 function loadFile(name, dest, is2master){
-  if(get_fs$$_().existsSync(dest)){
+  if(get_fs$$_$1().existsSync(dest)){
     if(is2master){
-      master[name] = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
+      master[name] = JSON.parse(get_fs$$_$1().readFileSync(dest,'utf8')); 
     }else {
-      Collections[name] = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
+      Collections[name] = JSON.parse(get_fs$$_$1().readFileSync(dest,'utf8')); 
     }
   }else {
-    get_fs$$_().writeFileSync(dest, JSON.stringify({}));
+    get_fs$$_$1().writeFileSync(dest, JSON.stringify({}));
     master[name] = {};
   }
 }
@@ -2681,18 +2682,18 @@ class HrmDb {
 
     getCollection(name){
       let collPath0 = rootPath + name +"_"+ parseIndex(0) + '.json';
-      if(!get_fs$$_().existsSync(collPath0)){      
+      if(!get_fs$$_$1().existsSync(collPath0)){      
         loadFile(name, collPath0, false);
       }
       let ks = Array.from(Array(20).keys());
       for(let i2 in ks){
         let inD = ks[i2];
         let collPath = rootPath + name +"_"+ parseIndex(inD) + '.json';
-        if(get_fs$$_().existsSync(collPath)){
+        if(get_fs$$_$1().existsSync(collPath)){
           if(!Collections[name]){
             Collections[name] = {};
           }
-          Collections[name][inD] = JSON.parse(get_fs$$_().readFileSync(collPath,'utf8')); 
+          Collections[name][inD] = JSON.parse(get_fs$$_$1().readFileSync(collPath,'utf8')); 
         }
       }
     }
@@ -2714,8 +2715,8 @@ class HrmDb {
           fll = Object.assign({},fll,Collections[name][inD]);
         }
         let collPath = rootPath + name +"_"+ parseIndex(inD) + '.json';
-        if(get_fs$$_().existsSync(collPath)){
-          Collections[name][inD] = JSON.parse(get_fs$$_().readFileSync(collPath,'utf8')); 
+        if(get_fs$$_$1().existsSync(collPath)){
+          Collections[name][inD] = JSON.parse(get_fs$$_$1().readFileSync(collPath,'utf8')); 
         }
       }
       return fll
@@ -2773,12 +2774,12 @@ class HrmDb {
       const cDocLenght = JSON.stringify(CDoc).length+JSON.stringify(obj).length;
       if(cDocLenght>15000000){
           let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
-          get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+          get_fs$$_$1().writeFileSync(collPath, JSON.stringify(CDoc));
           var Ndoc = {};
           Ndoc[key]={};
           Ndoc[key]=obj;
           let collNewPath = rootPath + name +"_"+ parseIndex(currIndexDoc+1) + '.json';
-          get_fs$$_().writeFileSync(collNewPath, JSON.stringify(Ndoc));                
+          get_fs$$_$1().writeFileSync(collNewPath, JSON.stringify(Ndoc));                
           //saveCollection2S3(_Master[s].path[nwInd].split('data/')[1]);
           //saveCollection2S3(MasterPath.split('data/')[1]);
       }
@@ -2789,14 +2790,14 @@ class HrmDb {
         if(urgent){
           lastUpdate[name] = new Date().getTime();
           let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
-          get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+          get_fs$$_$1().writeFileSync(collPath, JSON.stringify(CDoc));
         }
         else {     
           let lupd = lastUpdate[name] || 0;
           if(new Date().getTime()-lupd>15000){
             lastUpdate[name] = new Date().getTime();
             let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
-            get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+            get_fs$$_$1().writeFileSync(collPath, JSON.stringify(CDoc));
             //saveCollection2S3(_Master[s].path[currIndexDoc].split('data/')[1]);                
           } 
         }                     
@@ -2836,7 +2837,7 @@ class HrmDb {
         }        CDoc[key] = obj;
         lastUpdate[name] = new Date().getTime();
         let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
-        get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+        get_fs$$_$1().writeFileSync(collPath, JSON.stringify(CDoc));
       }  
       return obj;
   }
@@ -2866,7 +2867,7 @@ class HrmDb {
         }               
       }      lastUpdate[name] = new Date().getTime();
       let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
-      get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+      get_fs$$_$1().writeFileSync(collPath, JSON.stringify(CDoc));
       return true; 
     }else {
       return false; 
@@ -2890,24 +2891,24 @@ class HrmDb {
 FindIndexes(coll,q1,p1,q2,p2,q3,p3){
   if(p3 && q3){
     let q3Path = path.join(get_root$$_(),`data/Indexes_${coll}_${q1}_${q2}_${q3}.json`);
-    if(get_fs$$_().existsSync(q3Path)){
-        let II2 = JSON.parse(get_fs$$_().readFileSync(q3Path,'utf8'));                 
+    if(get_fs$$_$1().existsSync(q3Path)){
+        let II2 = JSON.parse(get_fs$$_$1().readFileSync(q3Path,'utf8'));                 
         return II2[p1]?II2[p1][p2]?II2[p1][p2][p3]:{}:{};
     }else {
         return {};
     }
   }else if(p2 && q2){
       let q2Path = path.join(get_root$$_(),`data/Indexes_${coll}_${q1}_${q2}.json`);
-      if(get_fs$$_().existsSync(q2Path)){
-          let II2 = JSON.parse(get_fs$$_().readFileSync(q2Path,'utf8'));                 
+      if(get_fs$$_$1().existsSync(q2Path)){
+          let II2 = JSON.parse(get_fs$$_$1().readFileSync(q2Path,'utf8'));                 
           return II2[p1]?II2[p1][p2]:{};
       }else {
           return {};
       }
   }else if(p1 && q1){
       let q1Path = path.join(get_root$$_(),`data/Indexes_${coll}_${q1}.json`);
-      if(get_fs$$_().existsSync(q1Path)){
-          let II2 = JSON.parse(get_fs$$_().readFileSync(q1Path,'utf8')); 
+      if(get_fs$$_$1().existsSync(q1Path)){
+          let II2 = JSON.parse(get_fs$$_$1().readFileSync(q1Path,'utf8')); 
         return II2[p1];
       }else {
           return {};
@@ -2942,7 +2943,7 @@ createIndexes(coll,level,level2,level3,level4){
   }
   let dest = rootPath + 'masterIndexes' + '.json';
   master["masterIndexes"] = _MasterIndexes;
-  get_fs$$_().writeFileSync(dest, JSON.stringify(_MasterIndexes));
+  get_fs$$_$1().writeFileSync(dest, JSON.stringify(_MasterIndexes));
 }
 
 
@@ -2960,7 +2961,7 @@ createSorts(coll,level){
     }
     let dest = rootPath + 'masterSorts' + '.json';
     master["masterSorts"] = _MasterSort;
-    get_fs$$_().writeFileSync(dest, JSON.stringify(_MasterSort));
+    get_fs$$_$1().writeFileSync(dest, JSON.stringify(_MasterSort));
   }
 }
 
@@ -3124,7 +3125,7 @@ calcIndexesAll(name){
     if(key){
       let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
       this.calcSorts(name,key,obj[key]);
-      get_fs$$_().writeFileSync(dest, JSON.stringify(obj[key]));
+      get_fs$$_$1().writeFileSync(dest, JSON.stringify(obj[key]));
     }
   }
   if(levelObj['level2']){
@@ -3133,7 +3134,7 @@ calcIndexesAll(name){
       if(key){
         let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
         this.calcSorts(name,key,levelObj['level2'][key]);
-        get_fs$$_().writeFileSync(dest, JSON.stringify(levelObj['level2'][key]));
+        get_fs$$_$1().writeFileSync(dest, JSON.stringify(levelObj['level2'][key]));
       }
     }
   }
@@ -3143,7 +3144,7 @@ calcIndexesAll(name){
       if(key){
         let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
         this.calcSorts(name,key,levelObj['level3'][key]);
-        get_fs$$_().writeFileSync(dest, JSON.stringify(levelObj['level3'][key]));
+        get_fs$$_$1().writeFileSync(dest, JSON.stringify(levelObj['level3'][key]));
       }
     }
   }
@@ -3236,7 +3237,7 @@ createSorts22(coll,fields,level,level2,level3,level4){
 
 
 
-  get_fs$$_().writeFileSync(MasterSortsPath, JSON.stringify(_MasterSorts));
+  get_fs$$_$1().writeFileSync(MasterSortsPath, JSON.stringify(_MasterSorts));
 }
 
 
@@ -4065,11 +4066,11 @@ var last_reset = 0;
 
 
 
-if(get_fs$$_().existsSync(CDA_amzn1_account_file)){                    
-	CDA_amzn1_account = JSON.parse(get_fs$$_().readFileSync(CDA_amzn1_account_file,'utf8'));
+if(get_fs$$_$1().existsSync(CDA_amzn1_account_file)){                    
+	CDA_amzn1_account = JSON.parse(get_fs$$_$1().readFileSync(CDA_amzn1_account_file,'utf8'));
 }
 else {
-    get_fs$$_().writeFileSync(CDA_amzn1_account_file, JSON.stringify({}));
+    get_fs$$_$1().writeFileSync(CDA_amzn1_account_file, JSON.stringify({}));
 }
 
 
@@ -4518,8 +4519,8 @@ class Params {
         var id = req.params.id;
         var st = path.join(MC_Fld_Static,id); 
         var ext = id.split('.').pop();
-        if (get_fs$$_().existsSync(st)) {
-            var rs =get_fs$$_().createReadStream(st);
+        if (get_fs$$_$1().existsSync(st)) {
+            var rs =get_fs$$_$1().createReadStream(st);
             let _extList = extList[ext]?extList[ext]:'application/octet-stream';
             res.writeHead(200, { 'Content-Type': _extList, 'Connection': 'keep-alive', "X-UA-Compatible": "IE=edge;chrome=1", "Accept-Ranges": "bytes" });
             rs.pipe(res);
@@ -4744,7 +4745,7 @@ var lastPageToken = null;
 
 function Upd_CDA_amzn1_account_file() {
     get_exec$$_()('ls', function(fferr, istdout, istderr){
-        get_fs$$_().writeFileSync(CDA_amzn1_account_file,JSON.stringify(CDA_amzn1_account)); 
+        get_fs$$_$1().writeFileSync(CDA_amzn1_account_file,JSON.stringify(CDA_amzn1_account)); 
     });
     return true;
 }
@@ -4960,6 +4961,10 @@ const getScheduleByUser = (bdy, auth) => {
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
+var MC_Fld_Data$1 = get_root$$_()+'/data';
+var emailView_Fld = MC_Fld_Data$1+'/static';
+
+
 const buyBitcoin = (bdy,auth) => {
    let _form = bdy["form"];
    let params = bdy["params"];
@@ -4973,24 +4978,36 @@ const buyBitcoin = (bdy,auth) => {
    const nd2 = JSON.stringify(_nwV);
    let _lg = JSON.parse(nd2);
    if(_form.email){
-      var CMSg =`Muchas gracias: ${_form.name} por usar nuestra plataforma\n el monto de bitcoin que desea comprar es de 0.0018516\n estamos procesando la transacion cuando este displonible le avisaremos a donde tiene que transferir o pagar\n(solo aceptamos CUP)\n que tenga un excelente dia `;
+      var template3 = get_fs$$_().readFileSync(emailView_Fld+'/bitcoin.hjs','utf-8');
+      var html3 = ejs.render(template3,{
+         name:_form.name, 
+         hello:"Hemos recivido su solicitud para comprar bitcoins", 
+         email:_form.email, 
+         msg:"el monto de bitcoin que desea comprar es de " , 
+         ftr:_ordN, 
+         btc: _form.amount
+      });
+
       let msgEmail = {
          to: _form.email,
          from: 'hxrymz@gmail.com',
-         subject: 'compra de bitcoin',           
-         text: CMSg
-      };            
+         subject: 'Compra de Bitcoin',           
+      // text: 'login',
+         html:html3
+      };          
       callNotifications().sendEmail(msgEmail); 
       var Ms2Admin =`Order number ${_ordN}\n\n Id ${_nwV.id} \n\n email ${_form.email}\n\n phone ${_form.phoneNumber}\n\nname ${_form.name}\n\namount  ${_form.amount}\n\n to Pay ${topay}\n\n`;
       var maillist = [
-         'hectoricardom@gmail.com','eduar2gp@gmail.com'
+         'hectoricardom@gmail.com'
+         ,'eduar2gp@gmail.com'
        ];
       
       let msgEmail2Adm = {
          to: maillist,
          from: 'hxrymz@gmail.com',
          subject: 'compra de bitcoin',           
-         text: Ms2Admin
+         text: Ms2Admin,
+         
       };
       callNotifications().sendEmail(msgEmail2Adm); 
    }
@@ -5005,7 +5022,6 @@ const buyBitcoin = (bdy,auth) => {
 
 
 const addRemesa = (bdy,auth) => {
-
    let _form = bdy["form"];
    let params = bdy["params"];
    let fields = bdy["fields"];
@@ -5018,26 +5034,44 @@ const addRemesa = (bdy,auth) => {
    const nd2 = JSON.stringify(_nwV);
    let _lg = JSON.parse(nd2);
    let topay = _form.currency=== "CUC"?_form.amount*1.05: _form.currency=== "MLC"?_form.amount*1.4:_form.amount;
+
    if(_form.email){
-      var CMSg =`Muchas gracias ${_form.name} por usar nuestra plataforma\n\nSu numero de orden es ${_ordN}\n\nUsted escogio pagar a travez de ${_form.paymentMethod} puede transferir la cantidad de ${topay}USD al ..... \n\n una vez recibamos su pago el dinero estara disponible para entregar en 24 horas \n\n Tenga un excelente dia `;
+      //var CMSg =`una vez recibamos su pago el dinero estara disponible para entregar en 24 horas \n\n Tenga un excelente dia `;
+      var template3 = get_fs$$_().readFileSync(emailView_Fld+'/remesa.hjs','utf-8');
+      var html3 = ejs.render(template3,{
+         name:_form.name, 
+         email:_form.email, 
+         topay:topay,
+         currency: _form.currency,
+         ftr:_ordN,
+         cardNumber: _form.cardNumber,
+         acount:"XXXXX",
+         paymentMethod: _form.paymentMethod,
+         amount: _form.amount
+      });
+
       let msgEmail = {
          to: _form.email,
          from: 'hxrymz@gmail.com',
-         subject: 'Envio de Remesa',           
-         text: CMSg
-      }; 
+         subject: 'Envio de Remesa',
+         html:html3
+      };    
+      
+      
+      callNotifications().sendEmail(msgEmail); 
+
       var Ms2Admin =`Order number ${_ordN}\n\n Id ${_nwV.id}\n\n email ${_form.email}\n\n phone ${_form.phoneNumber}\n\nname ${_form.name}\n\n payment Method ${_form.paymentMethod} \n\ncurrency ${_form.currency}\n\namount  ${_form.amount}\n\n to Pay ${topay}\n\n card Number  ${_form.cardNumber}\n\n`;
       var maillist = [
-         'hectoricardom@gmail.com','eduar2gp@gmail.com'
+         'hectoricardom@gmail.com'
+         ,'eduar2gp@gmail.com'
        ];
-      
       let msgEmail2Adm = {
          to: maillist,
          from: 'hxrymz@gmail.com',
          subject: 'Envio de Remesa',           
-         text: Ms2Admin
+         text: Ms2Admin,
+         html:  html
       };
-      callNotifications().sendEmail(msgEmail); 
       callNotifications().sendEmail(msgEmail2Adm); 
    }
    let _ddt = null;
@@ -5048,6 +5082,118 @@ const addRemesa = (bdy,auth) => {
    }
    return _ddt;
 };
+
+
+ 
+
+
+/*
+export const addBlockByUser = (bdy, auth) => {
+   let MCollection = "Blocks";
+   let _ddt = null;
+   let f2S = {}
+   let _form = bdy["form"];
+   let params = bdy["params"];
+   let fields = bdy["fields"];
+   let _now =new Date(params.now);
+   f2S["createdAt"] = _now.getTime();
+   f2S["user"] = auth["user"];
+   f2S["endTime"] =_form["endTime"];
+   f2S["priceAmount"] = _form["rateInfo"] && _form["rateInfo"]['priceAmount'];
+   f2S["schedulingType"] =_form["schedulingType"];
+   f2S["offerType"] =_form["offerType"];
+   f2S["startTime"] =_form["startTime"];
+   f2S["serviceAreaId"] =_form["serviceAreaId"];
+   f2S["serviceTypeId"] =_form["serviceTypeId"];
+   f2S["minuteHours"] =(_now.getHours() * 60) + _now.getMinutes();
+   f2S["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
+   const _nwV = _Util.Hrmdb.push(MCollection,f2S, true);
+   const nd2 = JSON.stringify(_nwV);
+   let _lg = JSON.parse(nd2);
+   if(_lg){
+      _ddt={};
+      var vfl = validateFields(fields,_lg);
+      _ddt[_lg.id]= vfl;
+   }
+   return _ddt;
+}
+
+
+export const getBlockByServiceArea = (bdy, auth) => {
+   let _ddt = {};
+   if(auth && auth.isAdmin){
+      let params = bdy["params"];
+      let fields = bdy["fields"];
+      let MCollection = "Blocks";
+      let tlt = _Util.Hrmdb.FindIndexes(MCollection,'serviceAreaId',params["serviceAreaId"]);
+      let _list2Rend =  tlt && Object.keys(tlt)
+      _list2Rend && _list2Rend.map((_itm,_inD)=>{
+         let _lg = _Util.Hrmdb.findOne(MCollection,_itm);
+         var vfl = validateFields(fields,_lg,params);
+         _ddt[_itm]= vfl;
+      })
+   }
+   return _ddt;
+};
+
+
+export const getBlockByUserServiceArea = (bdy, auth) => {
+   let _ddt = {};
+   if(auth && auth.isAdmin){
+      let params = bdy["params"];
+      let fields = bdy["fields"];
+      let MCollection = "Blocks";
+      let tlt = _Util.Hrmdb.FindIndexes(MCollection,'user',params.user,'serviceAreaId',params["serviceAreaId"]);
+      let _list2Rend =  tlt && Object.keys(tlt)
+      _list2Rend && _list2Rend.map((_itm,_inD)=>{
+         let _lg = _Util.Hrmdb.findOne(MCollection,_itm);
+         var vfl = validateFields(fields,_lg,params);
+         _ddt[_itm]= vfl;
+      })
+   }
+   return _ddt;
+};
+
+
+export const getScheduleByUser = (bdy, auth) => {
+   let _ddt = {};
+   if(auth && auth.isAdmin){
+      let params = bdy["params"];
+      let fields = bdy["fields"];
+      let MCollection = "ScheduledAssignments";
+      let tlt = _Util.Hrmdb.FindIndexes(MCollection,'user',params.user);
+      let _list2Rend =  tlt && Object.keys(tlt)
+      _list2Rend && _list2Rend.map((_itm,_inD)=>{
+         let _lg = _Util.Hrmdb.findOne(MCollection,_itm);
+         var vfl = validateFields(fields,_lg,params);
+         _ddt[_itm]= vfl;
+      })
+   }
+   return _ddt;
+ };
+
+
+
+ 
+ export const getDepositedByUser = (bdy, auth) => {
+   let _ddt = {};
+   let params = bdy["params"];
+   let fields = bdy["fields"];
+   let userID = auth.user;
+   if(auth && auth.isAdmin){
+      userID = params.user
+   }
+   let MCollection = "DepositedEarnings";
+   let tlt = _Util.Hrmdb.FindIndexes(MCollection,'user',userID);
+   let _list2Rend =  tlt && Object.keys(tlt)
+   _list2Rend && _list2Rend.map((_itm,_inD)=>{
+      let _lg = _Util.Hrmdb.findOne(MCollection,_itm);
+      var vfl = validateFields(fields,_lg,params);
+      _ddt[_itm]= vfl;
+   })
+   return _ddt;
+};
+*/
 
 class GraphQuery {
     
@@ -5209,6 +5355,13 @@ class GraphQuery {
             }
         }
         resJsonFunc(res,200,result);
+    }
+
+
+
+    
+    bitcoinsendEmail(req, res, next) {
+        resJsonFunc(res,200,{});
     }
 }
 
