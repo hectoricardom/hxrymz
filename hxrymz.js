@@ -5039,15 +5039,20 @@ const addRemesa = (bdy,auth) => {
       //var CMSg =`una vez recibamos su pago el dinero estara disponible para entregar en 24 horas \n\n Tenga un excelente dia `;
       var template3 = get_fs$$_$1().readFileSync(emailView_Fld+'/remesa.hjs','utf-8');
       var html3 = ejs.render(template3,{
-         name:_form.name, 
-         email:_form.email, 
-         topay:topay,
-         currency: _form.currency,
-         ftr:_ordN,
-         cardNumber: _form.cardNumber,
-         acount:"XXXXX",
-         paymentMethod: _form.paymentMethod,
-         amount: _form.amount
+        name:_form.name, 
+        email:_form.email, 
+        topay:topay,
+        currency: _form.currency,
+        ftr:_ordN,
+        delivery: _form.delivery,
+        receiverName: _form.detinationName,
+        receiverPhone:_form.detinationPhoneNumber,
+        cardNumber: _form.delivery === "Deposito"?` #${_form.cardNumber} `:` ${_form.address}, ${_form.city}, ${_form.estate}`,
+        acount:"XXXXX",
+        iscard:_form.delivery === "Deposito"?"la tarjeta":"", 
+        hours:_form.delivery === "Deposito"?"72":"24", 
+        paymentMethod: _form.paymentMethod,
+        amount: _form.amount
       });
 
       let msgEmail = {
@@ -5060,7 +5065,22 @@ const addRemesa = (bdy,auth) => {
       
       callNotifications().sendEmail(msgEmail); 
 
-      var Ms2Admin =`Order number ${_ordN}\n\n Id ${_nwV.id}\n\n email ${_form.email}\n\n phone ${_form.phoneNumber}\n\nname ${_form.name}\n\n payment Method ${_form.paymentMethod} \n\ncurrency ${_form.currency}\n\namount  ${_form.amount}\n\n to Pay ${topay}\n\n card Number  ${_form.cardNumber}\n\n`;
+      var Ms2Admin =`
+        Order number ${_ordN}\n\n
+        Id ${_nwV.id}\n\n 
+        email ${_form.email}\n\n 
+        phone ${_form.phoneNumber}\n\n
+        name ${_form.name}\n\n 
+        payment Method ${_form.paymentMethod} \n\n
+        currency ${_form.currency}\n\n
+        amount  ${_form.amount}\n\n to Pay ${topay}\n\n
+        deliveryMethod ${_form.delivery}\n\n        
+        receiverName ${_form.detinationName}\n\n
+        receiverPhone ${_form.detinationPhoneNumber}\n\n
+        card Number  ${_form.cardNumber}\n\n
+        address  ${_form.address}, ${_form.city}, ${_form.estate}\n\n
+        carnetID  ${_form.cid}\n\n
+        `;
       var maillist = [
          'hectoricardom@gmail.com'
          ,'eduar2gp@gmail.com'
