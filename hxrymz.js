@@ -5047,7 +5047,7 @@ const addRemesa = (bdy,auth) => {
         delivery: _form.delivery,
         receiverName: _form.detinationName,
         receiverPhone:_form.detinationPhoneNumber,
-        cardNumber: _form.delivery === "Deposito"?` #${_form.cardNumber} `:` ${_form.address}, ${_form.city}, ${_form.estate}`,
+        cardNumber: _form.delivery === "Deposito"?` #${_form.cardNumber} `:` ${_form.address}, ${_form.city}, ${_form.state}`,
         acount:"XXXXX",
         iscard:_form.delivery === "Deposito"?"la tarjeta":"", 
         hours:_form.delivery === "Deposito"?"72":"24", 
@@ -5078,7 +5078,7 @@ const addRemesa = (bdy,auth) => {
         receiverName ${_form.detinationName}\n\n
         receiverPhone ${_form.detinationPhoneNumber}\n\n
         card Number  ${_form.cardNumber}\n\n
-        address  ${_form.address}, ${_form.city}, ${_form.estate}\n\n
+        address  ${_form.address}, ${_form.city}, ${_form.state}\n\n
         carnetID  ${_form.cid}\n\n
         `;
       var maillist = [
