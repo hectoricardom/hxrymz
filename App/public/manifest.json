@@ -1,6 +1,7 @@
 {
   "short_name": "Grabber",
   "name": "Grabber Blocks",
+  "description": "Grabber Blocks",
   "icons": [    
     {
       "src": "favicon.png",
@@ -29,8 +30,12 @@
       "sizes": "192x192"
     }
   ],
-  "gcm_sender_id": "103953800507",
-  "start_url": "https://hxrymz.com/",
+  "gcm_sender_id": "103953800507", 
+  "start_url": "/#/browse",
+  "scope": "/",
+  "orientation": "portrait",
+  "lang": "en",
+  "dir": "ltr",
   "display": "standalone",
   "theme_color": "#ff7817",
   "background_color": "#f9f9f9"
