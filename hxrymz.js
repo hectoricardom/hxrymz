@@ -4963,7 +4963,7 @@ const getDepositedByUser = (bdy, auth) => {
 
 
 
-export const getServiceEarningsByUser = (bdy, auth) => {
+const getServiceEarningsByUser = (bdy, auth) => {
   let _ddt = {};
   let params = bdy["params"];
   let fields = bdy["fields"];
