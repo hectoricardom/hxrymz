@@ -4902,66 +4902,91 @@ const getBlockByServiceArea = (bdy, auth) => {
 
 
 const getBlockByUserServiceArea = (bdy, auth) => {
-   let _ddt = {};
-   if(auth && auth.isAdmin){
+  let _ddt = {};
+  if(auth && auth.isAdmin){
       let params = bdy["params"];
       let fields = bdy["fields"];
       let MCollection = "Blocks";
       let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user,'serviceAreaId',params["serviceAreaId"]);
       let _list2Rend =  tlt && Object.keys(tlt);
       _list2Rend && _list2Rend.map((_itm,_inD)=>{
-         let _lg = Hrmdb.findOne(MCollection,_itm);
-         var vfl = validateFields(fields,_lg,params);
-         _ddt[_itm]= vfl;
+          let _lg = Hrmdb.findOne(MCollection,_itm);
+          var vfl = validateFields(fields,_lg,params);
+          _ddt[_itm]= vfl;
       });
-   }
-   return _ddt;
+  }
+  return _ddt;
 };
 
 
 const getScheduleByUser = (bdy, auth) => {
-   let _ddt = {};
-   if(auth && auth.isAdmin){
+  let _ddt = {};
+  if(auth && auth.isAdmin){
       let params = bdy["params"];
       let fields = bdy["fields"];
       let MCollection = "ScheduledAssignments";
       let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user);
       let _list2Rend =  tlt && Object.keys(tlt);
       _list2Rend && _list2Rend.map((_itm,_inD)=>{
-         let _lg = Hrmdb.findOne(MCollection,_itm);
-         var vfl = validateFields(fields,_lg,params);
-         _ddt[_itm]= vfl;
+        let _lg = Hrmdb.findOne(MCollection,_itm);
+        var vfl = validateFields(fields,_lg,params);
+        _ddt[_itm]= vfl;
       });
-   }
-   return _ddt;
- };
-
-
-
- 
- const getDepositedByUser = (bdy, auth) => {
-   let _ddt = {};
-   let params = bdy["params"];
-   let fields = bdy["fields"];
-   let userID = auth.user;
-   if(auth && auth.isAdmin){
-      userID = params.user;
-   }
-   let MCollection = "DepositedEarnings";
-   let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
-   let _list2Rend =  tlt && Object.keys(tlt);
-   _list2Rend && _list2Rend.map((_itm,_inD)=>{
-      let _lg = Hrmdb.findOne(MCollection,_itm);
-      var vfl = validateFields(fields,_lg,params);
-      _ddt[_itm]= vfl;
-   });
-   return _ddt;
+  }
+  return _ddt;
 };
 
-Object.defineProperty(exports, "__esModule", { value: true });
 
+
+
+const getDepositedByUser = (bdy, auth) => {
+  let _ddt = {};
+  let params = bdy["params"];
+  let fields = bdy["fields"];
+  let userID = auth.user;
+  if(auth && auth.isAdmin){
+    userID = params.user;
+  }
+  let MCollection = "DepositedEarnings";
+  let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
+  let _list2Rend =  tlt && Object.keys(tlt);
+  _list2Rend && _list2Rend.map((_itm,_inD)=>{
+    let _lg = Hrmdb.findOne(MCollection,_itm);
+    var vfl = validateFields(fields,_lg,params);
+    _ddt[_itm]= vfl;
+  });
+  return _ddt;
+};
+
+
+
+
+export const getServiceEarningsByUser = (bdy, auth) => {
+  let _ddt = {};
+  let params = bdy["params"];
+  let fields = bdy["fields"];
+  let userID = auth.user;
+  if(auth && auth.isAdmin){
+    userID = params.user
+  }
+  let MCollection = "ServiceEarnings";
+  let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
+  let _list2Rend =  tlt && Object.keys(tlt)
+  _list2Rend && _list2Rend.map((_itm,_inD)=>{
+    let _lg = Hrmdb.findOne(MCollection,_itm);
+    var vfl = validateFields(fields,_lg,params);
+    _ddt[_itm]= vfl;
+  })
+  return _ddt;
+};
+
+
+
+
+/*
 
 var MC_Fld_Data$1 = get_root$$_()+'/data';
+
 var emailView_Fld = MC_Fld_Data$1+'/static';
 
 
@@ -5105,9 +5130,6 @@ const addRemesa = (bdy,auth) => {
 
 
  
-
-
-/*
 export const addBlockByUser = (bdy, auth) => {
    let MCollection = "Blocks";
    let _ddt = null;
@@ -5296,12 +5318,13 @@ class GraphQuery {
             updQueryStore("getScheduleByUser", getScheduleByUser);
             updQueryStore("getBlockByServiceArea", getBlockByServiceArea);
             updQueryStore("getDepositedByUser", getDepositedByUser);
-
+            updQueryStore("getServiceEarningsByUser", getServiceEarningsByUser);
+            
          
 
 
 
-            /***************************************************** */
+            /*****************************************************
 
 
 
@@ -5321,6 +5344,8 @@ class GraphQuery {
             updQueryStore("buyBitcoin", buyBitcoin);
             updQueryStore("addRemesa", addRemesa);
 
+
+            */
 
         });
     }
