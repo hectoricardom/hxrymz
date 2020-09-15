@@ -4921,12 +4921,12 @@ const getBlockByUserServiceArea = (bdy, auth) => {
 
 const getScheduleByUser = (bdy, auth) => {
   let _ddt = {};  
+  let params = bdy["params"];
+  let fields = bdy["fields"];
   let userID = auth.user;
   if(auth && auth.isAdmin){
     userID = params.user;
   }
-  let params = bdy["params"];
-  let fields = bdy["fields"];
   let MCollection = "ScheduledAssignments";
   let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
   let _list2Rend =  tlt && Object.keys(tlt);
