@@ -5156,9 +5156,9 @@ class GraphQuery {
 
     handleNotifications(req, res, next) {
         let {q,k, auth} =  req.body;
-        const fp = req.headers.authorization && req.headers.authorization.split(`:`)[1];         
         let bdy = req.body;
         let _ddt = this.getMoviesbyCollection(bdy,auth);
+        let result = {};
         if(_ddt){
             result = {data:_ddt};
         }
