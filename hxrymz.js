@@ -12,7 +12,6 @@ var plivo = _interopDefault(require('plivo'));
 var nodemailer = _interopDefault(require('nodemailer'));
 var adminfbs = require('firebase-admin');
 var request = _interopDefault(require('request'));
-var ejs = _interopDefault(require('ejs'));
 
 // var execN = _interopDefault(require('child_process'));
 
@@ -45,7 +44,7 @@ function get_root$$_() {
   return _root$$_;
 }
 
-function get_fs$$_$1() {
+function get_fs$$_() {
   return _fs$$_;
 }
 
@@ -2636,14 +2635,14 @@ function currentIndex(name){
 
 
 function loadFile(name, dest, is2master){
-  if(get_fs$$_$1().existsSync(dest)){
+  if(get_fs$$_().existsSync(dest)){
     if(is2master){
-      master[name] = JSON.parse(get_fs$$_$1().readFileSync(dest,'utf8')); 
+      master[name] = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
     }else {
-      Collections[name] = JSON.parse(get_fs$$_$1().readFileSync(dest,'utf8')); 
+      Collections[name] = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
     }
   }else {
-    get_fs$$_$1().writeFileSync(dest, JSON.stringify({}));
+    get_fs$$_().writeFileSync(dest, JSON.stringify({}));
     master[name] = {};
   }
 }
@@ -2682,18 +2681,18 @@ class HrmDb {
 
     getCollection(name){
       let collPath0 = rootPath + name +"_"+ parseIndex(0) + '.json';
-      if(!get_fs$$_$1().existsSync(collPath0)){      
+      if(!get_fs$$_().existsSync(collPath0)){      
         loadFile(name, collPath0, false);
       }
       let ks = Array.from(Array(20).keys());
       for(let i2 in ks){
         let inD = ks[i2];
         let collPath = rootPath + name +"_"+ parseIndex(inD) + '.json';
-        if(get_fs$$_$1().existsSync(collPath)){
+        if(get_fs$$_().existsSync(collPath)){
           if(!Collections[name]){
             Collections[name] = {};
           }
-          Collections[name][inD] = JSON.parse(get_fs$$_$1().readFileSync(collPath,'utf8')); 
+          Collections[name][inD] = JSON.parse(get_fs$$_().readFileSync(collPath,'utf8')); 
         }
       }
     }
@@ -2715,8 +2714,8 @@ class HrmDb {
           fll = Object.assign({},fll,Collections[name][inD]);
         }
         let collPath = rootPath + name +"_"+ parseIndex(inD) + '.json';
-        if(get_fs$$_$1().existsSync(collPath)){
-          Collections[name][inD] = JSON.parse(get_fs$$_$1().readFileSync(collPath,'utf8')); 
+        if(get_fs$$_().existsSync(collPath)){
+          Collections[name][inD] = JSON.parse(get_fs$$_().readFileSync(collPath,'utf8')); 
         }
       }
       return fll
@@ -2774,12 +2773,12 @@ class HrmDb {
       const cDocLenght = JSON.stringify(CDoc).length+JSON.stringify(obj).length;
       if(cDocLenght>15000000){
           let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
-          get_fs$$_$1().writeFileSync(collPath, JSON.stringify(CDoc));
+          get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
           var Ndoc = {};
           Ndoc[key]={};
           Ndoc[key]=obj;
           let collNewPath = rootPath + name +"_"+ parseIndex(currIndexDoc+1) + '.json';
-          get_fs$$_$1().writeFileSync(collNewPath, JSON.stringify(Ndoc));                
+          get_fs$$_().writeFileSync(collNewPath, JSON.stringify(Ndoc));                
           //saveCollection2S3(_Master[s].path[nwInd].split('data/')[1]);
           //saveCollection2S3(MasterPath.split('data/')[1]);
       }
@@ -2790,14 +2789,14 @@ class HrmDb {
         if(urgent){
           lastUpdate[name] = new Date().getTime();
           let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
-          get_fs$$_$1().writeFileSync(collPath, JSON.stringify(CDoc));
+          get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
         }
         else {     
           let lupd = lastUpdate[name] || 0;
           if(new Date().getTime()-lupd>15000){
             lastUpdate[name] = new Date().getTime();
             let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
-            get_fs$$_$1().writeFileSync(collPath, JSON.stringify(CDoc));
+            get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
             //saveCollection2S3(_Master[s].path[currIndexDoc].split('data/')[1]);                
           } 
         }                     
@@ -2837,7 +2836,7 @@ class HrmDb {
         }        CDoc[key] = obj;
         lastUpdate[name] = new Date().getTime();
         let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
-        get_fs$$_$1().writeFileSync(collPath, JSON.stringify(CDoc));
+        get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
       }  
       return obj;
   }
@@ -2867,7 +2866,7 @@ class HrmDb {
         }               
       }      lastUpdate[name] = new Date().getTime();
       let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
-      get_fs$$_$1().writeFileSync(collPath, JSON.stringify(CDoc));
+      get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
       return true; 
     }else {
       return false; 
@@ -2891,24 +2890,24 @@ class HrmDb {
 FindIndexes(coll,q1,p1,q2,p2,q3,p3){
   if(p3 && q3){
     let q3Path = path.join(get_root$$_(),`data/Indexes_${coll}_${q1}_${q2}_${q3}.json`);
-    if(get_fs$$_$1().existsSync(q3Path)){
-        let II2 = JSON.parse(get_fs$$_$1().readFileSync(q3Path,'utf8'));                 
+    if(get_fs$$_().existsSync(q3Path)){
+        let II2 = JSON.parse(get_fs$$_().readFileSync(q3Path,'utf8'));                 
         return II2[p1]?II2[p1][p2]?II2[p1][p2][p3]:{}:{};
     }else {
         return {};
     }
   }else if(p2 && q2){
       let q2Path = path.join(get_root$$_(),`data/Indexes_${coll}_${q1}_${q2}.json`);
-      if(get_fs$$_$1().existsSync(q2Path)){
-          let II2 = JSON.parse(get_fs$$_$1().readFileSync(q2Path,'utf8'));                 
+      if(get_fs$$_().existsSync(q2Path)){
+          let II2 = JSON.parse(get_fs$$_().readFileSync(q2Path,'utf8'));                 
           return II2[p1]?II2[p1][p2]:{};
       }else {
           return {};
       }
   }else if(p1 && q1){
       let q1Path = path.join(get_root$$_(),`data/Indexes_${coll}_${q1}.json`);
-      if(get_fs$$_$1().existsSync(q1Path)){
-          let II2 = JSON.parse(get_fs$$_$1().readFileSync(q1Path,'utf8')); 
+      if(get_fs$$_().existsSync(q1Path)){
+          let II2 = JSON.parse(get_fs$$_().readFileSync(q1Path,'utf8')); 
         return II2[p1];
       }else {
           return {};
@@ -2943,7 +2942,7 @@ createIndexes(coll,level,level2,level3,level4){
   }
   let dest = rootPath + 'masterIndexes' + '.json';
   master["masterIndexes"] = _MasterIndexes;
-  get_fs$$_$1().writeFileSync(dest, JSON.stringify(_MasterIndexes));
+  get_fs$$_().writeFileSync(dest, JSON.stringify(_MasterIndexes));
 }
 
 
@@ -2961,7 +2960,7 @@ createSorts(coll,level){
     }
     let dest = rootPath + 'masterSorts' + '.json';
     master["masterSorts"] = _MasterSort;
-    get_fs$$_$1().writeFileSync(dest, JSON.stringify(_MasterSort));
+    get_fs$$_().writeFileSync(dest, JSON.stringify(_MasterSort));
   }
 }
 
@@ -3125,7 +3124,7 @@ calcIndexesAll(name){
     if(key){
       let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
       this.calcSorts(name,key,obj[key]);
-      get_fs$$_$1().writeFileSync(dest, JSON.stringify(obj[key]));
+      get_fs$$_().writeFileSync(dest, JSON.stringify(obj[key]));
     }
   }
   if(levelObj['level2']){
@@ -3134,7 +3133,7 @@ calcIndexesAll(name){
       if(key){
         let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
         this.calcSorts(name,key,levelObj['level2'][key]);
-        get_fs$$_$1().writeFileSync(dest, JSON.stringify(levelObj['level2'][key]));
+        get_fs$$_().writeFileSync(dest, JSON.stringify(levelObj['level2'][key]));
       }
     }
   }
@@ -3144,7 +3143,7 @@ calcIndexesAll(name){
       if(key){
         let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
         this.calcSorts(name,key,levelObj['level3'][key]);
-        get_fs$$_$1().writeFileSync(dest, JSON.stringify(levelObj['level3'][key]));
+        get_fs$$_().writeFileSync(dest, JSON.stringify(levelObj['level3'][key]));
       }
     }
   }
@@ -3237,7 +3236,7 @@ createSorts22(coll,fields,level,level2,level3,level4){
 
 
 
-  get_fs$$_$1().writeFileSync(MasterSortsPath, JSON.stringify(_MasterSorts));
+  get_fs$$_().writeFileSync(MasterSortsPath, JSON.stringify(_MasterSorts));
 }
 
 
@@ -3457,17 +3456,6 @@ function genId$1() {
 
 function gen6CodeId() {
   var ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  var ID_LENGTH = 6;
-  var rtn = '';
-  for (var i = 0; i < ID_LENGTH; i++) {
-      rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
-  }
-  return rtn;
-}
-
-
-function gen6NumCodeId() {
-  var ALPHABET = '123456789';
   var ID_LENGTH = 6;
   var rtn = '';
   for (var i = 0; i < ID_LENGTH; i++) {
@@ -4066,11 +4054,11 @@ var last_reset = 0;
 
 
 
-if(get_fs$$_$1().existsSync(CDA_amzn1_account_file)){                    
-	CDA_amzn1_account = JSON.parse(get_fs$$_$1().readFileSync(CDA_amzn1_account_file,'utf8'));
+if(get_fs$$_().existsSync(CDA_amzn1_account_file)){                    
+	CDA_amzn1_account = JSON.parse(get_fs$$_().readFileSync(CDA_amzn1_account_file,'utf8'));
 }
 else {
-    get_fs$$_$1().writeFileSync(CDA_amzn1_account_file, JSON.stringify({}));
+    get_fs$$_().writeFileSync(CDA_amzn1_account_file, JSON.stringify({}));
 }
 
 
@@ -4514,13 +4502,14 @@ class Params {
     }
 
 
+//  "sudo cp -R /home/ubuntu/temp/hxrymz/data/static /home/ubuntu/hxrymz/data/static",
 
     getStatic(req, res, next) { 
         var id = req.params.id;
         var st = path.join(MC_Fld_Static,id); 
         var ext = id.split('.').pop();
-        if (get_fs$$_$1().existsSync(st)) {
-            var rs =get_fs$$_$1().createReadStream(st);
+        if (get_fs$$_().existsSync(st)) {
+            var rs =get_fs$$_().createReadStream(st);
             let _extList = extList[ext]?extList[ext]:'application/octet-stream';
             res.writeHead(200, { 'Content-Type': _extList, 'Connection': 'keep-alive', "X-UA-Compatible": "IE=edge;chrome=1", "Accept-Ranges": "bytes" });
             rs.pipe(res);
@@ -4745,7 +4734,7 @@ var lastPageToken = null;
 
 function Upd_CDA_amzn1_account_file() {
     get_exec$$_()('ls', function(fferr, istdout, istderr){
-        get_fs$$_$1().writeFileSync(CDA_amzn1_account_file,JSON.stringify(CDA_amzn1_account)); 
+        get_fs$$_().writeFileSync(CDA_amzn1_account_file,JSON.stringify(CDA_amzn1_account)); 
     });
     return true;
 }
@@ -4902,87 +4891,95 @@ const getBlockByServiceArea = (bdy, auth) => {
 
 
 const getBlockByUserServiceArea = (bdy, auth) => {
-  let _ddt = {};
-  if(auth && auth.isAdmin){
+   let _ddt = {};
+   if(auth && auth.isAdmin){
       let params = bdy["params"];
       let fields = bdy["fields"];
       let MCollection = "Blocks";
       let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user,'serviceAreaId',params["serviceAreaId"]);
       let _list2Rend =  tlt && Object.keys(tlt);
       _list2Rend && _list2Rend.map((_itm,_inD)=>{
-          let _lg = Hrmdb.findOne(MCollection,_itm);
-          var vfl = validateFields(fields,_lg,params);
-          _ddt[_itm]= vfl;
+         let _lg = Hrmdb.findOne(MCollection,_itm);
+         var vfl = validateFields(fields,_lg,params);
+         _ddt[_itm]= vfl;
       });
-  }
-  return _ddt;
+   }
+   return _ddt;
 };
 
 
 const getScheduleByUser = (bdy, auth) => {
-  let _ddt = {};  
-  let params = bdy["params"];
-  let fields = bdy["fields"];
-  let userID = auth.user;
-  if(auth && auth.isAdmin){
-    userID = params.user;
-  }
-  let MCollection = "ScheduledAssignments";
-  let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
-  let _list2Rend =  tlt && Object.keys(tlt);
-  _list2Rend && _list2Rend.map((_itm,_inD)=>{
-    let _lg = Hrmdb.findOne(MCollection,_itm);
-    var vfl = validateFields(fields,_lg,params);
-    _ddt[_itm]= vfl;
-  });
-  return _ddt;
+   let _ddt = {};
+   let params = bdy["params"];
+   let fields = bdy["fields"];
+   let userID = auth.user;
+   if(auth && auth.isAdmin){
+      userID = params.user;
+   }
+   let MCollection = "ScheduledAssignments";
+   let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
+   let _list2Rend =  tlt && Object.keys(tlt);
+   _list2Rend && _list2Rend.map((_itm,_inD)=>{
+      let _lg = Hrmdb.findOne(MCollection,_itm);
+      var vfl = validateFields(fields,_lg,params);
+      _ddt[_itm]= vfl;
+   });
+   return _ddt;
+ };
+
+
+
+ 
+ const getDepositedByUser = (bdy, auth) => {
+   let _ddt = {};
+   let params = bdy["params"];
+   let fields = bdy["fields"];
+   let userID = auth.user;
+   if(auth && auth.isAdmin){
+      userID = params.user;
+   }
+   let MCollection = "DepositedEarnings";
+   let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
+   let _list2Rend =  tlt && Object.keys(tlt);
+   _list2Rend && _list2Rend.map((_itm,_inD)=>{
+      let _lg = Hrmdb.findOne(MCollection,_itm);
+      var vfl = validateFields(fields,_lg,params);
+      _ddt[_itm]= vfl;
+   });
+   return _ddt;
 };
-
-
-
-
-const getDepositedByUser = (bdy, auth) => {
-  let _ddt = {};
-  let params = bdy["params"];
-  let fields = bdy["fields"];
-  let userID = auth.user;
-  if(auth && auth.isAdmin){
-    userID = params.user;
-  }
-  let MCollection = "DepositedEarnings";
-  let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
-  let _list2Rend =  tlt && Object.keys(tlt);
-  _list2Rend && _list2Rend.map((_itm,_inD)=>{
-    let _lg = Hrmdb.findOne(MCollection,_itm);
-    var vfl = validateFields(fields,_lg,params);
-    _ddt[_itm]= vfl;
-  });
-  return _ddt;
-};
-
-
-
 
 const getServiceEarningsByUser = (bdy, auth) => {
-  let _ddt = {};
-  let params = bdy["params"];
-  let fields = bdy["fields"];
-  let userID = auth.user;
-  if(auth && auth.isAdmin){
-    userID = params.user
-  }
-  let MCollection = "ServiceEarnings";
-  let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
-  let _list2Rend =  tlt && Object.keys(tlt)
-  _list2Rend && _list2Rend.map((_itm,_inD)=>{
-    let _lg = Hrmdb.findOne(MCollection,_itm);
-    var vfl = validateFields(fields,_lg,params);
-    _ddt[_itm]= vfl;
-  })
-  return _ddt;
+   let _ddt = {};
+   let params = bdy["params"];
+   let fields = bdy["fields"];
+   let userID = auth.user;
+   if(auth && auth.isAdmin){
+      userID = params.user;
+   }
+   let MCollection = "ServiceEarnings";
+   let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
+   let _list2Rend =  tlt && Object.keys(tlt);
+   _list2Rend && _list2Rend.map((_itm,_inD)=>{
+      let _lg = Hrmdb.findOne(MCollection,_itm);
+      var vfl = validateFields(fields,_lg,params);
+      _ddt[_itm]= vfl;
+   });
+   return _ddt;
 };
 
 
+
+
+const addNotificationbyCda = (bdy, auth) => {
+   let _ddt = null;
+   let _form = bdy["form"];
+   console.log(_form)
+   let params = bdy["params"];
+   _form["user"] = params["user"];
+   // Hrmdb.push('Notification',_form, true);
+   return _ddt;
+};
 
 class GraphQuery {
     
@@ -4993,7 +4990,7 @@ class GraphQuery {
             Hrmdb.getCollection('Logs');
             Hrmdb.getCollection('Regions');
             Hrmdb.getCollection('Logins');  
-
+            Hrmdb.getCollection('Notification'); 
            
             
             
@@ -5013,12 +5010,21 @@ class GraphQuery {
             Hrmdb.createIndexes('Blocks','user','serviceAreaId','minuteHours');
 
             
+
+            Hrmdb.createIndexes('Notification','day');           
+            Hrmdb.createIndexes('Notification','user');
+            Hrmdb.createIndexes('Notification','user','day');
+            Hrmdb.createIndexes('Notification','user','day');
+
+
+
+
             Hrmdb.calcIndexesAll('Cda');
             Hrmdb.calcIndexesAll('Blocks');
             Hrmdb.calcIndexesAll('Logins'); 
             Hrmdb.calcIndexesAll('Logs');
 
-
+            Hrmdb.calcIndexesAll('Notification');
 
             Hrmdb.getCollection('ServiceEarnings');  
             Hrmdb.getCollection('DepositedEarnings');  
@@ -5066,34 +5072,32 @@ class GraphQuery {
             updQueryStore("getBlockByServiceArea", getBlockByServiceArea);
             updQueryStore("getDepositedByUser", getDepositedByUser);
             updQueryStore("getServiceEarningsByUser", getServiceEarningsByUser);
+            updQueryStore("addNotificationbyCda", addNotificationbyCda);
             
-         
+            
+
+
+            /***************************************************** 
 
 
 
-            /*****************************************************
 
+            _Util.Hrmdb.getCollection('Remesas');
+            _Util.Hrmdb.getCollection('BuyBitcoin');
 
+            _Util.Hrmdb.createIndexes('Remesas','email');
+            _Util.Hrmdb.createIndexes('Remesas','phoneNumber');
+            _Util.Hrmdb.createIndexes('Remesas','currency');
+            _Util.Hrmdb.createIndexes('BuyBitcoin','email');
+            _Util.Hrmdb.createIndexes('BuyBitcoin','phoneNumber');
 
-
-            Hrmdb.getCollection('Remesas');
-            Hrmdb.getCollection('BuyBitcoin');
-
-            Hrmdb.createIndexes('Remesas','email');
-            Hrmdb.createIndexes('Remesas','phoneNumber');
-            Hrmdb.createIndexes('Remesas','currency');
-            Hrmdb.createIndexes('BuyBitcoin','email');
-            Hrmdb.createIndexes('BuyBitcoin','phoneNumber');
-
-            Hrmdb.calcIndexesAll('Remesas');
-            Hrmdb.calcIndexesAll('BuyBitcoin');
+            _Util.Hrmdb.calcIndexesAll('Remesas');
+            _Util.Hrmdb.calcIndexesAll('BuyBitcoin');
             
             updQueryStore("buyBitcoin", buyBitcoin);
             updQueryStore("addRemesa", addRemesa);
 
-
             */
-
         });
     }
 
@@ -5150,9 +5154,27 @@ class GraphQuery {
     }
 
 
+    handleNotifications(req, res, next) {
+        let {q,k, auth} =  req.body;
+        const fp = req.headers.authorization && req.headers.authorization.split(`:`)[1];         
+        let bdy = req.body;
+        let _ddt = this.getMoviesbyCollection(bdy,auth);
+        if(_ddt){
+            result = {data:_ddt};
+        }
+        else {
+            result = {err:"no body present"};
+        }
+        resJsonFunc(res,200,result);
+    }
+
+
+    
+
 
     
     bitcoinsendEmail(req, res, next) {
+       // buyBitcoinsendEmail()
         resJsonFunc(res,200,{});
     }
 }
@@ -5172,6 +5194,10 @@ class IndexRoute extends BaseRoute {
         
         router.post("/streamdata", (req, res, next) => {
             _GraphQuery.dataHandler(req, res, next);
+        });
+
+        router.post("/handleNotifications", (req, res, next) => {
+            _GraphQuery.handleNotifications(req, res, next);
         });
 
         router.get("/getStatic/:id", (req, res, next) => {
