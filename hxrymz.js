@@ -4987,7 +4987,7 @@ const addNotificationbyCda = (bdy, auth) => {
 
 
 const getNotificationbyCda = (bdy, auth) => {
-  let _ddt = null;
+  let _ddt = {};
   let params = bdy["params"];
   let fields = bdy["fields"];
   let userID = auth.user;
