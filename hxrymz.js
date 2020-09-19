@@ -4974,6 +4974,10 @@ const getServiceEarningsByUser = (bdy, auth) => {
 const addNotificationbyCda = (bdy, auth) => {
    let _ddt = {};
    let _form = bdy["form"];
+  
+   if(isJson$1(_form)){
+    _form = JSON.parse(bdy["form"]);
+   }
    console.log(_form)
    let params = bdy["params"];
    _form["user"] = params["user"];
