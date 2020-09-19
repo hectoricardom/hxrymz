@@ -4986,7 +4986,7 @@ const addNotificationbyCda = (bdy, auth) => {
 
 
 
-export const getNotificationbyCda = (bdy, auth) => {
+const getNotificationbyCda = (bdy, auth) => {
   let _ddt = null;
   let params = bdy["params"];
   let fields = bdy["fields"];
