@@ -4972,7 +4972,7 @@ const getServiceEarningsByUser = (bdy, auth) => {
 
 
 const addNotificationbyCda = (bdy, auth) => {
-   let _ddt = null;
+   let _ddt = {};
    let _form = bdy["form"];
    console.log(_form)
    let params = bdy["params"];
