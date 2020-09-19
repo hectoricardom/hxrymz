@@ -4984,6 +4984,29 @@ const addNotificationbyCda = (bdy, auth) => {
   return _ddt;
 };
 
+
+
+export const getNotificationbyCda = (bdy, auth) => {
+  let _ddt = null;
+  let params = bdy["params"];
+  let fields = bdy["fields"];
+  let userID = auth.user;
+  if(auth && auth.isAdmin){
+    userID = params.user
+  }
+  let MCollection = "Notification";
+  let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
+  let _list2Rend =  tlt && Object.keys(tlt)
+  _list2Rend && _list2Rend.map((_itm,_inD)=>{
+    let _lg = Hrmdb.findOne(MCollection,_itm);
+    var vfl = validateFields(fields,_lg,params);
+    _ddt[_itm]= vfl;
+  })
+  return _ddt;
+};
+
+
+
 class GraphQuery {
     
     constructor() {
@@ -5077,6 +5100,7 @@ class GraphQuery {
             updQueryStore("getServiceEarningsByUser", getServiceEarningsByUser);
             updQueryStore("addNotificationbyCda", addNotificationbyCda);
             
+            updQueryStore("getNotificationbyCda", getNotificationbyCda);
             
 
 
@@ -5212,6 +5236,8 @@ class IndexRoute extends BaseRoute {
         });
     }
 }
+
+
 
 function SSE (req, res, next) {
 	res.sseSetup = function() {
