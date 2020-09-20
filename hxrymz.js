@@ -5024,6 +5024,37 @@ const getNotificationbyCda = (bdy, auth) => {
 
 
 
+
+const getNotificationbyCdaFilter = (bdy, auth) => {
+  let _ddt = {};
+  let params = bdy["params"];
+  let fields = bdy["fields"];
+  let userID = auth.user;
+  if(auth && auth.isAdmin){
+    userID = params.user
+  }
+  let filters = params.filters;
+  let filSpl = filters.split(":")
+  let MCollection = "Notification";
+  let tlt = Hrmdb.FindIndexes(MCollection,'user',userID,filSpl[0],filSpl[1]);
+  let _list2Rend =  tlt && Object.keys(tlt)
+  _list2Rend && _list2Rend.map((_itm,_inD)=>{
+    let _lg = Hrmdb.findOne(MCollection,_itm);
+    if(!_lg['typeID']){
+        let _form = _lg;
+        let keyspl = _form["key"].split("|");
+        _form["typeID"] = keyspl[2];
+        _form["deviceNotID"] = keyspl[4];
+        let _now =new Date(_form["systemTime"]);
+        _form["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
+        Hrmdb.update(MCollection,_form,_itm);
+    }
+    var vfl = validateFields(fields,_lg,params);
+    _ddt[_itm]= vfl;
+  })
+  return _ddt;
+};
+
 class GraphQuery {
     
     constructor() {
@@ -5124,6 +5155,8 @@ class GraphQuery {
             updQueryStore("addNotificationbyCda", addNotificationbyCda);
             
             updQueryStore("getNotificationbyCda", getNotificationbyCda);
+            updQueryStore("getNotificationbyCdaFilter", getNotificationbyCdaFilter);
+            
             
 
 
