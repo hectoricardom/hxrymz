@@ -4981,6 +4981,9 @@ const addNotificationbyCda = (bdy, auth) => {
   let params = bdy["params"];
   _form["user"] = params["user"];
   let _now =new Date(_form["systemTime"]);
+  let keyspl = _form["key"].split("|");
+  _form["typeID"] = keyspl[2];
+  _form["deviceNotID"] = keyspl[4];
   _form["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
   Hrmdb.push('Notification',_form, true);
   get_exec$$_()('ls', function(err, istdout, istderr){
@@ -5004,6 +5007,15 @@ const getNotificationbyCda = (bdy, auth) => {
   let _list2Rend =  tlt && Object.keys(tlt)
   _list2Rend && _list2Rend.map((_itm,_inD)=>{
     let _lg = Hrmdb.findOne(MCollection,_itm);
+    if(!_lg['typeID']){
+        let _form = _lg;
+        let keyspl = _form["key"].split("|");
+        _form["typeID"] = keyspl[2];
+        _form["deviceNotID"] = keyspl[4];
+        let _now =new Date(_form["systemTime"]);
+        _form["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
+        Hrmdb.update(MCollection,_form,_itm);
+    }
     var vfl = validateFields(fields,_lg,params);
     _ddt[_itm]= vfl;
   })
@@ -5046,9 +5058,14 @@ class GraphQuery {
             Hrmdb.createIndexes('Notification','user');
             Hrmdb.createIndexes('Notification','flags');
             Hrmdb.createIndexes('Notification','key');
+            Hrmdb.createIndexes('Notification','typeID');
+            Hrmdb.createIndexes('Notification','deviceNotID');
             Hrmdb.createIndexes('Notification','user','day');
             Hrmdb.createIndexes('Notification','user','flags');
             Hrmdb.createIndexes('Notification','user','key');
+            Hrmdb.createIndexes('Notification','user','typeID');
+            Hrmdb.createIndexes('Notification','user','deviceNotID');
+
 
 
             Hrmdb.calcIndexesAll('Cda');
