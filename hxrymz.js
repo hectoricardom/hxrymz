@@ -5045,10 +5045,10 @@ class GraphQuery {
             Hrmdb.createIndexes('Notification','day');           
             Hrmdb.createIndexes('Notification','user');
             Hrmdb.createIndexes('Notification','flags');
-            Hrmdb.createIndexes('Notification','keys');
+            Hrmdb.createIndexes('Notification','key');
             Hrmdb.createIndexes('Notification','user','day');
             Hrmdb.createIndexes('Notification','user','flags');
-            Hrmdb.createIndexes('Notification','user','keys');
+            Hrmdb.createIndexes('Notification','user','key');
 
 
             Hrmdb.calcIndexesAll('Cda');
