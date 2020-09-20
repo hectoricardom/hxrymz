@@ -3829,7 +3829,7 @@ const verifyToken = (bdy) => {
     if(lg_id && lg_id.exp && lg_id.exp>(new Date()).getTime()){
         var k =Hrmdb.findOne('Logins',lg_id.id);
         if(k && k.id){
-            // var ciphertext = _Util.Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
+            // var ciphertext = Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
             delete code_token[tkCode];
             res = {token:k.id};
         }else {
@@ -4980,7 +4980,12 @@ const addNotificationbyCda = (bdy, auth) => {
   }
   let params = bdy["params"];
   _form["user"] = params["user"];
+  let _now =new Date(_form["systemTime"]);
+  _form["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
   Hrmdb.push('Notification',_form, true);
+  get_exec$$_()('ls', function(err, istdout, istderr){
+    Hrmdb.calcIndexesAll('Notification');
+ })
   return _ddt;
 };
 
@@ -5039,10 +5044,11 @@ class GraphQuery {
 
             Hrmdb.createIndexes('Notification','day');           
             Hrmdb.createIndexes('Notification','user');
+            Hrmdb.createIndexes('Notification','flags');
+            Hrmdb.createIndexes('Notification','keys');
             Hrmdb.createIndexes('Notification','user','day');
-            Hrmdb.createIndexes('Notification','user','day');
-
-
+            Hrmdb.createIndexes('Notification','user','flags');
+            Hrmdb.createIndexes('Notification','user','keys');
 
 
             Hrmdb.calcIndexesAll('Cda');
@@ -5109,17 +5115,17 @@ class GraphQuery {
 
 
 
-            _Util.Hrmdb.getCollection('Remesas');
-            _Util.Hrmdb.getCollection('BuyBitcoin');
+            Hrmdb.getCollection('Remesas');
+            Hrmdb.getCollection('BuyBitcoin');
 
-            _Util.Hrmdb.createIndexes('Remesas','email');
-            _Util.Hrmdb.createIndexes('Remesas','phoneNumber');
-            _Util.Hrmdb.createIndexes('Remesas','currency');
-            _Util.Hrmdb.createIndexes('BuyBitcoin','email');
-            _Util.Hrmdb.createIndexes('BuyBitcoin','phoneNumber');
+            Hrmdb.createIndexes('Remesas','email');
+            Hrmdb.createIndexes('Remesas','phoneNumber');
+            Hrmdb.createIndexes('Remesas','currency');
+            Hrmdb.createIndexes('BuyBitcoin','email');
+            Hrmdb.createIndexes('BuyBitcoin','phoneNumber');
 
-            _Util.Hrmdb.calcIndexesAll('Remesas');
-            _Util.Hrmdb.calcIndexesAll('BuyBitcoin');
+            Hrmdb.calcIndexesAll('Remesas');
+            Hrmdb.calcIndexesAll('BuyBitcoin');
             
             updQueryStore("buyBitcoin", buyBitcoin);
             updQueryStore("addRemesa", addRemesa);
