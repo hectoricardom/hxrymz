@@ -2830,9 +2830,9 @@ class HrmDb {
           // let ipth = _MasterIndexes[name][i2]
           if(Collections[name] && Collections[name][ipth][key]){
             currIndexDoc = ipth;
-            CDoc= Collections[s][ipth];
+            CDoc= Collections[name][ipth];
             CDoc[key] = obj;
-          }               
+          }
         }
         lastUpdate[name] = new Date().getTime();
         let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
@@ -2861,8 +2861,8 @@ class HrmDb {
         if(Collections[name] && Collections[name][ipth][key]){
           // rst = Collections[name][ipth][iD];
           currIndexDoc = ipth;
-          delete Collections[s][ipth][key];
-          CDoc = Collections[s][ipth];
+          delete Collections[name][ipth][key];
+          CDoc = Collections[name][ipth];
         }               
       }      lastUpdate[name] = new Date().getTime();
       let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
