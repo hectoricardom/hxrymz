@@ -2822,18 +2822,19 @@ class HrmDb {
 
     update(name,obj,k){
       const key = k;
-      obj.id = key;       
+      obj.id = key;
       var currIndexDoc = 0;
       if(key){
         var CDoc = {}; 
         for(let ipth in Collections[name]){
           // let ipth = _MasterIndexes[name][i2]
           if(Collections[name] && Collections[name][ipth][key]){
-            rst = Collections[name][ipth][iD];
+            rst = Collections[name][ipth][key];
             currIndexDoc = ipth;
             CDoc= Collections[s][ipth];
           }               
-        }        CDoc[key] = obj;
+        }        
+        CDoc[key] = obj;
         lastUpdate[name] = new Date().getTime();
         let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
         get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
