@@ -5040,15 +5040,6 @@ const getNotificationbyCdaFilter = (bdy, auth) => {
   let _list2Rend =  tlt && Object.keys(tlt)
   _list2Rend && _list2Rend.map((_itm,_inD)=>{
     let _lg = Hrmdb.findOne(MCollection,_itm);
-    if(!_lg['typeID']){
-        let _form = _lg;
-        let keyspl = _form["key"].split("|");
-        _form["typeID"] = keyspl[2];
-        _form["deviceNotID"] = keyspl[4];
-        let _now =new Date(_form["systemTime"]);
-        _form["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
-        Hrmdb.update(MCollection,_form,_itm);
-    }
     var vfl = validateFields(fields,_lg,params);
     _ddt[_itm]= vfl;
   })
@@ -5064,10 +5055,7 @@ class GraphQuery {
             Hrmdb.getCollection('Logs');
             Hrmdb.getCollection('Regions');
             Hrmdb.getCollection('Logins');  
-            Hrmdb.getCollection('Notification'); 
-           
-            
-            
+            Hrmdb.getCollection('Notification');
 
             Hrmdb.createIndexes('Logins','user');
             Hrmdb.createIndexes('Cda','email');
