@@ -4814,6 +4814,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _params = new Params();
 
 
+
+
 const getHashCodeBtc = () => {
    return {}
 };
@@ -4974,7 +4976,7 @@ const getServiceEarningsByUser = (bdy, auth) => {
 const addNotificationbyCda = (bdy, auth) => {
   let _ddt = {};
   let _form = bdy["form"];
-
+  let Collection = 'Notification';
   if(isJson$1(_form)){
   _form = JSON.parse(bdy["form"]);
   }
@@ -4985,10 +4987,8 @@ const addNotificationbyCda = (bdy, auth) => {
   _form["typeID"] = keyspl[2];
   _form["deviceNotID"] = keyspl[4];
   _form["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
-  Hrmdb.push('Notification',_form, true);
-  get_exec$$_()('ls', function(err, istdout, istderr){
-    Hrmdb.calcIndexesAll('Notification');
- })
+  Hrmdb.push(Collection,_form, true);  
+  calcNotificationIndexesAll(Collection);
   return _ddt;
 };
 
@@ -5045,6 +5045,23 @@ const getNotificationbyCdaFilter = (bdy, auth) => {
   })
   return _ddt;
 };
+
+
+var time_bewtwen_Operations={}
+
+
+function calcNotificationIndexesAll(Collection){
+  if(!time_bewtwen_Operations[Collection]){
+    time_bewtwen_Operations[Collection] = 0
+  }
+  let _now = (new Date()).getTime()
+  if(time_bewtwen_Operations[Collection]<_now){
+    time_bewtwen_Operations[Collection] = _now + 25000;
+    get_exec$$_()('ls', function(err, istdout, istderr){
+      Hrmdb.calcIndexesAll(Collection);
+    })
+  }
+}
 
 class GraphQuery {
     
