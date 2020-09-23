@@ -18,7 +18,7 @@ var request = _interopDefault(require('request'));
 // const _config = require('./config.json');
 
 var _root$$_ = "E:/newProject/Monorepo/AmzFlx/server/";
-_root$$_ = "/home/ubuntu/hxrymz/";
+// _root$$_ = "/home/ubuntu/hxrymz/";
 
 var _portNew_ = 7258;
 var _host_ = "localhost";
@@ -2822,7 +2822,7 @@ class HrmDb {
 
     update(name,obj,k){
       const key = k;
-      obj.id = key;
+      obj.id = key;       
       var currIndexDoc = 0;
       if(key){
         var CDoc = {}; 
@@ -2832,8 +2832,8 @@ class HrmDb {
             currIndexDoc = ipth;
             CDoc= Collections[name][ipth];
             CDoc[key] = obj;
-          }
-        }
+          }               
+        }       
         lastUpdate[name] = new Date().getTime();
         let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
         get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
@@ -3365,6 +3365,11 @@ class Notifications {
     }
 
 
+    updFireByKey(id,v){
+        var _CollectionFB_Upd = `/hhh/${id}/params/`;  
+        dbFirestore.collection(_CollectionFB_Upd).doc(id).update(v).then(doc=> { });    
+    }
+
     updFireIsValidToken(id,v){
         var _CollectionFB_Upd = `/hhh/${id}/params/`;  
         dbFirestore.collection(_CollectionFB_Upd).doc(id).update({ isValidToken: v }).then(doc=> { });    
@@ -3829,7 +3834,7 @@ const verifyToken = (bdy) => {
     if(lg_id && lg_id.exp && lg_id.exp>(new Date()).getTime()){
         var k =Hrmdb.findOne('Logins',lg_id.id);
         if(k && k.id){
-            // var ciphertext = Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
+            // var ciphertext = _Util.Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
             delete code_token[tkCode];
             res = {token:k.id};
         }else {
@@ -4814,8 +4819,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _params = new Params();
 
 
-
-
 const getHashCodeBtc = () => {
    return {}
 };
@@ -4969,99 +4972,115 @@ const getServiceEarningsByUser = (bdy, auth) => {
    });
    return _ddt;
 };
-
-
-
+let AllowNotification = {
+   "16":"FLEX_WORK",
+   "38":"FLEX_EXCLUSIVE_OFFER",
+   "39":"FLEX_INSTANT_OFFER",
+   "40":"FLEX_SURGE_PRICE"
+};
 
 const addNotificationbyCda = (bdy, auth) => {
-  let _ddt = {};
-  let _form = bdy["form"];
-  let Collection = 'Notification';
-  if(isJson$1(_form)){
-  _form = JSON.parse(bdy["form"]);
-  }
-  let params = bdy["params"];
-  _form["user"] = params["user"];
-  let _now =new Date(_form["systemTime"]);
-  let keyspl = _form["key"].split("|");
-  _form["typeID"] = keyspl[2];
-  _form["deviceNotID"] = keyspl[4];
-  _form["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
-  Hrmdb.push(Collection,_form, true);  
-  calcNotificationIndexesAll(Collection);
-  return _ddt;
+   let _ddt = null;
+   let _form = bdy["form"];   
+   if(isJson(_form)){
+      _form = JSON.parse(bdy["form"]);
+   }
+   let keyspl = _form["key"].split("|");
+   let typeID = keyspl[2];
+   if(AllowNotification[typeID]){
+      let params = bdy["params"];
+      let _userId = params["user"];
+      if(typeID==="40" || typeID==="38"){
+         callNotifications().updFireByKey(_userId,{FLEX_EXCLUSIVE_OFFER:genId$1()});
+      }
+      else if(typeID==="39"){
+         callNotifications().updFireByKey(_userId,{FLEX_INSTANT_OFFER:genId$1()});
+      }
+      _form["user"] = _userId;
+      _form["typeID"] = typeID; 
+      let _now =new Date(_form["systemTime"]);
+      _form["deviceNotID"] = keyspl[4];
+      _form["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
+      Hrmdb.push('Notification',_form, true);   
+      calcNotificationIndexesAll();
+   }
+   return _ddt;
 };
+
 
 
 
 const getNotificationbyCda = (bdy, auth) => {
-  let _ddt = {};
-  let params = bdy["params"];
-  let fields = bdy["fields"];
-  let userID = auth.user;
-  if(auth && auth.isAdmin){
-    userID = params.user
-  }
-  let MCollection = "Notification";
-  let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
-  let _list2Rend =  tlt && Object.keys(tlt)
-  _list2Rend && _list2Rend.map((_itm,_inD)=>{
-    let _lg = Hrmdb.findOne(MCollection,_itm);
-    if(!_lg['typeID']){
-        let _form = _lg;
-        let keyspl = _form["key"].split("|");
-        _form["typeID"] = keyspl[2];
-        _form["deviceNotID"] = keyspl[4];
-        let _now =new Date(_form["systemTime"]);
-        _form["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
-        Hrmdb.update(MCollection,_form,_itm);
-    }
-    var vfl = validateFields(fields,_lg,params);
-    _ddt[_itm]= vfl;
-  })
-  return _ddt;
+   let _ddt = null;
+   let params = bdy["params"];
+   let fields = bdy["fields"];
+   let userID = auth.user;
+   if(auth && auth.isAdmin){
+      userID = params.user;
+   }
+   let MCollection = "Notification";
+   let tlt = Hrmdb.FindIndexes(MCollection,'user',userID);
+   let _list2Rend =  tlt && Object.keys(tlt);
+   _list2Rend && _list2Rend.map((_itm,_inD)=>{      
+      let _lg = Hrmdb.findOne(MCollection,_itm);
+      /*
+      if(!_lg['typeID']){
+         let _form = _lg;
+         let keyspl = _form["key"].split("|");
+         _form["typeID"] = keyspl[2];
+         _form["deviceNotID"] = keyspl[4];
+         let _now =new Date(_form["systemTime"]);
+         _form["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
+         //_Util.Hrmdb.update(MCollection,_form,_itm);
+      }
+      */
+      var vfl = validateFields(fields,_lg,params);
+      _ddt[_itm]= vfl;
+   });
+   return _ddt;
 };
+
 
 
 
 
 const getNotificationbyCdaFilter = (bdy, auth) => {
-  let _ddt = {};
-  let params = bdy["params"];
-  let fields = bdy["fields"];
-  let userID = auth.user;
-  if(auth && auth.isAdmin){
-    userID = params.user
-  }
-  let filters = params.filters;
-  let filSpl = filters.split(":")
-  let MCollection = "Notification";
-  let tlt = Hrmdb.FindIndexes(MCollection,'user',userID,filSpl[0],filSpl[1]);
-  let _list2Rend =  tlt && Object.keys(tlt)
-  _list2Rend && _list2Rend.map((_itm,_inD)=>{
-    let _lg = Hrmdb.findOne(MCollection,_itm);
-    var vfl = validateFields(fields,_lg,params);
-    _ddt[_itm]= vfl;
-  })
-  return _ddt;
-};
+   let _ddt = {};
+   let params = bdy["params"];
+   let fields = bdy["fields"];
+   let userID = auth.user;
+   if(auth && auth.isAdmin){
+      userID = params.user;
+   }
+   let filters = params.filters;
+   let filSpl = filters.split(":");
+   let MCollection = "Notification";
+   let tlt = Hrmdb.FindIndexes(MCollection,'user',userID,filSpl[0],filSpl[1]);
+   let _list2Rend =  tlt && Object.keys(tlt);
+   _list2Rend && _list2Rend.map((_itm,_inD)=>{
+      let _lg = Hrmdb.findOne(MCollection,_itm);
+      var vfl = validateFields(fields,_lg,params);
+      _ddt[_itm]= vfl;
+   });
+   return _ddt;
+ };
+
+var time_bewtwen_Operations={};
 
 
-var time_bewtwen_Operations={}
-
-
-function calcNotificationIndexesAll(Collection){
-  if(!time_bewtwen_Operations[Collection]){
-    time_bewtwen_Operations[Collection] = 0
-  }
-  let _now = (new Date()).getTime()
-  if(time_bewtwen_Operations[Collection]<_now){
-    time_bewtwen_Operations[Collection] = _now + 25000;
-    get_exec$$_()('ls', function(err, istdout, istderr){
-      Hrmdb.calcIndexesAll(Collection);
-    })
-  }
-}
+ function calcNotificationIndexesAll(){
+   let Collection = "Notification";
+   if(!time_bewtwen_Operations[Collection]){
+      time_bewtwen_Operations[Collection] = 0;
+    }
+    let _now = (new Date()).getTime();
+    if(time_bewtwen_Operations[Collection]<_now){
+      time_bewtwen_Operations[Collection] = _now + 25000;
+      get_exec$$_()('ls', function(err, istdout, istderr){
+         Hrmdb.calcIndexesAll(Collection);
+      });
+    }
+ }
 
 class GraphQuery {
     
@@ -5072,7 +5091,10 @@ class GraphQuery {
             Hrmdb.getCollection('Logs');
             Hrmdb.getCollection('Regions');
             Hrmdb.getCollection('Logins');  
-            Hrmdb.getCollection('Notification');
+            Hrmdb.getCollection('Notification'); 
+           
+            
+            
 
             Hrmdb.createIndexes('Logins','user');
             Hrmdb.createIndexes('Cda','email');
@@ -5093,12 +5115,11 @@ class GraphQuery {
             Hrmdb.createIndexes('Notification','day');           
             Hrmdb.createIndexes('Notification','user');
             Hrmdb.createIndexes('Notification','flags');
-            Hrmdb.createIndexes('Notification','key');
-            Hrmdb.createIndexes('Notification','typeID');
-            Hrmdb.createIndexes('Notification','deviceNotID');
+            Hrmdb.createIndexes('Notification','keys');
             Hrmdb.createIndexes('Notification','user','day');
             Hrmdb.createIndexes('Notification','user','flags');
-            Hrmdb.createIndexes('Notification','user','key');
+            Hrmdb.createIndexes('Notification','user','keys');
+            
             Hrmdb.createIndexes('Notification','user','typeID');
             Hrmdb.createIndexes('Notification','user','deviceNotID');
 
@@ -5158,29 +5179,26 @@ class GraphQuery {
             updQueryStore("getDepositedByUser", getDepositedByUser);
             updQueryStore("getServiceEarningsByUser", getServiceEarningsByUser);
             updQueryStore("addNotificationbyCda", addNotificationbyCda);
-            
             updQueryStore("getNotificationbyCda", getNotificationbyCda);
             updQueryStore("getNotificationbyCdaFilter", getNotificationbyCdaFilter);
             
-            
-
 
             /***************************************************** 
 
 
 
 
-            Hrmdb.getCollection('Remesas');
-            Hrmdb.getCollection('BuyBitcoin');
+            _Util.Hrmdb.getCollection('Remesas');
+            _Util.Hrmdb.getCollection('BuyBitcoin');
 
-            Hrmdb.createIndexes('Remesas','email');
-            Hrmdb.createIndexes('Remesas','phoneNumber');
-            Hrmdb.createIndexes('Remesas','currency');
-            Hrmdb.createIndexes('BuyBitcoin','email');
-            Hrmdb.createIndexes('BuyBitcoin','phoneNumber');
+            _Util.Hrmdb.createIndexes('Remesas','email');
+            _Util.Hrmdb.createIndexes('Remesas','phoneNumber');
+            _Util.Hrmdb.createIndexes('Remesas','currency');
+            _Util.Hrmdb.createIndexes('BuyBitcoin','email');
+            _Util.Hrmdb.createIndexes('BuyBitcoin','phoneNumber');
 
-            Hrmdb.calcIndexesAll('Remesas');
-            Hrmdb.calcIndexesAll('BuyBitcoin');
+            _Util.Hrmdb.calcIndexesAll('Remesas');
+            _Util.Hrmdb.calcIndexesAll('BuyBitcoin');
             
             updQueryStore("buyBitcoin", buyBitcoin);
             updQueryStore("addRemesa", addRemesa);
@@ -5244,9 +5262,9 @@ class GraphQuery {
 
     handleNotifications(req, res, next) {
         let {q,k, auth} =  req.body;
+        let result = {};
         let bdy = req.body;
         let _ddt = this.getMoviesbyCollection(bdy,auth);
-        let result = {};
         if(_ddt){
             result = {data:_ddt};
         }
@@ -5297,8 +5315,6 @@ class IndexRoute extends BaseRoute {
         });
     }
 }
-
-
 
 function SSE (req, res, next) {
 	res.sseSetup = function() {
