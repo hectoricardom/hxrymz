@@ -4979,6 +4979,19 @@ let AllowNotification = {
    "40":"FLEX_SURGE_PRICE"
 };
 
+
+let users = [""]
+
+const FLEX_EXCLUSIVE_OFFER = (_userId) => {
+  callNotifications().updFireByKey(_userId,{FLEX_EXCLUSIVE_OFFER:genId$1()});
+  let data = callNotifications().getdataCDA();
+  for(let i in data){
+    if(i!==_userId && data[i] && data[i]["running"] && data[i]["isActive"] && data[i]["isActive"]["active"]){
+      callNotifications().updFireByKey(i,{FLEX_EXCLUSIVE_OFFER:genId$1()});
+    }
+  }
+}
+
 const addNotificationbyCda = (bdy, auth) => {
    let _ddt = null;
    let _form = bdy["form"];   
@@ -4991,7 +5004,8 @@ const addNotificationbyCda = (bdy, auth) => {
       let params = bdy["params"];
       let _userId = params["user"];
       if(typeID==="40" || typeID==="38"){
-         callNotifications().updFireByKey(_userId,{FLEX_EXCLUSIVE_OFFER:genId$1()});
+         //callNotifications().updFireByKey(_userId,{FLEX_EXCLUSIVE_OFFER:genId$1()});
+        FLEX_EXCLUSIVE_OFFER(_userId);
       }
       else if(typeID==="39"){
          callNotifications().updFireByKey(_userId,{FLEX_INSTANT_OFFER:genId$1()});
