@@ -4913,6 +4913,23 @@ const getBlockByUserServiceArea = (bdy, auth) => {
 };
 
 
+const getBlockByUserbyDay = (bdy, auth) => {
+  let _ddt = {};
+  if(auth && auth.isAdmin){
+     let params = bdy["params"];
+     let fields = bdy["fields"];
+     let MCollection = "Blocks";
+     let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user,'day',params["day"]);
+     let _list2Rend =  tlt && Object.keys(tlt);
+     _list2Rend && _list2Rend.map((_itm,_inD)=>{
+        let _lg = Hrmdb.findOne(MCollection,_itm);
+        var vfl = validateFields(fields,_lg,params);
+        _ddt[_itm]= vfl;
+     });
+  }
+  return _ddt;
+};
+
 const getScheduleByUser = (bdy, auth) => {
    let _ddt = {};
    let params = bdy["params"];
@@ -5187,6 +5204,8 @@ class GraphQuery {
             updQueryStore("checkForNewUser", checkForNewUser);
             updQueryStore("addBlockByUser", addBlockByUser);
             updQueryStore("getBlockByUserServiceArea", getBlockByUserServiceArea);
+            updQueryStore("getBlockByUserbyDay", getBlockByUserbyDay);
+            
             
             updQueryStore("getScheduleByUser", getScheduleByUser);
             updQueryStore("getBlockByServiceArea", getBlockByServiceArea);
@@ -5196,6 +5215,7 @@ class GraphQuery {
             updQueryStore("getNotificationbyCda", getNotificationbyCda);
             updQueryStore("getNotificationbyCdaFilter", getNotificationbyCdaFilter);
             
+
 
             /***************************************************** 
 
