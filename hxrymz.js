@@ -3205,6 +3205,7 @@ addIndex(name,item){
         let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
         console.log(key);
         console.log(dest);
+        console.log(obj[key]);
         //console.log(II2);
         //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(obj[key]));
         II2 = null;
@@ -3220,7 +3221,7 @@ addIndex(name,item){
           let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
           console.log(key);
           console.log(dest);
-          //console.log(II2);
+          console.log(levelObj['level2'][key]);
           //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(levelObj['level2'][key]));
           II2 = null;
         }
