@@ -3224,7 +3224,7 @@ addIndex(name,item){
         if(get_fs$$_().existsSync(dest)){
           let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8'));           
           if(levelSimpleObj['level2'][key]){
-            console.log(levelSimpleObj['level2'][key]);
+            //console.log(levelSimpleObj['level2'][key]);
             let ss1 = Object.keys(levelSimpleObj['level2'][key])[0]
             let ss2 = Object.keys(levelSimpleObj['level2'][key][ss1])[0]
             if(!II2[ss1]){
@@ -3250,9 +3250,7 @@ addIndex(name,item){
       if(key){
         let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
         if(get_fs$$_().existsSync(dest)){
-          let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
-          console.log(key);
-          console.log(dest);
+          let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8'));
           //console.log(II2);
           //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(levelSimpleObj['level3'][key]));
           II2 = null;
