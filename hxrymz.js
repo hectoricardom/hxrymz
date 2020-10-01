@@ -2614,6 +2614,7 @@ var master = {};
 var lastUpdate = {};
 
 var levelObj = {};
+var levelSimpleObj = {};
 
 
 let masterParth = [
@@ -2801,6 +2802,7 @@ class HrmDb {
           } 
         }                     
       }
+      this.addIndex(name,obj);
       return obj;
   }
   
@@ -3080,6 +3082,7 @@ calcLevel3(item,level,k,k2,row,row2){
 
     
 calcIndexesAll(name){
+
   var _th0 = this;
   var stt = (new Date()).getTime();
   let _MasterIndexes = master["masterIndexes"];
@@ -3159,8 +3162,164 @@ calcIndexesAll(name){
 
 
 
+addIndex(name,item){
+  let _MasterIndexes = master["masterIndexes"];
+  var obj = {};
+  levelSimpleObj["level2"] = {};
+  levelSimpleObj["level3"] = {};
+  for(let key in _MasterIndexes[name]){
+    //let key = ArrColl[i22]
+    if(key){
+      if(!obj[key]){ obj[key] = {}; }
+      if(obj[key] && item && item["id"] && item[key]){
+        let _row = item[key];
+        if(_row){      
+          if(typeof _row ==="object" ){
+            for(let o2Ind in _row){
+              // let o2Ind = _row[i23]
+              if(!obj[key][o2Ind]){ obj[key][o2Ind] = {}; }
+              if(obj[key][o2Ind]){
+                obj[key][o2Ind][item['id']]=1;
+                let _level1 = _MasterIndexes[name][key];
+                this.calcLevelOneIndex2(item,_level1,key,o2Ind);
+              }
+            }
+          }else {
+            if(!obj[key][_row]){ obj[key][_row] = {}; }
+            if(obj[key][_row]){
+              obj[key][_row][item['id']]=1;
+              let _level1 = _MasterIndexes[name][key];
+              this.calcLevelOneIndex2(item,_level1,key,_row);
+            }
+          }
+        }
+      }
+    }
+  } 
+  console.log(item["id"]);
+  console.log('level1');
+  for(let key in obj){   
+    if(key){
+      let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';      
+      if(get_fs$$_().existsSync(dest)){
+        let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
+        console.log(key);
+        console.log(dest);
+        console.log(II2);
+        //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(obj[key]));
+        II2 = null;
+      }
+    }
+  }
+  console.log('level2');
+  if(levelSimpleObj['level2']){
+    for(let key in levelSimpleObj['level2']){     
+      if(key){
+        let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';   
+        if(get_fs$$_().existsSync(dest)){
+          let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
+          console.log(key);
+          console.log(dest);
+          console.log(II2);
+          //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(levelObj['level2'][key]));
+          II2 = null;
+        }
+      }
+    }
+  }
+  console.log('level3');
+  if(levelSimpleObj['level3']){
+    for(let key in levelSimpleObj['level3']){
+      if(key){
+        let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
+        if(get_fs$$_().existsSync(dest)){
+          let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
+          console.log(key);
+          console.log(dest);
+          console.log(II2);
+          //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(levelObj['level3'][key]));
+          II2 = null;
+        }
+      }
+    }
+  }
 
 
+  obj = {};
+  levelSimpleObj["level2"] = {};
+  levelSimpleObj["level3"] = {};
+}
+
+
+
+calcLevelOneIndex2(item,level,k,row){
+  let lvl = "level2";
+  for(let key2 in level){
+    //let key2 = level[i22]
+    if(key2){
+      let keyComplx = k +'_'+ key2;
+      if(!levelSimpleObj[lvl][keyComplx]){ levelSimpleObj[lvl][keyComplx] = {}; }
+      if(!levelSimpleObj[lvl][keyComplx][row]){ levelSimpleObj[lvl][keyComplx][row] = {}; }
+      if(levelSimpleObj[lvl][keyComplx] && levelSimpleObj[lvl][keyComplx][row]){
+        let _row2 = item[key2];
+        if(typeof _row2 ==="object" ){
+          for(let o2Ind in _row2){
+            // let o2Ind = _row3[i22]
+            if(!levelSimpleObj[lvl][keyComplx][row][o2Ind]){ levelSimpleObj[lvl][keyComplx][row][o2Ind] = {}; }
+            if(levelSimpleObj[lvl][keyComplx][row][o2Ind]){
+              levelSimpleObj[lvl][keyComplx][row][o2Ind][item['id']]=1;
+              let _level3 = level[key2];
+              this.calcLevelOneIndex3(item,_level3,k,key2,row,o2Ind);
+            }
+          }
+        }else {
+          if(!levelSimpleObj[lvl][keyComplx][row][_row2]){ levelSimpleObj[lvl][keyComplx][row][_row2] = {}; }
+          if(levelSimpleObj[lvl][keyComplx][row][_row2]){
+            levelSimpleObj[lvl][keyComplx][row][_row2][item['id']]=1;
+            let _level3 = level[key2];
+            this.calcLevelOneIndex3(item,_level3,k,key2,row,_row2);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+calcLevelOneIndex3(item,level,k,k2,row,row2){
+  let lvl = "level3";
+  for(let key2 in level){
+    //let key2 = level[i22]
+    if(key2){
+      let keyComplx = k +'_'+ k2 +'_'+ key2;
+      if(!levelSimpleObj[lvl][keyComplx]){ levelSimpleObj[lvl][keyComplx] = {}; }
+      if(!levelSimpleObj[lvl][keyComplx][row]){ levelSimpleObj[lvl][keyComplx][row] = {}; }
+      if(!levelSimpleObj[lvl][keyComplx][row][row2]){ levelSimpleObj[lvl][keyComplx][row][row2] = {}; }
+      if(levelSimpleObj[lvl][keyComplx] && levelSimpleObj[lvl][keyComplx][row]  && levelSimpleObj[lvl][keyComplx][row][row2]){
+        let _row3 = item[key2];
+        if(typeof _row3 ==="object" ){
+          for(let o2Ind in _row3){
+            // let o2Ind = _row3[i22]
+            if(!levelSimpleObj[lvl][keyComplx][row][row2][o2Ind]){ levelSimpleObj[lvl][keyComplx][row][row2][o2Ind] = {}; }
+            if(levelSimpleObj[lvl][keyComplx][row][row2][o2Ind]){
+              levelSimpleObj[lvl][keyComplx][row][row2][o2Ind][item['id']]=1;
+              // let _level4 = level[key2]
+              // calcLevel3(item,_level3,k,key2,row,o2Ind)
+            }
+          }
+        }else {
+          if(!levelSimpleObj[lvl][keyComplx][row][row2][_row3]){ levelSimpleObj[lvl][keyComplx][row][row2][_row3] = {}; }
+          if(levelSimpleObj[lvl][keyComplx][row][row2][_row3]){
+            levelSimpleObj[lvl][keyComplx][row][row2][_row3][item['id']]=1;
+            // let _level4 = level[key2]
+            // calcLevel3(item,_level3,k,key2,row,_row2)
+          }
+        }
+      }
+    }
+  }
+}
 
 
 
@@ -4877,6 +5036,24 @@ const addBlockByUser = (bdy, auth) => {
 };
 
 
+const getBlockByUserbyDay = (bdy, auth) => {
+   let _ddt = {};
+   if(auth && auth.isAdmin){
+      let params = bdy["params"];
+      let fields = bdy["fields"];
+      let MCollection = "Blocks";
+      let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user,'day',params["day"]);
+      let _list2Rend =  tlt && Object.keys(tlt);
+      _list2Rend && _list2Rend.map((_itm,_inD)=>{
+         let _lg = Hrmdb.findOne(MCollection,_itm);
+         var vfl = validateFields(fields,_lg,params);
+         _ddt[_itm]= vfl;
+      });
+   }
+   return _ddt;
+ };
+
+
 const getBlockByServiceArea = (bdy, auth) => {
    let _ddt = {};
    if(auth && auth.isAdmin){
@@ -4912,23 +5089,6 @@ const getBlockByUserServiceArea = (bdy, auth) => {
    return _ddt;
 };
 
-
-const getBlockByUserbyDay = (bdy, auth) => {
-  let _ddt = {};
-  if(auth && auth.isAdmin){
-     let params = bdy["params"];
-     let fields = bdy["fields"];
-     let MCollection = "Blocks";
-     let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user,'day',params["day"]);
-     let _list2Rend =  tlt && Object.keys(tlt);
-     _list2Rend && _list2Rend.map((_itm,_inD)=>{
-        let _lg = Hrmdb.findOne(MCollection,_itm);
-        var vfl = validateFields(fields,_lg,params);
-        _ddt[_itm]= vfl;
-     });
-  }
-  return _ddt;
-};
 
 const getScheduleByUser = (bdy, auth) => {
    let _ddt = {};
@@ -4997,17 +5157,15 @@ let AllowNotification = {
 };
 
 
-let users = [""]
-
 const FLEX_EXCLUSIVE_OFFER = (_userId) => {
-  callNotifications().updFireByKey(_userId,{FLEX_EXCLUSIVE_OFFER:genId$1()});
-  let data = callNotifications().getdataCDA();
-  for(let i in data){
-    if(i!==_userId && data[i] && data[i]["running"] && data[i]["isActive"] && data[i]["isActive"]["active"]){
-      callNotifications().updFireByKey(i,{FLEX_EXCLUSIVE_OFFER:genId$1()});
-    }
-  }
-}
+   callNotifications().updFireByKey(_userId,{FLEX_EXCLUSIVE_OFFER:genId$1()});
+   let data = callNotifications().getdataCDA();
+   for(let i in data){
+      if(i!==_userId && data[i] && data[i]["running"] && data[i]["isActive"] && data[i]["isActive"]["active"]){
+         callNotifications().updFireByKey(i,{FLEX_EXCLUSIVE_OFFER:genId$1()});
+      }
+   }
+};
 
 const addNotificationbyCda = (bdy, auth) => {
    let _ddt = null;
@@ -5021,8 +5179,7 @@ const addNotificationbyCda = (bdy, auth) => {
       let params = bdy["params"];
       let _userId = params["user"];
       if(typeID==="40" || typeID==="38"){
-         //callNotifications().updFireByKey(_userId,{FLEX_EXCLUSIVE_OFFER:genId$1()});
-        FLEX_EXCLUSIVE_OFFER(_userId);
+         FLEX_EXCLUSIVE_OFFER(_userId);
       }
       else if(typeID==="39"){
          callNotifications().updFireByKey(_userId,{FLEX_INSTANT_OFFER:genId$1()});
@@ -5204,8 +5361,8 @@ class GraphQuery {
             updQueryStore("checkForNewUser", checkForNewUser);
             updQueryStore("addBlockByUser", addBlockByUser);
             updQueryStore("getBlockByUserServiceArea", getBlockByUserServiceArea);
-            updQueryStore("getBlockByUserbyDay", getBlockByUserbyDay);
             
+            updQueryStore("getBlockByUserbyDay", getBlockByUserbyDay);
             
             updQueryStore("getScheduleByUser", getScheduleByUser);
             updQueryStore("getBlockByServiceArea", getBlockByServiceArea);
@@ -5215,7 +5372,6 @@ class GraphQuery {
             updQueryStore("getNotificationbyCda", getNotificationbyCda);
             updQueryStore("getNotificationbyCdaFilter", getNotificationbyCdaFilter);
             
-
 
             /***************************************************** 
 
