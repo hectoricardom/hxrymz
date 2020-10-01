@@ -3196,21 +3196,20 @@ addIndex(name,item){
       }
     }
   } 
-  console.log(item["id"]);
-  console.log('level1');
+  
+  
   for(let key in obj){   
     if(key){
       let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';      
       if(get_fs$$_().existsSync(dest)){
-        let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
-        console.log(key);
-        console.log(dest);
+        let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8'));        
         if(levelSimpleObj['level2'][key]){
-          console.log(obj[key]);
-          let ss1 = Object.keys(levelSimpleObj['level2'][key])[0]
-          console.log(ss1);
-          //console.log(II2);
-          //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(obj[key]));
+          let ss1 = Object.keys(levelSimpleObj['level2'][key])[0];
+          if(!II2[ss1]){
+            II2[ss1] = {};
+          }
+          II2[ss1][item["id"]] = 1;
+          _Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(II2));
         }
         II2 = null;
       }
@@ -3218,24 +3217,24 @@ addIndex(name,item){
   }
 
 
-  console.log('level2');
   if(levelSimpleObj['level2']){
     for(let key in levelSimpleObj['level2']){     
       if(key){
-        let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';   
+        let dest = rootPath + 'Indexes_' + name +'_'+ key + '.json';   
         if(get_fs$$_().existsSync(dest)){
-          let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
-          console.log(key);
-          console.log(dest);
-          console.log('*****'); 
+          let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8'));           
           if(levelSimpleObj['level2'][key]){
             console.log(levelSimpleObj['level2'][key]);
             let ss1 = Object.keys(levelSimpleObj['level2'][key])[0]
             let ss2 = Object.keys(levelSimpleObj['level2'][key][ss1])[0]
-            console.log(ss1);
-          console.log(ss2);
-            //console.log(II2);
-            //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(obj[key]));
+            if(!II2[ss1]){
+              II2[ss1] = {};
+            }
+            if(!II2[ss1][ss2]){
+              II2[ss1][ss2] = {};
+            }
+            II2[ss1][ss2][item["id"]] = 1;
+            _Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(II2));
           }
           //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(levelSimpleObj['level2'][key]));
           II2 = null;
@@ -3245,7 +3244,7 @@ addIndex(name,item){
   }
 
 
-  console.log('level3');
+
   if(levelSimpleObj['level3']){
     for(let key in levelSimpleObj['level3']){
       if(key){
