@@ -3196,7 +3196,7 @@ addIndex(name,item){
       }
     }
   } 
-  
+
   
   for(let key in obj){   
     if(key){
@@ -3209,7 +3209,7 @@ addIndex(name,item){
             II2[ss1] = {};
           }
           II2[ss1][item["id"]] = 1;
-          _Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(II2));
+          get_fs$$_().writeFileSync(dest, JSON.stringify(II2));
         }
         II2 = null;
       }
@@ -3234,7 +3234,7 @@ addIndex(name,item){
               II2[ss1][ss2] = {};
             }
             II2[ss1][ss2][item["id"]] = 1;
-            _Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(II2));
+            get_fs$$_().writeFileSync(dest, JSON.stringify(II2));
           }
           //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(levelSimpleObj['level2'][key]));
           II2 = null;
