@@ -25,6 +25,7 @@ var _host_ = "localhost";
 
 var _fs$$_ = require('fs');
 var execN = require('child_process');
+const { ObjectKeys } = require('e:/newproject/monorepo/amzflx/client/src/store/util');
 var _exec$$_ = execN.exec;
 
 
@@ -3206,12 +3207,16 @@ addIndex(name,item){
         console.log(key);
         console.log(dest);
         console.log(obj[key]);
+        let ss1 = Object.keys(levelSimpleObj['level2'][key])[0]
+        console.log(ss1);
         //console.log(II2);
         //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(obj[key]));
         II2 = null;
       }
     }
   }
+
+
   console.log('level2');
   if(levelSimpleObj['level2']){
     for(let key in levelSimpleObj['level2']){     
@@ -3222,12 +3227,18 @@ addIndex(name,item){
           console.log(key);
           console.log(dest);
           console.log(levelSimpleObj['level2'][key]);
+          let ss1 = Object.keys(levelSimpleObj['level2'][key])[0]
+          let ss2 = Object.keys(levelSimpleObj['level2'][key][ss1])[0]
+          console.log(ss1);
+          console.log(ss2);
           //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(levelSimpleObj['level2'][key]));
           II2 = null;
         }
       }
     }
   }
+
+
   console.log('level3');
   if(levelSimpleObj['level3']){
     for(let key in levelSimpleObj['level3']){
