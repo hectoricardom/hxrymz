@@ -5051,6 +5051,24 @@ const addBlockByUser = (bdy, auth) => {
 };
 
 
+const getBlockByUser = (bdy, auth) => {
+  let _ddt = {};
+  if(auth && auth.isAdmin){
+     let params = bdy["params"];
+     let fields = bdy["fields"];
+     let MCollection = "Blocks";
+     let tlt = Hrmdb.FindIndexes(MCollection,'user',params.user);
+     let _list2Rend =  tlt && Object.keys(tlt);
+     _list2Rend && _list2Rend.map((_itm,_inD)=>{
+        let _lg = Hrmdb.findOne(MCollection,_itm);
+        var vfl = validateFields(fields,_lg,params);
+        _ddt[_itm]= vfl;
+     });
+  }
+  return _ddt;
+};
+
+
 const getBlockByUserbyDay = (bdy, auth) => {
    let _ddt = {};
    if(auth && auth.isAdmin){
@@ -5390,6 +5408,7 @@ class GraphQuery {
             updQueryStore("getBlockByUserServiceArea", getBlockByUserServiceArea);
             
             updQueryStore("getBlockByUserbyDay", getBlockByUserbyDay);
+            updQueryStore("getBlockByUser", getBlockByUser);
             
             updQueryStore("getScheduleByUser", getScheduleByUser);
             updQueryStore("getBlockByServiceArea", getBlockByServiceArea);
