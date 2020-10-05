@@ -5070,20 +5070,30 @@ const getBlockByUserbyDay = (bdy, auth) => {
 
 
 const getBlockByServiceArea = (bdy, auth) => {
-   let _ddt = {};
-   if(auth && auth.isAdmin){
-      let params = bdy["params"];
-      let fields = bdy["fields"];
-      let MCollection = "Blocks";
-      let tlt = Hrmdb.FindIndexes(MCollection,'serviceAreaId',params["serviceAreaId"]);
-      let _list2Rend =  tlt && Object.keys(tlt);
-      _list2Rend && _list2Rend.map((_itm,_inD)=>{
-         let _lg = Hrmdb.findOne(MCollection,_itm);
-         var vfl = validateFields(fields,_lg,params);
-         _ddt[_itm]= vfl;
-      });
-   }
-   return _ddt;
+  let _ddt = {};
+  if(auth && auth.isAdmin){
+    let params = bdy["params"];
+    let fields = bdy["fields"];
+    let MCollection = "Blocks";
+    let tlt = Hrmdb.FindIndexes(MCollection,'serviceAreaId',params["serviceAreaId"]);
+    let _list2Rend =  tlt && Object.keys(tlt);
+    
+    _list2Rend && _list2Rend.map((_itm,_inD)=>{
+      let _lg = Hrmdb.findOne(MCollection,_itm);
+      //var vfl = validateFields(fields,_lg,params);
+      let tmHr = _lg["minuteHours"];
+      let startTime = _lg["startTime"];
+      if(!nb[tmHr]){
+        nb[tmHr]={}
+      }
+      if(!nb[tmHr][startTime]){
+        nb[tmHr][startTime]=0
+      }
+      nb[tmHr][startTime] += 1;
+      //_ddt[_itm]= vfl;
+    });
+  }
+  return nb;
 };
 
 
