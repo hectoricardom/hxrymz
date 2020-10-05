@@ -5071,13 +5071,14 @@ const getBlockByUserbyDay = (bdy, auth) => {
 
 const getBlockByServiceArea = (bdy, auth) => {
   let _ddt = {};
+  let nb = {}
   if(auth && auth.isAdmin){
     let params = bdy["params"];
     let fields = bdy["fields"];
     let MCollection = "Blocks";
     let tlt = Hrmdb.FindIndexes(MCollection,'serviceAreaId',params["serviceAreaId"]);
     let _list2Rend =  tlt && Object.keys(tlt);
-    let nb = {}
+   
      
     _list2Rend && _list2Rend.map((_itm,_inD)=>{
       let _lg = Hrmdb.findOne(MCollection,_itm);
