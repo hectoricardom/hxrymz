@@ -5077,7 +5077,8 @@ const getBlockByServiceArea = (bdy, auth) => {
     let MCollection = "Blocks";
     let tlt = Hrmdb.FindIndexes(MCollection,'serviceAreaId',params["serviceAreaId"]);
     let _list2Rend =  tlt && Object.keys(tlt);
-    
+    let nb = {}
+     
     _list2Rend && _list2Rend.map((_itm,_inD)=>{
       let _lg = Hrmdb.findOne(MCollection,_itm);
       //var vfl = validateFields(fields,_lg,params);
