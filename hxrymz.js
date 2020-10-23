@@ -5060,6 +5060,8 @@ const addBlockResultByUser = (bdy, auth) => {
   let params = bdy["params"];
   let fields = bdy["fields"];
   let _now =new Date(params.now);
+  
+  f2S["statusOffer"] = params.statusOffer;
   f2S["createdAt"] = _now.getTime();
   f2S["user"] = auth["user"];
   f2S["endTime"] =_form["endTime"];
@@ -5425,7 +5427,15 @@ class GraphQuery {
             Hrmdb.calcIndexesAll('User'); 
             
 
-
+            Hrmdb.getCollection('OfferResult');
+            Hrmdb.createIndexes('OfferResult','user');
+            Hrmdb.createIndexes('OfferResult','serviceAreaId');
+            Hrmdb.createIndexes('OfferResult','statusOffer');
+            Hrmdb.createIndexes('OfferResult','user','serviceAreaId');
+            Hrmdb.createIndexes('OfferResult','user','serviceAreaId',"statusOffer");
+            Hrmdb.createIndexes('OfferResult','serviceAreaId',"statusOffer");
+            Hrmdb.calcIndexesAll('OfferResult'); 
+            
 
             
 
