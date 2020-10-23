@@ -5051,6 +5051,41 @@ const addBlockByUser = (bdy, auth) => {
 };
 
 
+
+const addBlockResultByUser = (bdy, auth) => {
+  let MCollection = "OfferResult"; 
+  let _ddt = null;
+  let f2S = {};
+  let _form = bdy["form"];
+  let params = bdy["params"];
+  let fields = bdy["fields"];
+  let _now =new Date(params.now);
+  f2S["createdAt"] = _now.getTime();
+  f2S["user"] = auth["user"];
+  f2S["endTime"] =_form["endTime"];
+  f2S["priceAmount"] = _form["rateInfo"] && _form["rateInfo"]['priceAmount'];
+  f2S["schedulingType"] =_form["schedulingType"];
+  f2S["offerType"] =_form["offerType"];
+  f2S["startTime"] =_form["startTime"];
+  f2S["serviceAreaId"] =_form["serviceAreaId"];
+  f2S["serviceTypeId"] =_form["serviceTypeId"];
+  f2S["minuteHours"] =(_now.getHours() * 60) + _now.getMinutes();
+  f2S["day"] = `${_now.getFullYear()}_${_now.getMonth()}_${_now.getDate()}`;
+  const _nwV = Hrmdb.push(MCollection,f2S, true);
+  const nd2 = JSON.stringify(_nwV);
+  let _lg = JSON.parse(nd2);
+  if(_lg){
+     _ddt={};
+     var vfl = validateFields(fields,_lg);
+     _ddt[_lg.id]= vfl;
+  }
+  return _ddt;
+};
+
+
+
+
+
 const getBlockByUser = (bdy, auth) => {
   let _ddt = {};
   if(auth && auth.isAdmin){
@@ -5405,6 +5440,7 @@ class GraphQuery {
             updQueryStore("GetScheduleAndEarningsByUser", GetScheduleAndEarningsByUser);
             updQueryStore("checkForNewUser", checkForNewUser);
             updQueryStore("addBlockByUser", addBlockByUser);
+            updQueryStore("addBlockResultByUser", addBlockResultByUser);
             updQueryStore("getBlockByUserServiceArea", getBlockByUserServiceArea);
             
             updQueryStore("getBlockByUserbyDay", getBlockByUserbyDay);
