@@ -5377,6 +5377,7 @@ class GraphQuery {
             Hrmdb.createIndexes('Logins','user');
             Hrmdb.createIndexes('Cda','email');
 
+            Hrmdb.getCollection('Blocks');
 
             /*
             
@@ -5466,13 +5467,17 @@ class GraphQuery {
             updQueryStore("checkForNewUser", checkForNewUser);
             updQueryStore("addBlockByUser", addBlockByUser);
             updQueryStore("addBlockResultByUser", addBlockResultByUser);
-            updQueryStore("getBlockByUserServiceArea", getBlockByUserServiceArea);
             
+            
+            /*    
+            updQueryStore("getBlockByUserServiceArea", getBlockByUserServiceArea);            
             updQueryStore("getBlockByUserbyDay", getBlockByUserbyDay);
             updQueryStore("getBlockByUser", getBlockByUser);
+            updQueryStore("getBlockByServiceArea", getBlockByServiceArea);
+
+            */
             
             updQueryStore("getScheduleByUser", getScheduleByUser);
-            updQueryStore("getBlockByServiceArea", getBlockByServiceArea);
             updQueryStore("getDepositedByUser", getDepositedByUser);
             updQueryStore("getServiceEarningsByUser", getServiceEarningsByUser);
             updQueryStore("addNotificationbyCda", addNotificationbyCda);
