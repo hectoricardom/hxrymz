@@ -4043,18 +4043,17 @@ const verifyToken = (bdy) => {
 const usersList = (bdy,auth) => {
     let _ddt = null;
     if(auth && auth.isAdmin){
-        let fields = bdy["fields"];
-        let params = bdy["params"];        
-        _ddt=[];
-        _ddt={};
-        const hdd = callNotifications().getdataCDA();
-        console.log(hdd)
-        for(let ky in hdd){
-            if(hdd[ky] && hdd[ky].id){
-                var vfl = validateFields(fields,hdd[ky],params,auth.user);
-                _ddt[ky]= vfl;
-            }
+      let fields = bdy["fields"];
+      let params = bdy["params"];        
+      _ddt=[];
+      _ddt={};
+      const hdd = callNotifications().getdataCDA();
+      for(let ky in hdd){
+        if(hdd[ky] && hdd[ky].email){
+            var vfl = validateFields(fields,hdd[ky],params,auth.user);
+            _ddt[ky]= vfl;
         }
+      }
     }
     return _ddt;
 };
