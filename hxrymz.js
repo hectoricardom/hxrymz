@@ -4991,6 +4991,29 @@ const checkForNewUser = (bdy, auth) => {
 
 
 
+const findbyIdCda = (bdy,auth) => {
+  let _ddt = null;
+  if(auth){
+      let MCollection =  "Cda";
+      let fields = bdy["fields"];
+      let params = bdy["params"];
+      let _id = auth.user;
+      let data = callNotifications().getdataCDA();
+      const hdd =  data[_id];
+      if(hdd){
+          if(_id){
+              _ddt={};
+              var vfl = validateFields(fields,hdd,params,_id);
+              _ddt[_id]= vfl;
+          }
+      }
+  }
+  return _ddt;
+};
+
+
+
+
 
 const addBlockByUser = (bdy, auth) => {
    let MCollection = "Blocks";
@@ -5234,10 +5257,11 @@ class GraphQuery {
             updQueryStore("GetScheduleAndEarningsByUser", GetScheduleAndEarningsByUser);
             updQueryStore("checkForNewUser", checkForNewUser);
             updQueryStore("addBlockByUser", addBlockByUser);
-            
+            updQueryStore("findbyIdCda", findbyIdCda);
+
             /*
             updQueryStore("findUserbyId", findUserbyId);            
-            updQueryStore("findbyIdCda", findbyIdCda);
+            
             
 
 
