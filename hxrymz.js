@@ -4717,7 +4717,11 @@ class Params {
       else {
           if (!res.finished) {
               const used = process.memoryUsage();
-              res.status(500).send({data:used});
+              var uss = {}
+              for (let key in used) {
+                uss[key] = `${Math.round(used[key] / 1024 / 1024 * 100) / 100} MB`
+              }
+              res.status(500).send({data:uss});
               res.finished = true;
           }
       }
