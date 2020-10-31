@@ -3964,8 +3964,6 @@ const generateToken = (bdy) => {
         }
     }
     if(userId){
-        console.log(userId)
-        console.log(Cda)
         var id = userId;        
         var tkCode = gen6CodeId();        
         var time2expire = 30*24*3600000;
