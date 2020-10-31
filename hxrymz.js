@@ -4706,7 +4706,7 @@ class Params {
     getStaticCollection(req, res, next) { 
       var id = req.params.id;
       var tempData = "/home/ubuntu/temp/data/";
-      var st = path.join(tempData,id); 
+      var st = tempData+id; 
       var ext = id.split('.').pop();
       if (get_fs$$_().existsSync(st)) {
           var rs =get_fs$$_().createReadStream(st);
