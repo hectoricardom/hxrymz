@@ -3151,6 +3151,13 @@ calcIndexesAll(name){
   levelObj["level2"] = {};
   levelObj["level3"] = {};
   console.log("collection ", name ," calculating index duration: ", (new Date()).getTime() - stt , " in " , Object.keys(ArrColl).length , " rows");
+  const used = process.memoryUsage();
+  var uss = {}
+  console.log("Memory usage")
+  for (let key in used) {
+    uss[key] = `${Math.round(used[key] / 1024 / 1024 * 100) / 100} MB`
+    console.log(`${key} :  ${Math.round(used[key] / 1024 / 1024 * 100) / 100} MB`)
+  }
 
 }
 
