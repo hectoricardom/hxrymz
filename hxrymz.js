@@ -3803,13 +3803,10 @@ function decryptTokenfromLoginId(token,Coll,fp) {
       }
       //else if(check && k.fp!==fp){       data = null; }
       else {
-        var uk = Hrmdb.findOne(Coll,k.user);
         data = {};
         data["user"] = k.user;
         data["exp"] = k.exp;
-        if(k && uk){
-          data["isAdmin"] = uk["isAdmin"];
-        }
+        data["isAdmin"] = k["isAdmin"];
       }
     }
     if(!data){
@@ -3971,7 +3968,7 @@ const generateToken = (bdy) => {
         var tkCode = gen6CodeId();        
         var time2expire = 30*24*3600000;
         var exp = (new Date()).getTime()+time2expire;
-        var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode};
+        var tk = {user:id,exp:exp,createdAt:(new Date()).getTime(),code:tkCode,isAdmin:Cda.isAdmin};
         var k = Hrmdb.push(`Logins`,tk);
         if(!code_token[tkCode]){
             code_token[tkCode]={};
