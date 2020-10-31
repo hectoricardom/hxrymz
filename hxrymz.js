@@ -4048,6 +4048,7 @@ const usersList = (bdy,auth) => {
         _ddt=[];
         _ddt={};
         const hdd = callNotifications().getdataCDA();
+        console.log(hdd)
         for(let ky in hdd){
             if(hdd[ky] && hdd[ky].id){
                 var vfl = validateFields(fields,hdd[ky],params,auth.user);
