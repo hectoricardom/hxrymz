@@ -4706,6 +4706,7 @@ class Params {
       var st = tempData+id; 
       var ext = id.split('.').pop();
       if (get_fs$$_().existsSync(st)) {
+        console.log(st);
         get_fs$$_().readFile(st, function (err, data) {
           if (!res.finished) {
             res.status(200).send(data);
