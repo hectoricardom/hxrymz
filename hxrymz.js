@@ -4716,7 +4716,8 @@ class Params {
       }
       else {
           if (!res.finished) {
-              res.status(403).send(null);
+              const used = process.memoryUsage();
+              res.status(500).send({data:used});
               res.finished = true;
           }
       }
