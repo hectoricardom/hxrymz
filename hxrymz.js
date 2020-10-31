@@ -2557,11 +2557,6 @@ function parseIndex(s) {
 
 
 
-/*
-
-Create a bucket and upload something into it
-
-
 
 
 var isDateFolder = false;
@@ -2600,7 +2595,7 @@ function saveCollection2S3(fileName){
        
 }
 
-*/
+
 
 
 
@@ -2780,8 +2775,8 @@ class HrmDb {
           Ndoc[key]=obj;
           let collNewPath = rootPath + name +"_"+ parseIndex(currIndexDoc+1) + '.json';
           get_fs$$_().writeFileSync(collNewPath, JSON.stringify(Ndoc));                
-          //saveCollection2S3(_Master[s].path[nwInd].split('data/')[1]);
-          //saveCollection2S3(MasterPath.split('data/')[1]);
+          saveCollection2S3(collPath);
+          saveCollection2S3(collNewPath);
       }
       else {
         CDoc[key]={};
@@ -2798,7 +2793,7 @@ class HrmDb {
             lastUpdate[name] = new Date().getTime();
             let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
             get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
-            //saveCollection2S3(_Master[s].path[currIndexDoc].split('data/')[1]);                
+            saveCollection2S3(collPath);              
           } 
         }                     
       }
@@ -2839,6 +2834,7 @@ class HrmDb {
         lastUpdate[name] = new Date().getTime();
         let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
         get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+        saveCollection2S3(collPath);
       }  
       return obj;
   }
@@ -2869,6 +2865,7 @@ class HrmDb {
       }      lastUpdate[name] = new Date().getTime();
       let collPath = rootPath + name +"_"+ parseIndex(currIndexDoc) + '.json';
       get_fs$$_().writeFileSync(collPath, JSON.stringify(CDoc));
+      saveCollection2S3(collPath);
       return true; 
     }else {
       return false; 
