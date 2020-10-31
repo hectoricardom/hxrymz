@@ -12,7 +12,8 @@ var plivo = _interopDefault(require('plivo'));
 var nodemailer = _interopDefault(require('nodemailer'));
 var adminfbs = require('firebase-admin');
 var request = _interopDefault(require('request'));
-
+var request = _interopDefault(require('request'));
+var AWS = _interopDefault(require('aws-sdk'));
 // var execN = _interopDefault(require('child_process'));
 
 // const _config = require('./config.json');
