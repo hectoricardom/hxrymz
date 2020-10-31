@@ -5364,7 +5364,7 @@ class GraphQuery {
     
     constructor() {
         get_exec$$_()('ls', function(err, istdout, istderr){
-            Hrmdb.getCollection('Blocks');
+           
             Hrmdb.getCollection('Cda');
             Hrmdb.getCollection('Logs');
             Hrmdb.getCollection('Regions');
@@ -5377,6 +5377,10 @@ class GraphQuery {
             Hrmdb.createIndexes('Logins','user');
             Hrmdb.createIndexes('Cda','email');
 
+
+            /*
+            
+            Hrmdb.getCollection('Blocks');
             Hrmdb.createIndexes('Blocks','day');           
             Hrmdb.createIndexes('Blocks','user');
             Hrmdb.createIndexes('Blocks','user','day','serviceAreaId');
@@ -5387,6 +5391,9 @@ class GraphQuery {
             Hrmdb.createIndexes('Blocks','serviceAreaId','minuteHours');
             Hrmdb.createIndexes('Blocks','user','minuteHours','serviceAreaId');
             Hrmdb.createIndexes('Blocks','user','serviceAreaId','minuteHours');
+            Hrmdb.calcIndexesAll('Blocks');
+
+            */
 
             
 
@@ -5404,7 +5411,7 @@ class GraphQuery {
 
 
             Hrmdb.calcIndexesAll('Cda');
-            Hrmdb.calcIndexesAll('Blocks');
+            
             Hrmdb.calcIndexesAll('Logins'); 
             Hrmdb.calcIndexesAll('Logs');
 
