@@ -4016,18 +4016,22 @@ const verifyToken = (bdy) => {
     var tkCode = params.code;
     var lg_id = code_token[tkCode]; 
     console.log(code_token)
-    if(lg_id && lg_id.exp && lg_id.exp>(new Date()).getTime()){
-        var k =Hrmdb.findOne('Logins',lg_id.id);
-        if(k && k.id){
-            // var ciphertext = _Util.Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
-            delete code_token[tkCode];
-            res = {token:k.id};
-        }else {
-            res = {err:`Access was denied -- Code Failed`};               
-        }
-    }else {
-        res = {err:`Access was denied -- Code Failed`};
-    }      
+    console.log(lg_id)
+    if(lg_id){
+      console.log(lg_id.exp)
+      if(lg_id.exp && lg_id.exp>(new Date()).getTime()){
+          var k =Hrmdb.findOne('Logins',lg_id.id);
+          if(k && k.id){
+              // var ciphertext = _Util.Base64.encode(CryptoJS.AES.encrypt(k.id, Skey).toString());
+              delete code_token[tkCode];
+              res = {token:k.id};
+          }else {
+              res = {err:`Access was denied -- Code Failed`};               
+          }
+      }else {
+          res = {err:`Access was denied -- Code Failed`};
+      } 
+    }     
     return res 
 };
 
