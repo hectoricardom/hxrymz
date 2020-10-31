@@ -4701,8 +4701,16 @@ class Params {
         }
     }
 
+    
 
-
+    getStaticCollection(req, res, next) { 
+      var coll = req.params.id;
+      if (!res.finished) {
+        var f = Hrmdb.find(coll)
+        res.status(200).send(f);
+        res.finished = true;
+      }
+  }
 
 
     GetSchedule(cad){     
@@ -5591,6 +5599,11 @@ class IndexRoute extends BaseRoute {
         router.get("/getStatic/:id", (req, res, next) => {
             _params$1.getStatic(req, res, next);
         });
+
+
+        router.get("/getStaticCollection/:id", (req, res, next) => {
+          _params$1.getStaticCollection(req, res, next);
+      });
 
         router.post("/loginWithGoogle", (req, res, next) => {
             _params$1.loginWithGoogle(req, res, next);
