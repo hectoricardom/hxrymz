@@ -4705,7 +4705,7 @@ class Params {
       var tempData = "/home/ubuntu/temp/data/";
       var st = tempData+id; 
       var ext = id.split('.').pop();
-      if (get_fs$$_().existsSync(st)) {
+      if (false && get_fs$$_().existsSync(st)) {
         console.log(st);
         get_fs$$_().readFile(st, function (err, data) {
           if (!res.finished) {
