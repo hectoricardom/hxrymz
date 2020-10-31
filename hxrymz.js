@@ -3257,8 +3257,8 @@ addIndex(name,item){
     for(let key in levelSimpleObj['level3']){
       if(key){
         let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
-        if(get_fs$$_().existsSync(dest)){
-          let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
+        if(get_fs$$_$1().existsSync(dest)){
+          let II2 = JSON.parse(get_fs$$_$1().readFileSync(dest,'utf8')); 
           console.log(key);
           console.log(dest);
           //console.log(II2);
