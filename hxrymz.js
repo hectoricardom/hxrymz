@@ -3975,11 +3975,7 @@ const generateToken = (bdy) => {
             code_token[tkCode]['id']=k.id;
             code_token[tkCode]['exp']=(new Date()).getTime()+(15*60000);
         }
-        var phone_ = Cda.phoneNumber;
-        var msg = `${tkCode} is your verification code.`;
-        if(phone_){
-            callNotifications().sendSMS(phone_,msg);
-        }
+        var msg = `${tkCode} is your verification code.`;        
         if(_email){
             let msgEmail = {
                 to: _email,
@@ -3996,10 +3992,14 @@ const generateToken = (bdy) => {
             };    
             callNotifications().sendEmail(msgEmail2Admin);
         }
-        let l4phone = phone_ && phone_.substring(phone_.length-4, phone_.length);
+        var phone_ = Cda.phoneNumber;
+        let l4phone = "";
+        if(phone_){
+            callNotifications().sendSMS(phone_,msg);
+            l4phone = phone_ && phone_.substring(phone_.length-4, phone_.length);
+        }
         //_th.sendNotificationtoToken({"title": "VerificationCode", "body": `${msg} for ${_email}`});
         res = {status:200,msg:`token sent`,phone:l4phone || ""};
-        
     }
     else {
         _res =  {status:502,err:`Access was denied -- Email not found`}; 
@@ -4029,7 +4029,6 @@ const verifyToken = (bdy) => {
     }      
     return res 
 };
-
 
 
 
