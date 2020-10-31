@@ -3998,8 +3998,9 @@ const generateToken = (bdy) => {
         let l4phone = "";
         if(phone_){
             callNotifications().sendSMS(phone_,msg);
-            l4phone = phone_ && phone_.toString();
-            l4phone = l4phone.substring(phone_.length-4, phone_.length);
+            phone_ = phone_ && phone_.toString();
+            l4phone = phone_.substring(phone_.length-4, phone_.length);
+            //let l4phone = pp.split("").slice(pp.length-4,pp.length).join("")
         }
         //_th.sendNotificationtoToken({"title": "VerificationCode", "body": `${msg} for ${_email}`});
         res = {status:200,msg:`token sent`,phone:l4phone || ""};
