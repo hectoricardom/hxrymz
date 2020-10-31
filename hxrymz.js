@@ -2578,9 +2578,9 @@ function saveCollection2S3(fileName){
   var _now = (new Date());
   let FolderName = `${_now.getFullYear()}@${_now.getMonth()+1}@${_now.getDate()}`;
   //let bucketFolder = `${bucketName}`;  
-    var urlFile =  path.join(_Cnst.get_root$$_(),'data',fileName);
-    if(fileName && _Cnst.get_fs$$_().existsSync(urlFile)){        
-        _Cnst.get_fs$$_().readFile(urlFile, function (err, data) {
+    var urlFile =  path.join(get_root$$_(),'data',fileName);
+    if(fileName && get_fs$$_().existsSync(urlFile)){        
+        get_fs$$_().readFile(urlFile, function (err, data) {
             var DateTime = Math.floor((new Date()).getTime()/300000);
             var params = {Bucket: bucketName, Key: `${FolderName}/${bucketName}_${DateTime}_${fileName}`, Body: data};
             s3.putObject(params, function(err, _data) {
@@ -2592,8 +2592,7 @@ function saveCollection2S3(fileName){
 
     }else{   
       
-  }
-       
+  }  
 }
 
 
@@ -4707,10 +4706,12 @@ class Params {
       var st = tempData+id; 
       var ext = id.split('.').pop();
       if (get_fs$$_().existsSync(st)) {
-          var rs =get_fs$$_().createReadStream(st);
-          let _extList = extList[ext]?extList[ext]:'application/octet-stream';
-          res.writeHead(200, { 'Content-Type': _extList, 'Connection': 'keep-alive', "X-UA-Compatible": "IE=edge;chrome=1", "Accept-Ranges": "bytes" });
-          rs.pipe(res);
+        get_fs$$_().readFile(st, function (err, data) {
+          if (!res.finished) {
+            res.status(200).send(data);
+            res.finished = true;
+          }
+        })
       }
       else {
           if (!res.finished) {
