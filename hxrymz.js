@@ -4704,11 +4704,21 @@ class Params {
     
 
     getStaticCollection(req, res, next) { 
-      var coll = req.params.id;
-      if (!res.finished) {
-        var f = Hrmdb.find(coll)
-        res.status(200).send(f);
-        res.finished = true;
+      var id = req.params.id;
+      var tempData = "/home/ubuntu/temp/data/";
+      var st = path.join(tempData,id); 
+      var ext = id.split('.').pop();
+      if (get_fs$$_().existsSync(st)) {
+          var rs =get_fs$$_().createReadStream(st);
+          let _extList = extList[ext]?extList[ext]:'application/octet-stream';
+          res.writeHead(200, { 'Content-Type': _extList, 'Connection': 'keep-alive', "X-UA-Compatible": "IE=edge;chrome=1", "Accept-Ranges": "bytes" });
+          rs.pipe(res);
+      }
+      else {
+          if (!res.finished) {
+              res.status(403).send(null);
+              res.finished = true;
+          }
       }
   }
 
