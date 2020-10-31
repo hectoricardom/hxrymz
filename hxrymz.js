@@ -4015,6 +4015,7 @@ const verifyToken = (bdy) => {
     let params = bdy["params"];
     var tkCode = params.code;
     var lg_id = code_token[tkCode]; 
+    console.log(code_token)
     if(lg_id && lg_id.exp && lg_id.exp>(new Date()).getTime()){
         var k =Hrmdb.findOne('Logins',lg_id.id);
         if(k && k.id){
