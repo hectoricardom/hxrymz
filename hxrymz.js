@@ -4048,8 +4048,11 @@ const usersList = (bdy,auth) => {
       _ddt=[];
       _ddt={};
       const hdd = callNotifications().getdataCDA();
+      console
       for(let ky in hdd){
+        console.log(ky)
         if(hdd[ky] && hdd[ky].email){
+          console.log(hdd[ky].email)
             var vfl = validateFields(fields,hdd[ky],params,auth.user);
             _ddt[ky]= vfl;
         }
