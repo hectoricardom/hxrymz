@@ -4004,7 +4004,7 @@ const generateToken = (bdy) => {
         res = {status:200,msg:`token sent`,phone:l4phone || ""};
     }
     else {
-        _res =  {status:502,err:`Access was denied -- Email not found`}; 
+        res =  {status:502,err:`Access was denied -- Email not found`}; 
     }  
     return res         
 };
