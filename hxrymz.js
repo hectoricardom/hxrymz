@@ -1,12 +1,5 @@
 'use strict';
 
-
- 
-
-//   ssh -i "C:\PEM\af_6.pem" ubuntu@ec2-3-17-110-93.us-east-2.compute.amazonaws.com
-
-
-
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var express = _interopDefault(require('express'));
@@ -25,7 +18,9 @@ var request = _interopDefault(require('request'));
 // const _config = require('./config.json');
 
 var _root$$_ = "E:/newProject/Monorepo/AmzFlx/server/";
-_root$$_ = "/home/ubuntu/hxrymz/";
+
+// _root$$_ = "/home/ubuntu/hxrymz/";
+
 
 var _portNew_ = 7258;
 var _host_ = "localhost";
@@ -3121,22 +3116,16 @@ addIndex2(name,item){
       }
     }
   } 
-  console.log(item["id"]);
-  console.log('level1');
   for(let key in obj){   
     if(key){
       let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';      
       if(get_fs$$_().existsSync(dest)){
         let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
-        console.log(key);
-        console.log(dest);
-        console.log(II2);
         //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(obj[key]));
         II2 = null;
       }
     }
   }
-  console.log('level2');
   if(levelSimpleObj['level2']){
     for(let key in levelSimpleObj['level2']){     
       if(key){
@@ -3266,8 +3255,6 @@ addIndex(name,item){
         let dest = rootPath + 'Indexes_' +name +'_'+key + '.json';
         if(get_fs$$_().existsSync(dest)){
           let II2 = JSON.parse(get_fs$$_().readFileSync(dest,'utf8')); 
-          console.log(key);
-          console.log(dest);
           //console.log(II2);
           //_Cnst.get_fs$$_().writeFileSync(dest, JSON.stringify(levelSimpleObj['level3'][key]));
           II2 = null;
@@ -4062,10 +4049,7 @@ const verifyToken = (bdy) => {
     let params = bdy["params"];
     var tkCode = params.code;
     var lg_id = code_token[tkCode]; 
-    console.log(code_token)
-    console.log(lg_id)
     if(lg_id){
-      console.log(lg_id.exp)
       if(lg_id.exp && lg_id.exp>(new Date()).getTime()){
           var k =Hrmdb.findOne('Logins',lg_id.id);
           if(k && k.id){
@@ -4374,6 +4358,41 @@ class Params {
 
 
 
+
+    loadIProfile(){
+      var _th = this;
+      let dd = _Notifications$1.getdataCDA();
+      
+      Object.keys(_Notifications$1.getdataCDA()).map(o2=>{
+          var fi = Hrmdb.findOne('Cda',o2);          
+          if(!fi && o2!=="AEBMN5JGXGKHTDPSXDBSZDKWEAEA"){              
+              _th.getProfile(o2);
+          }
+          
+          if(dd[o2] && dd[o2]["isActive"] && dd[o2]["isActive"]["active"]){
+            if(!dd[o2]['region']){
+              _th.getRegionbyCda(o2);
+            }
+            if(!dd[o2]['email']){
+                if(fi && fi.email){
+                  dd[o2]['email'] = fi.email;
+                  //  Upd_CDA_amzn1_account_file();  
+                }             
+            }
+            if(!dd[o2]['_phoneNumber']){                
+                if(fi && fi._phoneNumber){
+                  dd[o2]['_phoneNumber'] = fi._phoneNumber;
+                    //Upd_CDA_amzn1_account_file(); 
+                }              
+            }
+            if(!dd[o2]['serviceAreaIds']){
+                _th.eligibleServiceAreas(o2);
+            }
+          }
+      });
+  }			
+
+
     
 
 
@@ -4381,7 +4400,7 @@ class Params {
 
 
 
-    loadIProfile(){
+    loadIProfile22(){
         var _th = this;
         Object.keys(CDA_amzn1_account).map(o2=>{
             var fi = Hrmdb.findOne('Cda',o2);
@@ -4499,19 +4518,22 @@ class Params {
     getRegionbyCda(_cda){
         var _th = this;    
         var _tk = _th.GetTokenById(_cda);
-        _tk && request({
-            headers: {
-                'Host':'tas-na-extern.amazon.com',
-                'x-amz-access-token':_tk,
-                'User-Agent':'iOS/11.0.1 (iPhone Darwin) Model/iPhone Platform/iPhone9,1 RabbitiOS/2.15',
-            },
-            uri: `https://tas-na-extern.amazon.com:443/cdadiscriminators`,
-            method: 'GET'
-            }, 
+
+        let opt = {
+          headers: {
+              'Host':'tas-na-extern.amazon.com',
+              'x-amz-access-token':_tk,
+              'User-Agent':'iOS/11.0.1 (iPhone Darwin) Model/iPhone Platform/iPhone9,1 RabbitiOS/2.15',
+          },
+          uri: `https://tas-na-extern.amazon.com:443/cdadiscriminators`,
+          method: 'GET'
+        }
+        _tk && request(opt, 
             function (err, res, body) {
                 if(err){
                     _th.Upd_CDA_amzn1_account(_cda,'region',null);
                 }
+                
                 else if(isJson$1(body)){
                     var p = JSON.parse(body);
                     if(p.Message){
@@ -4519,6 +4541,8 @@ class Params {
                     }else {
                         var regionId = p.cdaDiscriminators.region;
                         _th.Upd_CDA_amzn1_account(_cda,'region',regionId);
+                        _Notifications$1.createfirebaseDoc(_cda,{'region':regionId})
+
                         _th.getServiceAreas(_tk,regionId);
                         _th.eligibleServiceAreas(_cda);                        
                     }
@@ -4560,6 +4584,7 @@ class Params {
                             _region['serviceAreas'][sa.id]['name'] = sa.name;
                         }					
                     });
+                    _Notifications$1.createfirebaseDoc(_cda,{'region':regionId})
                     var rg = Hrmdb.findOne('Regions',p.region.id);  
                     if(rg && rg.id){
                         Hrmdb.update('Regions',_region,p.region.id);    
@@ -4649,8 +4674,9 @@ class Params {
     GetTokenById(cad){ 
         var _dataCDA = _Notifications$1.getdataCDA();
         let _tk_ = _dataCDA[cad]?_dataCDA[cad]['token']:null;
+       
         if(_dataCDA[cad] && _dataCDA[cad]["isActive"] && _dataCDA[cad]["isActive"]["active"]){
-            return _tk_;
+          return _tk_;
         }else {
             return null;
         }
