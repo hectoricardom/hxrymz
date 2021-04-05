@@ -1,5 +1,12 @@
 'use strict';
 
+
+ 
+
+//   ssh -i "C:\PEM\af_6.pem" ubuntu@ec2-3-17-110-93.us-east-2.compute.amazonaws.com
+
+
+
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var express = _interopDefault(require('express'));
