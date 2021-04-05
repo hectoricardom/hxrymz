@@ -3436,6 +3436,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 var _dataCDA = {};
 
+var _usersCDA = {};
+
+
 var _CollectionFB = 'Cdas';
 
 var serviceAccount = JSON.parse(Base64.decode(clv.fbCnf));
@@ -3486,6 +3489,11 @@ class Notifications {
     getdataCDAbyId(id){
         return _dataCDA[id];
     }
+
+
+    getdataUsers(){
+      return _usersCDA;
+  }
 
  
     sendEmail(msg){   
@@ -3566,7 +3574,7 @@ class Notifications {
         dbFirestore.collection(_CollectionFB_Upd).doc(id).update({ frBsToken: v }).then(doc=> { });    
     }
 
-
+    /*
     getFiREBASEDATARealTime(CDA_amzn1_account){   
         Object.keys(CDA_amzn1_account).map(_id=>{
             var _CollectionFB_ = `/hhh/${_id}/params/`; 
@@ -3577,12 +3585,42 @@ class Notifications {
                 });
             }); 
             
-        }); 
-        
+        });
+    }
+    */
+
+    getFiREBASEDATARealTimeByID(_id){
+      var _CollectionFB_ = `/hhh/${_id}/params/`; 
+      dbFirestore.collection(_CollectionFB_).onSnapshot((querySnapshot) => {    
+          querySnapshot.forEach((doc) => {
+              var s = doc.data();    
+              _dataCDA[_id]=s;
+          });
+      });
     }
 
 
-    /*
+    getFiREBASEDATAhhh(){   
+      var _CollectionFB_ = `/hhh/`; 
+      var _th = this;
+      dbFirestore.collection(_CollectionFB_).onSnapshot((querySnapshot) => {    
+        querySnapshot.forEach((doc) => {
+            var s = doc.data();
+            let _id = doc.ref.path.replace("hhh/","");
+            _usersCDA[_id] = s.email;
+            _th.getFiREBASEDATARealTimeByID(_id);
+        });
+      });
+      /*
+      dbFirestore.collection(_CollectionFB_).get().then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+            console.log(`Found document at ${documentSnapshot.ref.path}`);
+        });
+      });
+      */
+    }
+
+    
     getFiREBASEDATA33(){         
         dbFirestore.collection(_CollectionFB).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -3591,7 +3629,7 @@ class Notifications {
             });
         });
     }
-    */
+    
 
 
 }
@@ -4001,10 +4039,10 @@ const generateToken = (bdy) => {
             //let l4phone = pp.split("").slice(pp.length-4,pp.length).join("")
         }
         //_th.sendNotificationtoToken({"title": "VerificationCode", "body": `${msg} for ${_email}`});
-        res = {status:200,msg:`token sent`,phone:l4phone || ""};
+        res = {status:200, msg:`token sent`, phone:l4phone || ""};
     }
     else {
-        res =  {status:502,err:`Access was denied -- Email not found`}; 
+        res =  {status:502, err:`Access was denied -- Email not found`}; 
     }  
     return res         
 };
@@ -4048,11 +4086,8 @@ const usersList = (bdy,auth) => {
       _ddt=[];
       _ddt={};
       const hdd = callNotifications().getdataCDA();
-      console
       for(let ky in hdd){
-        console.log(ky)
         if(hdd[ky] && hdd[ky].email){
-          console.log(hdd[ky].email)
             var vfl = validateFields(fields,hdd[ky],params,auth.user);
             _ddt[ky]= vfl;
         }
@@ -4232,7 +4267,9 @@ class Params {
         get_exec$$_()('ls', function(err, istdout, istderr){
 
         }); 
-        _Notifications$1.getFiREBASEDATARealTime(CDA_amzn1_account);
+        _Notifications$1.getFiREBASEDATAhhh();
+        //_Notifications$1.getFiREBASEDATARealTime(CDA_amzn1_account);
+
         this.timer = null;
         _th.readTokenInterval();
      }
