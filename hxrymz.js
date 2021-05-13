@@ -5248,17 +5248,44 @@ class GraphQuery {
         get_exec$$_()('ls', function(err, istdout, istderr){
            
             Hrmdb.getCollection('Cda');
-            Hrmdb.getCollection('Logs');
-            Hrmdb.getCollection('Regions');
-            Hrmdb.getCollection('Logins');  
-            Hrmdb.getCollection('Notification'); 
            
+            Hrmdb.getCollection('Regions');
+            Hrmdb.getCollection('Logins');
 
             Hrmdb.createIndexes('Logins','user');
             Hrmdb.createIndexes('Cda','email');
 
-            Hrmdb.getCollection('Blocks');
+
+
+
+
+            Hrmdb.calcIndexesAll('Cda');
+            
+            Hrmdb.calcIndexesAll('Logins'); 
+         
+
+
+            
+
+            Hrmdb.getCollection('User');           
+            Hrmdb.createIndexes('User','email');
+            Hrmdb.createIndexes('User','isAdmin'); 
+            Hrmdb.calcIndexesAll('User'); 
+            
+
+
+
+
+
+
+
+
+
             /*
+
+            Hrmdb.getCollection('Logs');
+            Hrmdb.getCollection('Blocks');
+            Hrmdb.getCollection('Notification'); 
             _Util.Hrmdb.createIndexes('Blocks','day');           
             _Util.Hrmdb.createIndexes('Blocks','user');
             _Util.Hrmdb.createIndexes('Blocks','user','day','serviceAreaId');
@@ -5272,7 +5299,7 @@ class GraphQuery {
 
             _Util.Hrmdb.calcIndexesAll('Blocks');
 
-            */
+          
             Hrmdb.createIndexes('Notification','day');           
             Hrmdb.createIndexes('Notification','user');
             Hrmdb.createIndexes('Notification','flags');
@@ -5286,12 +5313,10 @@ class GraphQuery {
 
 
 
-            Hrmdb.calcIndexesAll('Cda');
-            
-            Hrmdb.calcIndexesAll('Logins'); 
-            Hrmdb.calcIndexesAll('Logs');
-
             Hrmdb.calcIndexesAll('Notification');
+
+
+
 
             Hrmdb.getCollection('ServiceEarnings');  
             Hrmdb.getCollection('DepositedEarnings');  
@@ -5310,13 +5335,10 @@ class GraphQuery {
             Hrmdb.calcIndexesAll('DepositedEarnings');            
             Hrmdb.calcIndexesAll('ScheduledAssignments');           
             
+   Hrmdb.calcIndexesAll('Logs');
 
 
-            Hrmdb.getCollection('User');           
-            Hrmdb.createIndexes('User','email');
-            Hrmdb.createIndexes('User','isAdmin'); 
-            Hrmdb.calcIndexesAll('User'); 
-            
+  */
 
 
 
